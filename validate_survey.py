@@ -1,9 +1,11 @@
 """Validate guidelines/<source>/survey.csv against the allowed values in SURVEY_SCHEMA.md.
 
-Usage: python validate_survey.py
+Usage: python validate_survey.py [glob_pattern]
+       (default glob_pattern: guidelines/*/survey.csv)
 """
 import csv
 import glob
+import os
 import sys
 
 RELEVANCE_VALUES = {"", "0", "1", "2", "3", "4", "5"}
@@ -32,6 +34,12 @@ def validate_file(path):
     with open(path, encoding="utf-8-sig", newline="") as f:
         rows = list(csv.DictReader(f))
 
+    guidelines_path = os.path.join(os.path.dirname(path), "guidelines.csv")
+    guideline_ids = None
+    if os.path.exists(guidelines_path):
+        with open(guidelines_path, encoding="utf-8-sig", newline="") as f:
+            guideline_ids = {r["ID"].strip() for r in csv.DictReader(f)}
+
     ids_seen = set()
     for i, row in enumerate(rows, start=2):  # +1 header, +1 to make it 1-based
         rid = row.get("ID", "").strip()
@@ -40,6 +48,8 @@ def validate_file(path):
         elif rid in ids_seen:
             errors.append(f"line {i}: duplicate ID {rid!r}")
         ids_seen.add(rid)
+        if guideline_ids is not None and rid and rid not in guideline_ids:
+            errors.append(f"line {i}: ID {rid!r} not found in {guidelines_path}")
 
         relevance = row.get("BPM Relevance", "").strip()
         if relevance not in RELEVANCE_VALUES:
@@ -67,13 +77,22 @@ def validate_file(path):
                         f"(allowed: {sorted(LIFECYCLE_VALUES)})"
                     )
 
+    if guideline_ids is not None:
+        missing = guideline_ids - ids_seen
+        if missing:
+            errors.append(
+                f"{len(missing)} ID(s) from {guidelines_path} have no row here: {sorted(missing)[:10]}"
+                + (" ..." if len(missing) > 10 else "")
+            )
+
     return errors
 
 
 def main():
-    paths = sorted(glob.glob("guidelines/*/survey.csv"))
+    pattern = sys.argv[1] if len(sys.argv) > 1 else "guidelines/*/survey.csv"
+    paths = sorted(glob.glob(pattern))
     if not paths:
-        print("No survey.csv files found under guidelines/*/")
+        print(f"No files found matching {pattern!r}")
         sys.exit(1)
 
     total_errors = 0
