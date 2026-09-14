@@ -130,6 +130,14 @@ fieldset {
   margin: 0 0 22px;
 }
 
+.fieldset-disabled {
+  opacity: 0.45;
+}
+
+.fieldset-disabled .option label {
+  cursor: not-allowed;
+}
+
 legend {
   font-weight: 600;
   font-size: 13.5px;

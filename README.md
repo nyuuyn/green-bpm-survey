@@ -1,8 +1,13 @@
 # Green BPM Survey — Frontend
 
 The public-facing survey site for the [green-bpm-guideline-survey](https://github.com/nyuuyn/green-bpm-guideline-survey)
-project. Presents a random sample of sustainability guidelines and asks respondents to rate
-each one's relevance to Business Process Management.
+project, whose goal is to distill a proper "Green BPM Guideline" out of the flood of general
+sustainability advice that exists today (most of which turns out not to be very relevant to
+BPM specifically — see that repo's README for why). This site collects the real human ratings
+that step needs: it presents a random sample of guidelines and asks respondents to rate each
+one's relevance to Business Process Management.
+
+**Live:** <https://nyuuyn.github.io/green-bpm-survey/>
 
 This repo is deliberately **public** and separate from the private data/analysis repo: it only
 contains the survey UI and `data.json`, a bundle of guideline text and source links that's
@@ -15,10 +20,18 @@ No ratings, analysis, or internal notes live here.
   `sourceLabel`), generated from the private repo's `guidelines/*/guidelines.csv` files.
 - `index.html` / `style.css` / `app.js` — a small vanilla-JS single-page app, no build step,
   no framework. On load it randomly samples `SAMPLE_SIZE` (25) guidelines and walks the
-  respondent through one at a time, collecting: BPM Relevance (0–5), BPM Scope, Generic
-  (Yes/No), BPM Lifecycle (multi-select), optional Keywords and Justification — the same
-  schema as [`SURVEY_SCHEMA.md`](https://github.com/nyuuyn/green-bpm-guideline-survey/blob/main/SURVEY_SCHEMA.md)
-  in the data repo.
+  respondent through one at a time, collecting:
+  - **BPM Relevance** (0–5)
+  - **BPM Scope** — multi-select, since many guidelines act on more than one layer
+  - **Generic** (Yes/No) — automatically disabled and left blank when Relevance is 0, since
+    there's no BPM argument left to classify as generic-or-specific at that point
+  - **BPM Lifecycle** (multi-select, with "Not Applicable" enforced as mutually exclusive)
+  - optional free-text **Justification**
+
+  Keywords are deliberately *not* collected — that's done analytically over the guideline text
+  after the real survey, not by asking respondents to invent tags. This is the same schema as
+  [`SURVEY_SCHEMA.md`](https://github.com/nyuuyn/green-bpm-guideline-survey/blob/main/SURVEY_SCHEMA.md)
+  in the data repo — keep both in sync if you change one.
 
 ### Test mode (current state)
 
@@ -70,8 +83,9 @@ json.dump(items, open("data.json", "w", encoding="utf-8"), ensure_ascii=False)
 
 `test_flow.mjs` is a headless functional test (jsdom + a self-hosted static server, no external
 dependencies beyond `npm install`) covering: sampling, question rendering, submit validation,
-back/forward navigation with answer persistence, the Not-Applicable mutual-exclusivity rule,
-and the final payload shape.
+multi-select Scope, the Relevance=0 → Generic disabled/blank behavior, back/forward navigation
+with answer persistence, the Not-Applicable mutual-exclusivity rule, and the final payload shape
+(23 assertions).
 
 ```bash
 npm install
@@ -81,5 +95,5 @@ npm test
 ## Status
 
 - [x] Frontend built and tested (sampling, form, validation, navigation, test-mode payload)
-- [ ] GitHub Pages enabled
+- [x] GitHub Pages enabled — live at <https://nyuuyn.github.io/green-bpm-survey/>
 - [ ] Submission backend (Google Apps Script + Sheet) deployed and `SUBMIT_ENDPOINT` set

@@ -37,8 +37,10 @@ window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 const appJs = fs.readFileSync("app.js", "utf-8");
 dom.window.eval(appJs);
 
+let failures = 0;
 function log(label, ok, extra = "") {
   console.log(`${ok ? "PASS" : "FAIL"} - ${label}${extra ? " :: " + extra : ""}`);
+  if (!ok) failures++;
 }
 
 async function sleep(ms) {
@@ -47,6 +49,24 @@ async function sleep(ms) {
 
 async function main() {
   const doc = window.document;
+
+  function check(name, value, checked = true) {
+    const input = [...doc.querySelectorAll(`input[name="${name}"]`)].find((i) => i.value === value);
+    if (!input) throw new Error(`input not found: ${name}=${value}`);
+    input.checked = checked;
+    input.dispatchEvent(new window.Event("change", { bubbles: true }));
+    return input;
+  }
+
+  function isChecked(name, value) {
+    const input = [...doc.querySelectorAll(`input[name="${name}"]`)].find((i) => i.value === value);
+    return !!input && input.checked;
+  }
+
+  function submit() {
+    const form = doc.querySelector("form");
+    form.dispatchEvent(new window.Event("submit", { bubbles: true, cancelable: true }));
+  }
 
   // 1. Intro screen renders with a Start button.
   await sleep(50);
@@ -59,95 +79,94 @@ async function main() {
 
   let h2 = doc.querySelector("h2");
   log("Question 1 rendered (h2 present)", !!h2, h2 && h2.textContent.slice(0, 50));
-
-  const progressLabel = doc.getElementById("progressLabel");
-  log("Progress label shows 1 / 25", progressLabel.textContent.trim() === "1 / 25", progressLabel.textContent);
+  log("Progress label shows 1 / 25", doc.getElementById("progressLabel").textContent.trim() === "1 / 25");
+  log("No Keywords field present", !doc.querySelector('input[name="keywords"]'));
 
   // 3. Try submitting with nothing filled -> should show validation error, not advance.
-  let form = doc.querySelector("form");
-  form.dispatchEvent(new window.Event("submit", { bubbles: true, cancelable: true }));
+  submit();
   await sleep(20);
-  let errorText = doc.querySelector(".error-text").textContent;
-  log("Empty submit blocked with error", errorText.includes("Relevance"), errorText);
+  log("Empty submit blocked with error", doc.querySelector(".error-text").textContent.includes("Relevance"));
 
-  // 4. Fill required fields, submit -> should advance to question 2.
-  function check(name, value) {
-    const input = [...doc.querySelectorAll(`input[name="${name}"]`)].find((i) => i.value === value);
-    if (!input) throw new Error(`input not found: ${name}=${value}`);
-    input.checked = true;
-    input.dispatchEvent(new window.Event("change", { bubbles: true }));
-  }
-  check("relevance", "5");
+  // 4. BPM Scope is multi-select: checking two scope boxes should both stay checked (not radio behavior).
   check("scope", "Process Model");
+  check("scope", "Worker/Task");
+  log("Scope allows multiple selections", isChecked("scope", "Process Model") && isChecked("scope", "Worker/Task"));
+
+  // 5. Selecting Relevance = 0 disables and clears Generic.
   check("generic", "No");
-  check("lifecycle", "Design");
-  check("lifecycle", "Modeling");
+  check("relevance", "0");
+  const genericInputsDisabled = [...doc.querySelectorAll('input[name="generic"]')].every((i) => i.disabled);
+  const genericCleared = ![...doc.querySelectorAll('input[name="generic"]')].some((i) => i.checked);
+  log("Relevance=0 disables Generic inputs", genericInputsDisabled);
+  log("Relevance=0 clears any prior Generic selection", genericCleared);
 
-  form = doc.querySelector("form");
-  form.dispatchEvent(new window.Event("submit", { bubbles: true, cancelable: true }));
+  // 6. Submitting with Relevance=0 should NOT require Generic (it's blank, not missing).
+  check("lifecycle", "Not Applicable");
+  submit();
   await sleep(20);
+  log("Advanced to question 2 despite Generic being unset at Relevance=0",
+    doc.getElementById("progressLabel").textContent.trim() === "2 / 25");
 
-  h2 = doc.querySelector("h2");
-  log("Advanced to question 2", doc.getElementById("progressLabel").textContent.trim() === "2 / 25");
+  // 7. Switching relevance away from 0 re-enables Generic.
+  check("relevance", "4");
+  const genericReenabled = [...doc.querySelectorAll('input[name="generic"]')].every((i) => !i.disabled);
+  log("Non-zero Relevance re-enables Generic inputs", genericReenabled);
 
-  // 5. Not Applicable mutual exclusivity: check Design, then Not Applicable -> Design should uncheck.
+  // 8. Not Applicable mutual exclusivity: check Design, then Not Applicable -> Design should uncheck.
+  check("scope", "Infrastructure/Platform");
   check("lifecycle", "Design");
   check("lifecycle", "Not Applicable");
-  const designChecked = [...doc.querySelectorAll('input[name="lifecycle"]')].find((i) => i.value === "Design").checked;
-  const naChecked = [...doc.querySelectorAll('input[name="lifecycle"]')].find((i) => i.value === "Not Applicable").checked;
-  log("Checking Not Applicable unchecks Design", !designChecked && naChecked);
-
-  // pick a valid combo again and re-check NA gets cleared when picking a real phase
+  log("Checking Not Applicable unchecks Design", !isChecked("lifecycle", "Design") && isChecked("lifecycle", "Not Applicable"));
   check("lifecycle", "Monitoring");
-  const naStillChecked = [...doc.querySelectorAll('input[name="lifecycle"]')].find((i) => i.value === "Not Applicable").checked;
-  log("Picking a phase after NA unchecks Not Applicable", !naStillChecked);
+  log("Picking a phase after NA unchecks Not Applicable", !isChecked("lifecycle", "Not Applicable"));
 
-  // fill rest and go back to question 1, verify answer persisted
-  check("relevance", "3");
-  check("scope", "Worker/Task");
+  // fill rest, go back to question 1, verify answer persisted (including multi-select scope)
   check("generic", "Yes");
-  form = doc.querySelector("form");
   const backBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent === "Back");
   log("Back button present on question 2", !!backBtn);
   backBtn.click();
   await sleep(20);
+  log("Going back restores question 1's prior Relevance", isChecked("relevance", "0"));
+  log("Going back restores question 1's multi-select Scope", isChecked("scope", "Process Model") && isChecked("scope", "Worker/Task"));
 
-  const relevance5Checked = [...doc.querySelectorAll('input[name="relevance"]')].find((i) => i.value === "5").checked;
-  log("Going back restores question 1's prior answer", relevance5Checked);
-
-  // 6. Fast-forward: answer all remaining questions to reach the completion screen.
-  // go forward again through question 2 (already filled above before going back... but going back doesn't
-  // clear question 2's state; re-submit it via Next since it's index 1 already answered)
-  form = doc.querySelector("form");
-  form.dispatchEvent(new window.Event("submit", { bubbles: true, cancelable: true }));
+  // go forward again through question 1 (still valid as filled) to question 2
+  submit();
   await sleep(20);
 
+  // 9. Fast-forward: answer all remaining questions to reach the completion screen.
   let guard = 0;
   while (!doc.querySelector("h1") && guard < 30) {
-    check("relevance", "0");
-    check("scope", "Infrastructure/Platform");
+    check("relevance", "3");
+    check("scope", "Organizational/Governance");
     check("generic", "Yes");
     check("lifecycle", "Not Applicable");
-    form = doc.querySelector("form");
-    if (!form) break;
-    form.dispatchEvent(new window.Event("submit", { bubbles: true, cancelable: true }));
+    if (!doc.querySelector("form")) break;
+    submit();
     await sleep(15);
     guard++;
   }
 
   const h1 = doc.querySelector("h1");
   log("Reached completion screen", !!h1 && h1.textContent.includes("Thank you"), h1 && h1.textContent);
-
-  const testModeNote = doc.querySelector(".test-mode-note");
-  log("Test-mode note shown (no backend configured)", !!testModeNote);
+  log("Test-mode note shown (no backend configured)", !!doc.querySelector(".test-mode-note"));
 
   const pre = doc.querySelector("pre.summary-box");
   const parsed = JSON.parse(pre.textContent);
   log("Final payload has 25 responses", parsed.responses.length === 25, `got ${parsed.responses.length}`);
   log("Payload has sessionId and submittedAt", !!parsed.sessionId && !!parsed.submittedAt);
   log("Each response has an ID field", parsed.responses.every((r) => !!r.ID));
+  log("No response has a Keywords field", parsed.responses.every((r) => !("Keywords" in r)));
 
-  console.log("\nDone.");
+  const zeroRelevanceResponse = parsed.responses.find((r) => r["BPM Relevance"] === "0");
+  log("Relevance=0 response has blank Generic", !!zeroRelevanceResponse && zeroRelevanceResponse.Generic === "",
+    zeroRelevanceResponse && JSON.stringify(zeroRelevanceResponse));
+
+  const multiScopeResponse = parsed.responses.find((r) => r["BPM Scope"].includes(","));
+  log("A multi-select Scope response is stored comma-joined", !!multiScopeResponse,
+    multiScopeResponse && multiScopeResponse["BPM Scope"]);
+
+  console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);
+  if (failures > 0) process.exitCode = 1;
 }
 
 main()

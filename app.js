@@ -148,12 +148,14 @@ function renderQuestion() {
     },
   });
 
+  const genericFs = genericField();
+  const relevanceFs = relevanceField((value) => setGenericEnabled(genericFs, value !== "0"));
+
   form.append(
-    relevanceField(),
+    relevanceFs,
     scopeField(),
-    genericField(),
+    genericFs,
     lifecycleField(),
-    keywordsField(),
     justificationField(),
     errorEl,
     el("div", { class: "btn-row" }, [
@@ -179,7 +181,10 @@ function renderQuestion() {
 
   // restore previously entered answer if navigating back/forward
   const prior = state.responses[state.index];
-  if (prior) fillForm(form, prior);
+  if (prior) {
+    fillForm(form, prior);
+    setGenericEnabled(genericFs, prior["BPM Relevance"] !== "0");
+  }
 }
 
 function goBack() {
@@ -203,8 +208,8 @@ function radioGroup(name, options, { vertical = false } = {}) {
   );
 }
 
-function checkboxGroup(name, options) {
-  return el("div", { class: "option-row" },
+function checkboxGroup(name, options, { vertical = false } = {}) {
+  return el("div", { class: `option-row${vertical ? " vertical" : ""}` },
     options.map((opt, i) => {
       const id = `${name}-${i}`;
       return el("div", { class: "option" }, [
@@ -215,25 +220,42 @@ function checkboxGroup(name, options) {
   );
 }
 
-function relevanceField() {
+function relevanceField(onChange) {
+  const group = radioGroup("relevance", RELEVANCE_OPTIONS);
+  group.addEventListener("change", (e) => {
+    if (e.target.name === "relevance") onChange(e.target.value);
+  });
   return el("fieldset", {}, [
     el("legend", {}, ["BPM Relevance", el("span", { class: "hint" }, "How relevant is this guideline to business process design, modeling, execution, or monitoring?")]),
-    radioGroup("relevance", RELEVANCE_OPTIONS),
+    group,
   ]);
 }
 
 function scopeField() {
   return el("fieldset", {}, [
-    el("legend", {}, ["BPM Scope", el("span", { class: "hint" }, "Which layer does this guideline actually act on?")]),
-    radioGroup("scope", SCOPE_OPTIONS, { vertical: true }),
+    el("legend", {}, ["BPM Scope", el("span", { class: "hint" }, "Select every layer this guideline actually acts on — often more than one.")]),
+    checkboxGroup("scope", SCOPE_OPTIONS, { vertical: true }),
   ]);
 }
 
 function genericField() {
-  return el("fieldset", {}, [
+  const naNote = el("p", { class: "hint", "data-role": "generic-na-note", hidden: true },
+    "Not applicable — this guideline scored 0 on BPM Relevance, so there's no BPM argument left to classify.");
+  return el("fieldset", { "data-role": "generic-fieldset" }, [
     el("legend", {}, ["Generic?", el("span", { class: "hint" }, "Is this just general good practice, or a BPM-specific argument?")]),
     radioGroup("generic", GENERIC_OPTIONS),
+    naNote,
   ]);
+}
+
+function setGenericEnabled(fieldset, enabled) {
+  fieldset.querySelectorAll('input[name="generic"]').forEach((input) => {
+    input.disabled = !enabled;
+    if (!enabled) input.checked = false;
+  });
+  fieldset.classList.toggle("fieldset-disabled", !enabled);
+  const note = fieldset.querySelector('[data-role="generic-na-note"]');
+  if (note) note.hidden = enabled;
 }
 
 function lifecycleField() {
@@ -265,13 +287,6 @@ function lifecycleField() {
   return fieldset;
 }
 
-function keywordsField() {
-  return el("fieldset", {}, [
-    el("legend", {}, ["Keywords", el("span", { class: "hint" }, "Optional, comma-separated.")]),
-    el("input", { type: "text", name: "keywords", placeholder: "e.g. scaling, region selection" }),
-  ]);
-}
-
 function justificationField() {
   return el("fieldset", {}, [
     el("legend", {}, ["Justification", el("span", { class: "hint" }, "Optional — briefly explain your rating.")]),
@@ -284,15 +299,14 @@ function justificationField() {
 function collectAnswer(form) {
   const fd = new FormData(form);
   const relevance = fd.get("relevance");
-  const scope = fd.get("scope");
-  const generic = fd.get("generic");
+  const scope = fd.getAll("scope");
+  const generic = fd.get("generic") || ""; // absent when the fieldset is disabled (Relevance = 0)
   const lifecycle = fd.getAll("lifecycle");
-  const keywords = (fd.get("keywords") || "").trim();
   const justification = (fd.get("justification") || "").trim();
 
   if (!relevance) return { ok: false, error: "Please select a BPM Relevance score." };
-  if (!scope) return { ok: false, error: "Please select a BPM Scope." };
-  if (!generic) return { ok: false, error: "Please select Yes or No for Generic." };
+  if (scope.length === 0) return { ok: false, error: "Please select at least one BPM Scope." };
+  if (relevance !== "0" && !generic) return { ok: false, error: "Please select Yes or No for Generic." };
   if (lifecycle.length === 0) return { ok: false, error: "Please select at least one BPM Lifecycle phase, or Not Applicable." };
   if (lifecycle.includes("Not Applicable") && lifecycle.length > 1) {
     return { ok: false, error: "Not Applicable can't be combined with other lifecycle phases." };
@@ -303,10 +317,9 @@ function collectAnswer(form) {
     ok: true,
     answer: {
       ID: item.id,
-      Keywords: keywords,
       "BPM Relevance": relevance,
-      "BPM Scope": scope,
-      Generic: generic,
+      "BPM Scope": scope.join(", "),
+      Generic: relevance === "0" ? "" : generic,
       "BPM Justification": justification,
       "BPM Lifecycle": lifecycle.join(", "),
       Discussion: "",
@@ -320,14 +333,17 @@ function fillForm(form, answer) {
       input.checked = input.value === value;
     });
   };
+  const setChecklist = (name, values) => {
+    form.querySelectorAll(`input[name="${name}"]`).forEach((input) => {
+      input.checked = values.includes(input.value);
+    });
+  };
   setRadio("relevance", answer["BPM Relevance"]);
-  setRadio("scope", answer["BPM Scope"]);
+  const scopes = answer["BPM Scope"] ? answer["BPM Scope"].split(",").map((s) => s.trim()) : [];
+  setChecklist("scope", scopes);
   setRadio("generic", answer.Generic);
   const lifecycles = answer["BPM Lifecycle"] ? answer["BPM Lifecycle"].split(",").map((s) => s.trim()) : [];
-  form.querySelectorAll('input[name="lifecycle"]').forEach((cb) => {
-    cb.checked = lifecycles.includes(cb.value);
-  });
-  form.querySelector('input[name="keywords"]').value = answer.Keywords || "";
+  setChecklist("lifecycle", lifecycles);
   form.querySelector('textarea[name="justification"]').value = answer["BPM Justification"] || "";
 }
 
