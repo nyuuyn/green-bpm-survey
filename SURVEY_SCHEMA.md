@@ -7,10 +7,9 @@ Defines the allowed values for the columns in every `guidelines/<source>/survey.
 | Column | Type | Allowed values | Notes |
 |---|---|---|---|
 | `ID` | free text | must match an `ID` in the corresponding `guidelines.csv` | join key |
-| `Keywords` | free text, comma-separated | open vocabulary | not locked — exploratory tagging, expected to grow as the interview progresses |
 | `BPM Relevance` | integer | `0`, `1`, `2`, `3`, `4`, `5` (or blank if not yet rated) | see rubric below |
-| `BPM Scope` | single categorical | `Process Model`, `Worker/Task`, `Process Data`, `Infrastructure/Platform`, `Organizational/Governance` (or blank if not yet rated) | see definitions below |
-| `Generic` | boolean | `Yes`, `No` (or blank if not yet rated) | `Yes` = good general software/cloud practice, not specific to BPM; `No` = the relevance argument is specific to business processes |
+| `BPM Scope` | categorical, multi-select (comma-separated) | `Process Model`, `Worker/Task`, `Process Data`, `Infrastructure/Platform`, `Organizational/Governance` (or blank if not yet rated) | see definitions below. Select every layer the guideline actually acts on — many guidelines touch more than one |
+| `Generic` | boolean | `Yes`, `No`, or blank | `Yes` = good general software/cloud practice, not specific to BPM; `No` = the relevance argument is specific to business processes. **Must be blank when `BPM Relevance` is `0`** — if something isn't relevant to BPM at all, there's no BPM argument left to call generic-or-specific |
 | `BPM Justification` | free text | open, German or English | the "why" behind the relevance score |
 | `BPM Lifecycle` | categorical, multi-select (comma-separated) | `Design`, `Modeling`, `Execution`, `Monitoring`, `Analysis`, `Optimization`, `Not Applicable` | see definitions below. `Not Applicable` must be used alone, not combined with other phases |
 | `Discussion` | free text | open | reserved for open follow-up notes/disagreements; currently unused across all sources |
@@ -28,7 +27,7 @@ Inferred from how the initial test-run interview actually used the scale (101 of
 
 ## `BPM Scope` definitions
 
-This column was added because the test-run justifications repeatedly reasoned about *which layer* a guideline acts on, without anywhere to record it explicitly (18 of 239 justifications mention "worker" specifically to make this distinction). Pick the single layer the guideline's recommendation actually changes:
+This column was added because the test-run justifications repeatedly reasoned about *which layer* a guideline acts on, without anywhere to record it explicitly (18 of 239 justifications mention "worker" specifically to make this distinction). Select every layer the guideline's recommendation actually changes — some guidelines legitimately touch more than one (e.g. a resource-selection pattern can affect both `Worker/Task` and `Process Model` if the choice is baked into how the process is structured):
 
 - **Process Model** — affects the structure of the process itself: control flow, gateways, timers, task boundaries, sub-processes.
 - **Worker/Task** — affects the implementation of an individual task/service invoked by the process (e.g. a service task's backing code or hosting), not the process structure.
@@ -51,3 +50,4 @@ Canonical spelling only — the test-run data mixed `Analyse`/`Analysis` (18 vs.
 ## Changelog
 
 - 2026-09-11: Added `BPM Scope` and `Generic` columns; locked `BPM Relevance` and `BPM Lifecycle` to the enums above (previously free text with drift: `Analyse`/`Analysis`, and `-`/`None`/blank all meaning "not applicable").
+- 2026-09-14: Removed `Keywords` (forcing raters to invent tags added friction; keyword extraction will instead be done analytically over `Guideline`/`BPM Justification` text after the real interview). Changed `BPM Scope` from single-select to multi-select, matching `BPM Lifecycle`'s pattern, since many guidelines genuinely act on more than one layer. Clarified that `Generic` must be blank when `BPM Relevance` is `0` (a 0-relevance guideline has no BPM argument left to classify as generic-or-specific).

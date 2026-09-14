@@ -1,16 +1,27 @@
 # Green BPM Guideline Survey
 
-A survey of sustainability/green-software guidelines from seven public sources, rated for
-relevance to Business Process Management (BPM) — process design, modeling, execution, and
-monitoring — as opposed to being generic cloud/software advice.
-
-## Why
+**Goal: distill a proper "Green BPM Guideline" — a curated, evidence-backed set of sustainability
+practices that actually matter for business process design, modeling, execution, and
+monitoring — out of the flood of general-purpose sustainability guidance that exists today.**
 
 Sustainability guidance is abundant (cloud vendor frameworks, web guidelines, pattern
-catalogs), but most of it is written for infrastructure and application engineers, not process
-designers. This project collects that guidance, annotates each guideline with its relevance to
-BPM specifically, and compares general sustainability sources against BPM-native ones to see
-whether "relevant to BPM" is actually a distinct signal or just noise.
+catalogs), but almost all of it is written for infrastructure and application engineers, not
+process designers. Most of it is *not* actually relevant to BPM — an early rating pass across
+415 guidelines found that general sources average 79% low-relevance content and only 12%
+genuinely high-relevance, while sources written specifically for green BPM invert that almost
+completely (0% low, 87% high — see "Key finding" below). That gap is the reason this project
+exists: rather
+than pointing a BPM practitioner at seven different sustainability frameworks and asking them to
+guess which parts apply, this project collects them all, has both an AI pass and a real human
+interview rate every guideline's BPM relevance, and will use the highly-rated results to compile
+a single, focused Green BPM Guideline.
+
+**Pipeline:** collect guidelines from multiple sources → rate each one for BPM relevance (scope,
+lifecycle phase, generic-vs-specific) → validate/compare AI and human ratings → filter down to
+the high-relevance subset → synthesize that subset into a coherent guideline document.
+We're currently between steps 2 and 3: a public survey at
+[green-bpm-survey](https://github.com/nyuuyn/green-bpm-survey) collects the real human ratings
+that will be compared against the existing AI pass in this repo.
 
 ## Repo structure
 
@@ -52,13 +63,16 @@ by `ID`:
 
 | Column | Meaning |
 |---|---|
-| `Keywords` | free-text topic tags |
 | `BPM Relevance` | 0–5, how relevant the guideline is to BPM |
-| `BPM Scope` | which layer the guideline actually acts on: Process Model / Worker-Task / Process Data / Infrastructure-Platform / Organizational-Governance |
-| `Generic` | Yes/No — is this just generic good practice, or a BPM-specific argument? |
+| `BPM Scope` | which layer(s) the guideline acts on — multi-select: Process Model / Worker-Task / Process Data / Infrastructure-Platform / Organizational-Governance |
+| `Generic` | Yes/No — is this just generic good practice, or a BPM-specific argument? Blank when `BPM Relevance` is 0 (nothing to classify) |
 | `BPM Justification` | the reasoning behind the rating |
 | `BPM Lifecycle` | which BPM lifecycle phase(s) apply: Design, Modeling, Execution, Monitoring, Analysis, Optimization, or Not Applicable |
 | `Discussion` | reserved for follow-up notes |
+
+Keywords are deliberately *not* collected from raters — forcing people to invent tags adds
+friction for little gain. Keyword/topic extraction will instead be done analytically over the
+`Guideline` and `BPM Justification` text once real ratings exist.
 
 See [`SURVEY_SCHEMA.md`](SURVEY_SCHEMA.md) for the full rubric and the allowed-value
 definitions — the schema is intentionally locked (not free text) so ratings stay comparable
@@ -94,9 +108,11 @@ flagged).
 
 ## Key finding so far
 
-General sustainability sources cluster around 68–84% of their guidelines scoring 0–2 on BPM
-Relevance (not very relevant) and only 8–17% scoring 4–5. The two BPM-native sources invert
-this completely: 0% at 0–2, 83–89% at 4–5. See `analysis.ipynb` for the full breakdown.
+Across the 5 general sustainability sources (400 guidelines), 79.2% score 0–2 on BPM Relevance
+(not very relevant) and only 12.2% score 4–5. The 2 BPM-native sources (15 guidelines) invert
+this almost completely: 0% at 0–2, 86.7% at 4–5. This is the evidence that "relevant to BPM" is
+a real, distinct signal — not noise — and that filtering for it is worth doing. See
+`analysis.ipynb` for the full breakdown.
 
 ## Status / what's next
 
@@ -104,5 +120,8 @@ this completely: 0% at 0–2, 83–89% at 4–5. See `analysis.ipynb` for the fu
 - [x] Survey schema locked (`BPM Relevance`, `BPM Scope`, `Generic`, `BPM Lifecycle`)
 - [x] Claude-generated rating pass over all 415 guidelines
 - [x] First analysis notebook
+- [x] Public survey frontend live at [green-bpm-survey](https://github.com/nyuuyn/green-bpm-survey) / <https://nyuuyn.github.io/green-bpm-survey/>
+- [ ] Submission backend for the survey (Google Apps Script + Sheet) — frontend is currently in test mode
 - [ ] Real human interview pass (`survey.csv` is still empty everywhere)
 - [ ] Human vs. Claude rating comparison (the notebook has a stub section ready for this)
+- [ ] Filter to the high-relevance subset and synthesize the actual Green BPM Guideline document

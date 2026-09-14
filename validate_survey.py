@@ -10,7 +10,6 @@ import sys
 
 RELEVANCE_VALUES = {"", "0", "1", "2", "3", "4", "5"}
 SCOPE_VALUES = {
-    "",
     "Process Model",
     "Worker/Task",
     "Process Data",
@@ -55,13 +54,22 @@ def validate_file(path):
         if relevance not in RELEVANCE_VALUES:
             errors.append(f"line {i} ({rid}): BPM Relevance {relevance!r} not in 0-5")
 
-        scope = row.get("BPM Scope", "").strip()
-        if scope not in SCOPE_VALUES:
-            errors.append(f"line {i} ({rid}): BPM Scope {scope!r} not an allowed value")
+        scope_raw = row.get("BPM Scope", "").strip()
+        if scope_raw:
+            for p in [s.strip() for s in scope_raw.split(",") if s.strip()]:
+                if p not in SCOPE_VALUES:
+                    errors.append(
+                        f"line {i} ({rid}): BPM Scope value {p!r} not allowed "
+                        f"(allowed: {sorted(SCOPE_VALUES)})"
+                    )
 
         generic = row.get("Generic", "").strip()
         if generic not in GENERIC_VALUES:
             errors.append(f"line {i} ({rid}): Generic {generic!r} must be Yes/No/blank")
+        elif relevance == "0" and generic != "":
+            errors.append(
+                f"line {i} ({rid}): Generic must be blank when BPM Relevance is 0, got {generic!r}"
+            )
 
         lifecycle_raw = row.get("BPM Lifecycle", "").strip()
         if lifecycle_raw:
