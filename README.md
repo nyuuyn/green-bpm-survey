@@ -19,8 +19,21 @@ No ratings, analysis, or internal notes live here.
 - `data.json` — 415 guidelines (`id`, `name`, `category`, `reference`, `guideline`, `source`,
   `sourceLabel`), generated from the private repo's `guidelines/*/guidelines.csv` files.
 - `index.html` / `style.css` / `app.js` — a small vanilla-JS single-page app, no build step,
-  no framework. On load it randomly samples `SAMPLE_SIZE` (25) guidelines and walks the
-  respondent through one at a time, collecting:
+  no framework. On load it randomly samples `SAMPLE_SIZE` (25) guidelines. Before rating starts,
+  a one-time **"About you"** screen collects respondent background — separately from personal
+  data, and not used to identify anyone:
+  - **BPM experience** (None / studied it / practitioner at a few duration bands)
+  - **Sustainability/green-IT experience** — a *separate* axis from BPM experience, since the
+    two are independent (a BPM expert can be new to sustainability and vice versa)
+  - **Role** (Process Analyst, Developer, Consultant, Researcher, Student, etc., or a free-text
+    "Other")
+
+  This exists so ratings can later be checked for whether BPM/sustainability background
+  actually changes what gets rated as relevant, rather than treating every rating as equally
+  authoritative regardless of who gave it. It's stored once per session (in the payload's
+  `respondent` object), not repeated per guideline.
+
+  Then it walks the respondent through the guidelines one at a time, collecting:
   - **BPM Relevance** (0–5)
   - **BPM Scope** — multi-select, since many guidelines act on more than one layer
   - **Generic** (Yes/No) — automatically disabled and left blank when Relevance is 0, since
@@ -82,10 +95,11 @@ json.dump(items, open("data.json", "w", encoding="utf-8"), ensure_ascii=False)
 ## Tests
 
 `test_flow.mjs` is a headless functional test (jsdom + a self-hosted static server, no external
-dependencies beyond `npm install`) covering: sampling, question rendering, submit validation,
+dependencies beyond `npm install`) covering: the "About you" screen (validation, the
+Role=Other conditional free-text field), sampling, question rendering, submit validation,
 multi-select Scope, the Relevance=0 → Generic disabled/blank behavior, back/forward navigation
 with answer persistence, the Not-Applicable mutual-exclusivity rule, and the final payload shape
-(23 assertions).
+(27 assertions).
 
 ```bash
 npm install
@@ -95,5 +109,11 @@ npm test
 ## Status
 
 - [x] Frontend built and tested (sampling, form, validation, navigation, test-mode payload)
+- [x] Respondent background ("About you": BPM experience, sustainability experience, role)
 - [x] GitHub Pages enabled — live at <https://nyuuyn.github.io/green-bpm-survey/>
 - [ ] Submission backend (Google Apps Script + Sheet) deployed and `SUBMIT_ENDPOINT` set
+- [ ] Known open design question for whenever the backend is wired up: the private repo's
+      `survey.csv` currently assumes one row per guideline `ID` (`validate_survey.py` rejects
+      duplicate IDs). Once real submissions come in from multiple respondents, some guidelines
+      will legitimately get more than one rating — that schema will need a `RespondentID`-style
+      column (or a separate per-session table) before real data can be merged in, not solved yet.

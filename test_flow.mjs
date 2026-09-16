@@ -73,9 +73,34 @@ async function main() {
   const startBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent === "Start");
   log("Intro screen has Start button", !!startBtn);
 
-  // 2. Click Start -> should fetch data.json and render question 1.
+  // 2. Click Start -> should fetch data.json and render the "About you" screen first.
   startBtn.click();
   await sleep(300); // allow the fetch + render to complete
+
+  let h1 = doc.querySelector("h1");
+  log('Routes to "About you" screen before question 1', !!h1 && h1.textContent === "About you", h1 && h1.textContent);
+
+  // 2a. Submitting with nothing filled should block with an error.
+  submit();
+  await sleep(20);
+  log("Empty respondent-info submit blocked with error", doc.querySelector(".error-text").textContent.includes("BPM experience"));
+
+  // 2b. Selecting role = Other should reveal the free-text field, and block submit until it's filled.
+  check("role", "Other");
+  const roleOtherInput = doc.querySelector('input[name="roleOther"]');
+  log("Role=Other reveals the free-text input", !!roleOtherInput && !roleOtherInput.closest("div").hidden);
+  check("bpmExperience", "Practitioner, 5+ years");
+  check("sustainabilityExperience", "None");
+  submit();
+  await sleep(20);
+  log("Role=Other without text is blocked", doc.querySelector(".error-text").textContent.includes("specify your role"));
+
+  roleOtherInput.value = "Sustainability Officer";
+  submit();
+  await sleep(20);
+
+  h1 = doc.querySelector("h1");
+  log("Advances to question 1 after respondent info completed", !h1 || h1.textContent !== "About you");
 
   let h2 = doc.querySelector("h2");
   log("Question 1 rendered (h2 present)", !!h2, h2 && h2.textContent.slice(0, 50));
@@ -146,7 +171,7 @@ async function main() {
     guard++;
   }
 
-  const h1 = doc.querySelector("h1");
+  h1 = doc.querySelector("h1");
   log("Reached completion screen", !!h1 && h1.textContent.includes("Thank you"), h1 && h1.textContent);
   log("Test-mode note shown (no backend configured)", !!doc.querySelector(".test-mode-note"));
 
@@ -154,6 +179,11 @@ async function main() {
   const parsed = JSON.parse(pre.textContent);
   log("Final payload has 25 responses", parsed.responses.length === 25, `got ${parsed.responses.length}`);
   log("Payload has sessionId and submittedAt", !!parsed.sessionId && !!parsed.submittedAt);
+  log("Payload has respondent info with the values entered", !!parsed.respondent
+    && parsed.respondent["BPM Experience"] === "Practitioner, 5+ years"
+    && parsed.respondent["Sustainability Experience"] === "None"
+    && parsed.respondent.Role === "Sustainability Officer",
+    parsed.respondent && JSON.stringify(parsed.respondent));
   log("Each response has an ID field", parsed.responses.every((r) => !!r.ID));
   log("No response has a Keywords field", parsed.responses.every((r) => !("Keywords" in r)));
 

@@ -37,6 +37,26 @@ const LIFECYCLE_OPTIONS = [
   "Optimization",
 ];
 
+const EXPERIENCE_OPTIONS = [
+  "None",
+  "Studied it, not in practice",
+  "Practitioner, < 2 years",
+  "Practitioner, 2-5 years",
+  "Practitioner, 5+ years",
+  "Prefer not to say",
+];
+
+const ROLE_OPTIONS = [
+  "Process Analyst / Business Analyst",
+  "Process Owner / Manager",
+  "Developer / Implementer",
+  "Consultant",
+  "Researcher / Academic",
+  "Student",
+  "Other",
+  "Prefer not to say",
+];
+
 /* ---------- State ---------- */
 
 const state = {
@@ -44,6 +64,7 @@ const state = {
   items: [],
   index: 0,
   responses: [], // one object per answered item, same order as state.items
+  respondent: null, // filled in by renderRespondentInfo before rating starts
 };
 
 /* ---------- Utilities ---------- */
@@ -101,7 +122,7 @@ function renderIntro() {
         "each one is to designing, modeling, executing, and monitoring business processes — as " +
         "opposed to being general cloud/software advice."),
       el("ul", { class: "intro-facts" }, [
-        el("li", {}, [el("span", { class: "ico" }, "📝"), el("span", {}, `You'll rate ${SAMPLE_SIZE} randomly selected guidelines.`)]),
+        el("li", {}, [el("span", { class: "ico" }, "📝"), el("span", {}, `A few quick questions about your background, then you'll rate ${SAMPLE_SIZE} randomly selected guidelines.`)]),
         el("li", {}, [el("span", { class: "ico" }, "⏱️"), el("span", {}, "About 10–15 minutes.")]),
         el("li", {}, [el("span", { class: "ico" }, "🔒"), el("span", {}, "Anonymous — no account, no personal data collected.")]),
       ]),
@@ -119,8 +140,89 @@ async function startSurvey() {
     const all = await res.json();
     state.items = shuffle(all).slice(0, Math.min(SAMPLE_SIZE, all.length));
   }
-  state.index = 0;
-  renderQuestion();
+  renderRespondentInfo();
+}
+
+function renderRespondentInfo() {
+  setProgress(0, 0);
+
+  const errorEl = el("p", { class: "error-text" });
+  const roleOtherWrap = el("div", { style: "margin-top:8px" }, [
+    el("input", { type: "text", name: "roleOther", placeholder: "Please specify your role" }),
+  ]);
+  roleOtherWrap.hidden = true;
+
+  const form = el("form", {
+    onsubmit: (e) => {
+      e.preventDefault();
+      const data = collectRespondentInfo(form);
+      if (!data.ok) {
+        errorEl.textContent = data.error;
+        return;
+      }
+      state.respondent = data.respondent;
+      state.index = 0;
+      renderQuestion();
+    },
+  });
+
+  const roleGroup = radioGroup("role", ROLE_OPTIONS, { vertical: true });
+  roleGroup.addEventListener("change", (e) => {
+    if (e.target.name !== "role") return;
+    roleOtherWrap.hidden = e.target.value !== "Other";
+    if (roleOtherWrap.hidden) roleOtherWrap.querySelector("input").value = "";
+  });
+
+  form.append(
+    el("fieldset", {}, [
+      el("legend", {}, ["BPM experience", el("span", { class: "hint" }, "Your own background with business process management.")]),
+      radioGroup("bpmExperience", EXPERIENCE_OPTIONS, { vertical: true }),
+    ]),
+    el("fieldset", {}, [
+      el("legend", {}, ["Sustainability / green-IT experience", el("span", { class: "hint" }, "Separate from BPM — your background with sustainability specifically.")]),
+      radioGroup("sustainabilityExperience", EXPERIENCE_OPTIONS, { vertical: true }),
+    ]),
+    el("fieldset", {}, [
+      el("legend", {}, ["Role", el("span", { class: "hint" }, "Whichever best describes you.")]),
+      roleGroup,
+      roleOtherWrap,
+    ]),
+    errorEl,
+    el("div", { class: "btn-row" }, [
+      el("span"),
+      el("button", { type: "submit", class: "btn-primary" }, "Continue"),
+    ])
+  );
+
+  app.replaceChildren(
+    el("div", { class: "card" }, [
+      el("h1", {}, "About you"),
+      el("p", { class: "intro-lead" }, "This helps us understand whether BPM/sustainability background affects how guidelines get rated — it's not used to identify you."),
+      form,
+    ])
+  );
+}
+
+function collectRespondentInfo(form) {
+  const fd = new FormData(form);
+  const bpmExperience = fd.get("bpmExperience");
+  const sustainabilityExperience = fd.get("sustainabilityExperience");
+  const role = fd.get("role");
+  const roleOther = (fd.get("roleOther") || "").trim();
+
+  if (!bpmExperience) return { ok: false, error: "Please select your BPM experience." };
+  if (!sustainabilityExperience) return { ok: false, error: "Please select your sustainability/green-IT experience." };
+  if (!role) return { ok: false, error: "Please select a role." };
+  if (role === "Other" && !roleOther) return { ok: false, error: "Please specify your role, or choose a different option." };
+
+  return {
+    ok: true,
+    respondent: {
+      "BPM Experience": bpmExperience,
+      "Sustainability Experience": sustainabilityExperience,
+      Role: role === "Other" ? roleOther : role,
+    },
+  };
 }
 
 function renderQuestion() {
@@ -355,6 +457,7 @@ async function renderComplete() {
   const payload = {
     sessionId: state.sessionId,
     submittedAt: new Date().toISOString(),
+    respondent: state.respondent,
     responses: state.responses,
   };
 
