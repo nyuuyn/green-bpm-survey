@@ -97,6 +97,11 @@ const progressBar = document.getElementById("progressBar");
 const progressFill = document.getElementById("progressFill");
 const progressLabel = document.getElementById("progressLabel");
 
+function renderApp(...children) {
+  app.replaceChildren(...children);
+  window.scrollTo(0, 0);
+}
+
 function setProgress(current, total) {
   if (total === 0) {
     progressBar.hidden = true;
@@ -113,7 +118,7 @@ function setProgress(current, total) {
 
 function renderIntro() {
   setProgress(0, 0);
-  app.replaceChildren(
+  renderApp(
     el("div", { class: "card" }, [
       el("h1", {}, "Is sustainability guidance actually relevant to Business Process Management?"),
       el("p", { class: "intro-lead" },
@@ -194,7 +199,7 @@ function renderRespondentInfo() {
     ])
   );
 
-  app.replaceChildren(
+  renderApp(
     el("div", { class: "card" }, [
       el("h1", {}, "About you"),
       el("p", { class: "intro-lead" }, "This helps us understand whether BPM/sustainability background affects how guidelines get rated — it's not used to identify you."),
@@ -268,7 +273,7 @@ function renderQuestion() {
     ])
   );
 
-  app.replaceChildren(
+  renderApp(
     el("div", { class: "card" }, [
       el("div", { class: "badges" }, [
         el("span", { class: "badge" }, item.sourceLabel),
@@ -468,7 +473,7 @@ async function renderComplete() {
 
   if (SUBMIT_ENDPOINT) {
     card.append(el("p", {}, "Submitting your responses…"));
-    app.replaceChildren(card);
+    renderApp(card);
     try {
       await fetch(SUBMIT_ENDPOINT, {
         method: "POST",
@@ -480,7 +485,7 @@ async function renderComplete() {
     } catch (err) {
       card.append(el("p", { class: "error-text" }, "Something went wrong submitting your responses. Please try again shortly."));
     }
-    app.replaceChildren(card);
+    renderApp(card);
     return;
   }
 
@@ -508,7 +513,7 @@ async function renderComplete() {
     el("pre", { class: "summary-box" }, json)
   );
 
-  app.replaceChildren(card);
+  renderApp(card);
 }
 
 /* ---------- Boot ---------- */
