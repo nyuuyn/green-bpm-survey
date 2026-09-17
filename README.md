@@ -90,7 +90,7 @@ for source, label in SOURCES.items():
                 "reference": r["Reference"], "guideline": r["Guideline"],
                 "source": source, "sourceLabel": label,
             })
-json.dump(items, open("data.json", "w", encoding="utf-8"), ensure_ascii=False)
+json.dump(items, open("data.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 ```
 
 ## Tests
