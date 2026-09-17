@@ -16,7 +16,7 @@ No ratings, analysis, or internal notes live here.
 
 ## How it works
 
-- `data.json` — 415 guidelines (`id`, `name`, `category`, `reference`, `guideline`, `source`,
+- `data.json` — 425 guidelines (`id`, `name`, `category`, `reference`, `guideline`, `source`,
   `sourceLabel`), generated from the private repo's `guidelines/*/guidelines.csv` files.
 - `index.html` / `style.css` / `app.js` — a small vanilla-JS single-page app, no build step,
   no framework. On load it randomly samples `SAMPLE_SIZE` (25) guidelines. Before rating starts,
@@ -79,6 +79,7 @@ SOURCES = {
     "w3c": "W3C Web Sustainability Guidelines",
     "gbpp": "Green Business Process Patterns (Nowak et al., 2011)",
     "ppatterns": "process-pattern.app",
+    "lean": "Lean and Environment (EPA Toolkit / Lean Enterprise Institute)",
 }
 items = []
 for source, label in SOURCES.items():
