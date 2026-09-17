@@ -49,8 +49,9 @@ requirements.txt    Python dependencies for the notebook
 | `w3c` | W3C Web Sustainability Guidelines | 71 | General web |
 | `gbpp` | Green Business Process Patterns (Nowak et al., PLoP 2011) | 9 | **BPM-native** |
 | `ppatterns` | process-pattern.app, patterns tagged "Sustainability" | 6 | **BPM-native** |
+| `lean` | Lean and Environment (EPA Lean & Environment Toolkit; Lean Enterprise Institute "green waste" articles) | 10 | **BPM-native** |
 
-**415 guidelines total.**
+**425 guidelines total.**
 
 ## Data schema
 
