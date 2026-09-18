@@ -1,4 +1,4 @@
-name: Test
+name: Test and Deploy
 
 on:
   push:
@@ -28,3 +28,34 @@ jobs:
       - run: pip install -r tests_e2e/requirements.txt
       - run: playwright install --with-deps chromium
       - run: pytest
+
+  # Only runs if both test jobs above succeed, and only on a push to main (not
+  # PRs) - a failing test blocks this entirely, so the live site keeps serving
+  # its last good deploy instead of a broken one. Requires Pages' source to be
+  # set to "GitHub Actions" (Settings -> Pages -> Build and deployment).
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: [unit, e2e]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage the static site (exclude dev/test tooling)
+        run: |
+          mkdir _site
+          cp index.html style.css app.js data.json analysis.json _site/
+          cp -r assets _site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+      - id: deployment
+        uses: actions/deploy-pages@v4
