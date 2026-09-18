@@ -18,7 +18,7 @@ import glob
 import os
 import sys
 
-RELEVANCE_VALUES = {"", "0", "1", "2", "3", "4", "5"}
+RELEVANCE_VALUES = {"", "0", "1", "2", "3"}
 SCOPE_VALUES = {
     "Process Model",
     "Worker/Task",
@@ -125,7 +125,7 @@ def validate_file(path, respondent_ids=None):
 
         relevance = row.get("BPM Relevance", "").strip()
         if relevance not in RELEVANCE_VALUES:
-            errors.append(f"line {i} ({rid}): BPM Relevance {relevance!r} not in 0-5")
+            errors.append(f"line {i} ({rid}): BPM Relevance {relevance!r} not in 0-3")
 
         scope_raw = row.get("BPM Scope", "").strip()
         if scope_raw:

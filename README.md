@@ -9,7 +9,8 @@ catalogs), but almost all of it is written for infrastructure and application en
 process designers. Most of it is *not* actually relevant to BPM — an early rating pass across
 415 guidelines found that general sources average 79% low-relevance content and only 12%
 genuinely high-relevance, while sources written specifically for green BPM invert that almost
-completely (0% low, 87% high — see "Key finding" below). That gap is the reason this project
+completely (0% low, 87% high — see "Key finding" below; relevance is rated on a locked 0–3
+scale, see `SURVEY_SCHEMA.md`). That gap is the reason this project
 exists: rather
 than pointing a BPM practitioner at seven different sustainability frameworks and asking them to
 guess which parts apply, this project collects them all, has both an AI pass and a real human
@@ -109,11 +110,13 @@ flagged).
 
 ## Key finding so far
 
-Across the 5 general sustainability sources (400 guidelines), 79.2% score 0–2 on BPM Relevance
-(not very relevant) and only 12.2% score 4–5. The 2 BPM-native sources (15 guidelines) invert
-this almost completely: 0% at 0–2, 86.7% at 4–5. This is the evidence that "relevant to BPM" is
-a real, distinct signal — not noise — and that filtering for it is worth doing. See
-`analysis.ipynb` for the full breakdown.
+Across the 5 general sustainability sources (400 guidelines), 79.2% score 0–1 on BPM Relevance
+(not very relevant) and only 12.2% score 3 (highly relevant). The 2 BPM-native sources (15
+guidelines) invert this almost completely: 0% at 0–1, 86.7% at 3. This is the evidence that
+"relevant to BPM" is a real, distinct signal — not noise — and that filtering for it is worth
+doing. See `analysis.ipynb` for the full breakdown. (`BPM Relevance` was collapsed from an
+earlier 0–5 scale to 0–3 on 2026-09-18; these percentages are unchanged by that collapse, just
+restated on the new scale — see `SURVEY_SCHEMA.md`'s changelog.)
 
 ## Status / what's next
 

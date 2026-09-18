@@ -23,7 +23,7 @@ Defines the allowed values for the columns in `respondents.csv` and every `guide
 |---|---|---|---|
 | `RespondentID` | free text | must match a `RespondentID` in `respondents.csv` | join key to the respondent's background |
 | `ID` | free text | must match an `ID` in the corresponding `guidelines.csv` | join key to the guideline being rated |
-| `BPM Relevance` | integer | `0`, `1`, `2`, `3`, `4`, `5` (or blank if not yet rated) | see rubric below |
+| `BPM Relevance` | integer | `0`, `1`, `2`, `3` (or blank if not yet rated) | see rubric below |
 | `BPM Scope` | categorical, multi-select (comma-separated) | `Process Model`, `Worker/Task`, `Process Data`, `Infrastructure/Platform`, `Organizational/Governance`, or blank | see definitions below. Select every layer the guideline actually acts on — many guidelines touch more than one. **Must be blank when `BPM Relevance` is `0`** (see note below) |
 | `Generic` | boolean | `Yes`, `No`, or blank | `Yes` = good general software/cloud practice, not specific to BPM; `No` = the relevance argument is specific to business processes. **Must be blank when `BPM Relevance` is `0`** — if something isn't relevant to BPM at all, there's no BPM argument left to call generic-or-specific |
 | `BPM Justification` | free text | open, German or English | the "why" behind the relevance score |
@@ -34,14 +34,12 @@ Defines the allowed values for the columns in `respondents.csv` and every `guide
 
 ## `BPM Relevance` rubric
 
-Inferred from how the initial test-run interview actually used the scale (101 of 239 answers landed on `1`, only 4 on `0` — the boundary between them matters, so use it deliberately):
+Collapsed from an earlier 0–5 scale down to 0–3 (see changelog) — the boundary between `0` and `1` still matters most in practice (it was the split 101-of-239 test-run answers landed on `1` vs. only 4 on `0`), so use it deliberately:
 
 - **0** — Not relevant to BPM at all; the guideline concerns something a process design would never touch (e.g. ML model file formats). `BPM Scope`, `Generic`, and `BPM Lifecycle` are all left blank at this score — see the note under `BPM Scope`/`BPM Lifecycle` above.
-- **1** — Barely relevant; applies only in a generic software/infrastructure sense, no meaningful connection to process design or execution.
-- **2** — Weak/indirect relevance; a connection exists but is a stretch or highly situational.
-- **3** — Moderate relevance; clearly applicable in some but not all process contexts, or relevance depends heavily on the use case.
-- **4** — High relevance; a clear, common application to process design, modeling, or execution.
-- **5** — Directly and obviously relevant; a core BPM concern (e.g. region selection, demand-based scaling of orchestrated workers).
+- **1** — Low relevance; applies only in a generic software/infrastructure sense, or a BPM connection exists but is a stretch or highly situational.
+- **2** — Moderate relevance; clearly applicable in some but not all process contexts, or relevance depends heavily on the use case.
+- **3** — High relevance; a clear, common, or core application to process design, modeling, or execution (e.g. region selection, demand-based scaling of orchestrated workers).
 
 ## `BPM Scope` definitions
 
@@ -71,3 +69,4 @@ Canonical spelling only — the test-run data mixed `Analyse`/`Analysis` (18 vs.
 - 2026-09-14: Removed `Keywords` (forcing raters to invent tags added friction; keyword extraction will instead be done analytically over `Guideline`/`BPM Justification` text after the real interview). Changed `BPM Scope` from single-select to multi-select, matching `BPM Lifecycle`'s pattern, since many guidelines genuinely act on more than one layer. Clarified that `Generic` must be blank when `BPM Relevance` is `0` (a 0-relevance guideline has no BPM argument left to classify as generic-or-specific).
 - 2026-09-16: Added `respondents.csv` and a `RespondentID` column on every `survey*.csv` row, to support the real survey (public frontend now live) where multiple respondents rate overlapping guidelines and each session's BPM/sustainability experience and role need to be tied back to their ratings. `ID` is no longer required to be unique in `survey.csv` (only the `(RespondentID, ID)` pair is) — `survey_claude.csv` keeps the old unique-`ID`/full-coverage rules since it's a single complete pass, not a pool of sessions.
 - 2026-09-18: Extended the "blank at `BPM Relevance` = `0`" rule from `Generic` alone to also cover `BPM Scope` and `BPM Lifecycle` — the public survey frontend now hides those fields entirely once Relevance is set to `0`, since there's no scope or lifecycle argument left to classify either. Retroactively blanked `BPM Scope`/`BPM Lifecycle` on the 95 existing `survey_claude.csv` rows that had `BPM Relevance` = `0` (previously they carried a forced/arbitrary value), so the AI pass matches what real respondents will submit.
+- 2026-09-18: Collapsed `BPM Relevance` from a 0–5 scale to 0–3, done before any real human ratings exist so nothing has to be remapped later. Mapping applied retroactively to all 425 `survey_claude.csv` rows: old `0`→`0`, `{1,2}`→`1`, `3`→`2`, `{4,5}`→`3` (new distribution: `0`:95, `1`:223, `2`:38, `3`:69).
