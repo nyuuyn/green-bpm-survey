@@ -30,12 +30,16 @@ that will be compared against the existing AI pass in this repo.
 guidelines/<source>/
     guidelines.csv          raw guideline data scraped from the source (ID, Name, Category, Reference, Guideline)
     survey.csv              human interview ratings — currently empty, reserved for the real interview pass
-    survey_claude.csv       Claude-generated ratings, same schema as survey.csv, kept separate for comparison
+    survey_claude.csv       Claude-generated ratings, no persona framing, same schema as survey.csv
+    survey_claude_sustainability.csv  Claude ratings framed as a sustainability/green-IT expert (lay BPM exposure) — test data
+    survey_claude_bpm.csv             Claude ratings framed as a BPM expert (lay sustainability exposure) — test data
     guidelines_archive_*.csv  (azure/gsf/w3c only) pre-refresh snapshot, kept so old survey answers stay traceable
 
 SURVEY_SCHEMA.md    the locked column definitions and rating rubric — read this before adding ratings
 validate_survey.py  validates a survey.csv (or any file matching a glob) against the locked schema
-analysis.ipynb       loads every source, merges guidelines + ratings, and charts the results
+analysis.ipynb       loads every source, merges guidelines + ratings, and charts the results (including
+                     the three-way general/sustainability-persona/BPM-persona comparison)
+generate_analysis_json.py  emits analysis_<round>.json for the frontend's analysis page tabs
 requirements.txt    Python dependencies for the notebook
 ```
 
@@ -123,6 +127,9 @@ restated on the new scale — see `SURVEY_SCHEMA.md`'s changelog.)
 - [x] Raw guideline data collected and split from survey data for all 7 sources
 - [x] Survey schema locked (`BPM Relevance`, `BPM Scope`, `Generic`, `BPM Lifecycle`)
 - [x] Claude-generated rating pass over all 415 guidelines
+- [x] Two more Claude passes with persona framing (sustainability-expert, BPM-expert) over all
+      425 guidelines — test/comparison data previewing where those perspectives diverge, shown
+      as extra tabs on the frontend's analysis page alongside the general pass
 - [x] First analysis notebook
 - [x] Public survey frontend live at [green-bpm-survey](https://github.com/nyuuyn/green-bpm-survey) / <https://nyuuyn.github.io/green-bpm-survey/>
 - [ ] Submission backend for the survey (Google Apps Script + Sheet) — frontend is currently in test mode

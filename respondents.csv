@@ -1,2 +1,4 @@
 RespondentID,SubmittedAt,BPM Experience,Sustainability Experience,Role
 claude,,,,AI rater (Claude Sonnet 5)
+claude-sustainability,,None,"Practitioner, 5+ years",AI rater (Claude Sonnet 5) - sustainability-expert persona
+claude-bpm,,"Practitioner, 5+ years",None,AI rater (Claude Sonnet 5) - BPM-expert persona
