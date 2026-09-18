@@ -46,6 +46,18 @@ const EXPERIENCE_OPTIONS = [
   "Prefer not to say",
 ];
 
+const GUIDELINE_SOURCES = [
+  { label: "AWS Well-Architected Framework — Sustainability Pillar", url: "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html" },
+  { label: "Azure Well-Architected Framework — Sustainability", url: "https://learn.microsoft.com/en-us/azure/well-architected/sustainability/" },
+  { label: "Google Cloud Well-Architected Framework — Sustainability", url: "https://cloud.google.com/architecture/framework/sustainability" },
+  { label: "Green Software Foundation Patterns Catalog", url: "https://patterns.greensoftware.foundation/" },
+  { label: "W3C Web Sustainability Guidelines", url: "https://www.w3.org/TR/web-sustainability-guidelines/" },
+  { label: "Green Business Process Patterns (Nowak et al., 2011)", url: "https://www.iaas.uni-stuttgart.de/publications/INPROC-2011-65-Green_Business_Process_Patterns_web.pdf" },
+  { label: "process-pattern.app", url: "https://process-pattern.app/" },
+  { label: "EPA Lean & Environment Toolkit", url: "https://www.epa.gov/sustainability/lean-environment-toolkit-preface" },
+  { label: "Lean Enterprise Institute — sustainability articles", url: "https://www.lean.org/the-lean-post/articles/how-lean-can-help-you-go-green/" },
+];
+
 const ROLE_OPTIONS = [
   "Process Analyst / Business Analyst",
   "Process Owner / Manager",
@@ -122,14 +134,22 @@ function renderIntro() {
     el("div", { class: "card" }, [
       el("h1", {}, "Is sustainability guidance actually relevant to Business Process Management?"),
       el("p", { class: "intro-lead" },
-        "We collected 415 sustainability guidelines from cloud providers, the Green Software " +
-        "Foundation, W3C, and academic BPM literature. We'd like your judgment on how relevant " +
+        "We collected 425 sustainability guidelines from cloud providers, the Green Software " +
+        "Foundation, W3C, and academic BPM/lean literature. We'd like your judgment on how relevant " +
         "each one is to designing, modeling, executing, and monitoring business processes — as " +
         "opposed to being general cloud/software advice."),
       el("ul", { class: "intro-facts" }, [
         el("li", {}, [el("span", { class: "ico" }, "📝"), el("span", {}, `A few quick questions about your background, then you'll rate ${SAMPLE_SIZE} randomly selected guidelines.`)]),
         el("li", {}, [el("span", { class: "ico" }, "⏱️"), el("span", {}, "About 10–15 minutes.")]),
         el("li", {}, [el("span", { class: "ico" }, "🔒"), el("span", {}, "Anonymous — no account, no personal data collected.")]),
+      ]),
+      el("div", { class: "intro-sources" }, [
+        el("p", { class: "intro-sources-label" }, "Guidelines are drawn from:"),
+        el("ul", { class: "source-list" },
+          GUIDELINE_SOURCES.map((s) =>
+            el("li", {}, el("a", { class: "ref-link", href: s.url, target: "_blank", rel: "noopener" }, s.label))
+          )
+        ),
       ]),
       el("div", { class: "btn-row" }, [
         el("span"),
