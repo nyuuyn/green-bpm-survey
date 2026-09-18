@@ -133,7 +133,7 @@ async function main() {
   log("Touching Scope before Relevance doesn't disable other fields",
     ![...doc.querySelectorAll('input[name="generic-0"]')].some((i) => i.disabled));
 
-  check("relevance-0", "4");
+  check("relevance-0", "2");
   const row0Body = doc.querySelector('.rating-row[data-index="0"] .rating-row-body');
   log("Picking a relevance score expands the row", row0Body.hidden === false);
   check("generic-0", "Yes");
@@ -160,7 +160,7 @@ async function main() {
   // 6. Row 2: switching Relevance away from 0 re-enables Scope, Generic, and Lifecycle together.
   check("relevance-2", "0");
   log("Row 2 Relevance=0 disables Scope", [...doc.querySelectorAll('input[name="scope-2"]')].every((i) => i.disabled));
-  check("relevance-2", "4");
+  check("relevance-2", "2");
   log("Row 2 non-zero Relevance re-enables Scope, Generic, and Lifecycle", ["scope-2", "generic-2", "lifecycle-2"].every(
     (name) => [...doc.querySelectorAll(`input[name="${name}"]`)].every((i) => !i.disabled)
   ));

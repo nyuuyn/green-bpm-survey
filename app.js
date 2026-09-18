@@ -11,11 +11,9 @@ const SUBMIT_ENDPOINT = null;
 
 const RELEVANCE_OPTIONS = [
   { value: "0", label: "0 — not relevant" },
-  { value: "1", label: "1 — barely relevant" },
-  { value: "2", label: "2 — weak / indirect" },
-  { value: "3", label: "3 — moderate" },
-  { value: "4", label: "4 — high" },
-  { value: "5", label: "5 — directly relevant" },
+  { value: "1", label: "1 — low" },
+  { value: "2", label: "2 — moderate" },
+  { value: "3", label: "3 — high" },
 ];
 
 const SCOPE_OPTIONS = [
