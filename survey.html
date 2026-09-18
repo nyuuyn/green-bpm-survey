@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Green BPM Relevance Survey</title>
+<meta name="description" content="Help rate how relevant sustainability guidelines are to Business Process Management.">
+<link rel="icon" href="assets/img/envite-icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <span class="brand-crumbs">
+      <a class="brand" href="index.html">
+        <img src="assets/img/envite-icon.svg" alt="" class="brand-icon" aria-hidden="true">
+        <span class="brand-text">Green BPM Survey</span>
+      </a>
+      <span class="crumb-sep">/</span>
+      <span class="crumb-current">Survey</span>
+    </span>
+    <span id="progressLabel" class="progress-label" hidden></span>
+  </header>
+
+  <div id="progressBar" class="progress-bar" hidden><div id="progressFill" class="progress-fill"></div></div>
+
+  <main id="app"></main>
+
+  <footer class="footer">
+    <p>
+      Responses are anonymous. No account or personal data required.
+      Source data and methodology: this survey draws from sustainability guidelines
+      published by AWS, Microsoft Azure, Google Cloud, the Green Software Foundation, W3C,
+      and academic BPM pattern literature.
+    </p>
+    <p class="footer-credit">
+      <span>An initiative by</span>
+      <a href="https://envite.de" target="_blank" rel="noopener">
+        <img src="assets/img/envite-logo-black.svg" alt="envite Consulting" class="footer-logo footer-logo-light">
+        <img src="assets/img/envite-logo-white.svg" alt="envite Consulting" class="footer-logo footer-logo-dark">
+      </a>
+    </p>
+  </footer>
+
+</div>
+<script src="common.js"></script>
+<script src="survey.js"></script>
+</body>
+</html>

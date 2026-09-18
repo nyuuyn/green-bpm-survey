@@ -1,32 +1,12 @@
-// Headless functional test of app.js using jsdom. Spins up its own static file
-// server (no external tooling needed) so `npm test` is fully self-contained.
+// Headless functional test of survey.js using jsdom.
 import { JSDOM } from "jsdom";
 import fs from "node:fs";
-import http from "node:http";
-import path from "node:path";
+import { startServer, sleep } from "./test_server.mjs";
 
-const MIME = { ".html": "text/html", ".js": "text/javascript", ".json": "application/json", ".css": "text/css" };
+const { base: BASE, close } = await startServer();
 
-const server = http.createServer((req, res) => {
-  const file = req.url === "/" ? "/index.html" : req.url;
-  const filePath = path.join(process.cwd(), file);
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(404);
-      res.end("not found");
-      return;
-    }
-    res.writeHead(200, { "Content-Type": MIME[path.extname(filePath)] || "application/octet-stream" });
-    res.end(data);
-  });
-});
-
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-const PORT = server.address().port;
-const BASE = `http://127.0.0.1:${PORT}`;
-
-const dom = new JSDOM(fs.readFileSync("index.html", "utf-8"), {
-  url: BASE + "/",
+const dom = new JSDOM(fs.readFileSync("survey.html", "utf-8"), {
+  url: `${BASE}/survey.html`,
   runScripts: "outside-only",
   resources: "usable",
 });
@@ -34,29 +14,17 @@ const dom = new JSDOM(fs.readFileSync("index.html", "utf-8"), {
 const { window } = dom;
 window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 
-// Stub Chart.js: jsdom has no <canvas> 2D context backing, so this only exercises
-// app.js's DOM-building and aggregation logic, not actual pixel rendering.
-const mountedCharts = [];
-window.Chart = class {
-  constructor(canvas, config) {
-    if (!canvas) throw new Error("Chart constructed with no canvas element (bad canvas id?)");
-    this.config = config;
-    mountedCharts.push({ id: canvas.id, config });
-  }
-  destroy() {}
-};
-
-const appJs = fs.readFileSync("app.js", "utf-8");
-dom.window.eval(appJs);
+// A "use strict" eval() gets its own isolated top-level scope per call, even on
+// the same window - so common.js and survey.js must be eval'd together in one
+// call for survey.js to see common.js's declarations (el, renderApp, ...).
+// A real browser doesn't have this quirk (classic <script> tags share one
+// global scope), which is exactly what the Playwright suite exercises instead.
+dom.window.eval([fs.readFileSync("common.js", "utf-8"), fs.readFileSync("survey.js", "utf-8")].join("\n"));
 
 let failures = 0;
 function log(label, ok, extra = "") {
   console.log(`${ok ? "PASS" : "FAIL"} - ${label}${extra ? " :: " + extra : ""}`);
   if (!ok) failures++;
-}
-
-async function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
 }
 
 async function main() {
@@ -91,24 +59,18 @@ async function main() {
     check(`lifecycle-${i}`, "Not Applicable");
   }
 
-  // 1. Intro screen renders with a Start button.
-  await sleep(50);
-  const startBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent === "Start");
-  log("Intro screen has Start button", !!startBtn);
-
-  // 2. Click Start -> should fetch data.json and render the "About you" screen first.
-  startBtn.click();
+  // 1. survey.js boots straight into "About you" (data.json fetch + shuffle),
+  //    no intro/Start step - that content now lives on the landing page (index.html).
   await sleep(300); // allow the fetch + render to complete
-
   let h1 = doc.querySelector("h1");
-  log('Routes to "About you" screen before the rating list', !!h1 && h1.textContent === "About you", h1 && h1.textContent);
+  log('Boots directly into "About you"', !!h1 && h1.textContent === "About you", h1 && h1.textContent);
 
-  // 2a. Submitting with nothing filled should block with an error.
+  // 1a. Submitting with nothing filled should block with an error.
   submit();
   await sleep(20);
   log("Empty respondent-info submit blocked with error", doc.querySelector(".error-text").textContent.includes("BPM experience"));
 
-  // 2b. Selecting role = Other should reveal the free-text field, and block submit until it's filled.
+  // 1b. Selecting role = Other should reveal the free-text field, and block submit until it's filled.
   check("role", "Other");
   const roleOtherInput = doc.querySelector('input[name="roleOther"]');
   log("Role=Other reveals the free-text input", !!roleOtherInput && !roleOtherInput.closest("div").hidden);
@@ -130,13 +92,13 @@ async function main() {
   log("Progress starts at 0 / 25", progressLabel() === "0 / 25", progressLabel());
   log("No Keywords field present", !doc.querySelector('input[name="keywords"]'));
 
-  // 3. Clicking Finish with nothing filled should block with an error, not advance.
+  // 2. Clicking Finish with nothing filled should block with an error, not advance.
   submit();
   await sleep(20);
   log("Empty Finish blocked with error", doc.querySelector(".error-text").textContent.includes("25 guideline"));
   log("Still on the rating list after a blocked Finish", doc.querySelector("h1").textContent === "Rate each guideline");
 
-  // 4. Row 0: BPM Scope is multi-select - checking two scope boxes should both stay checked,
+  // 3. Row 0: BPM Scope is multi-select - checking two scope boxes should both stay checked,
   //    even before Relevance has been touched (Scope/Generic/Lifecycle must not be disabled
   //    just because Relevance happens to still be blank).
   check("scope-0", "Process Model");
@@ -154,7 +116,7 @@ async function main() {
   log("Row 0 marked complete once all fields are set", row0.classList.contains("complete"));
   log("Progress shows 1 / 25 after completing row 0", progressLabel() === "1 / 25", progressLabel());
 
-  // 5. Row 1: Relevance=0 means there's nothing left to classify - Scope, Generic, and
+  // 4. Row 1: Relevance=0 means there's nothing left to classify - Scope, Generic, and
   //    Lifecycle all get disabled and cleared (mirroring the existing Generic-at-0 behavior),
   //    and the row is immediately complete with no further input required.
   check("relevance-1", "0");
@@ -169,7 +131,7 @@ async function main() {
   log("Row 1 marked complete immediately at Relevance=0", row1.classList.contains("complete"));
   log("Progress shows 2 / 25 after Relevance=0 alone completes row 1", progressLabel() === "2 / 25", progressLabel());
 
-  // 6. Row 2: switching Relevance away from 0 re-enables Scope, Generic, and Lifecycle together.
+  // 5. Row 2: switching Relevance away from 0 re-enables Scope, Generic, and Lifecycle together.
   check("relevance-2", "0");
   log("Row 2 Relevance=0 disables Scope", [...doc.querySelectorAll('input[name="scope-2"]')].every((i) => i.disabled));
   check("relevance-2", "2");
@@ -182,7 +144,7 @@ async function main() {
   log("Row 2 marked complete once all required fields are set",
     row1.parentElement.querySelector('.rating-row[data-index="2"]').classList.contains("complete"));
 
-  // 7. Row 4: Not Applicable mutual exclusivity in BPM Lifecycle (needs a non-zero Relevance
+  // 6. Row 4: Not Applicable mutual exclusivity in BPM Lifecycle (needs a non-zero Relevance
   //    first, since Lifecycle is disabled at Relevance=0).
   check("relevance-4", "3");
   check("lifecycle-4", "Design");
@@ -193,7 +155,7 @@ async function main() {
   check("scope-4", "Worker/Task");
   check("generic-4", "No");
 
-  // 8. Row 3: header click toggles the collapsed/expanded body independent of field values.
+  // 7. Row 3: header click toggles the collapsed/expanded body independent of field values.
   const row3Header = doc.querySelector('.rating-row[data-index="3"] .rating-row-header');
   const row3Body = doc.querySelector('.rating-row[data-index="3"] .rating-row-body');
   log("Row 3 starts collapsed", row3Body.hidden === true);
@@ -202,11 +164,11 @@ async function main() {
   row3Header.click();
   log("Clicking the header again collapses row 3", row3Body.hidden === true);
 
-  // 9. Fill every remaining row with a default valid answer.
+  // 8. Fill every remaining row with a default valid answer.
   for (let i = 3; i < rows.length; i++) fillDefault(i);
   log("Progress shows 25 / 25 once every row is answered", progressLabel() === "25 / 25", progressLabel());
 
-  // 10. Finish -> completion screen.
+  // 9. Finish -> completion screen.
   submit();
   await sleep(50);
 
@@ -237,33 +199,17 @@ async function main() {
   log("A multi-select Scope response is stored comma-joined", !!multiScopeResponse,
     multiScopeResponse && multiScopeResponse["BPM Scope"]);
 
-  // 11. From the completion screen, "See the guideline analysis" fetches analysis.json
-  //     and renders charts + a top-20 table over the full 425-guideline Claude pass.
-  const analysisBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent.includes("analysis"));
-  log("Analysis link present on completion screen", !!analysisBtn);
-  analysisBtn.click();
-  await sleep(300); // allow fetch("analysis.json") + chart mounting to settle
+  // 10. The completion screen links to the standalone analysis page - a plain <a>
+  //     now that analysis.html is independently reachable, not a JS-state-restoring button.
+  const analysisLink = [...doc.querySelectorAll("a")].find((a) => a.textContent.includes("analysis"));
+  log("Completion screen links to analysis.html", !!analysisLink && analysisLink.getAttribute("href") === "analysis.html");
 
-  h1 = doc.querySelector("h1");
-  log("Navigates to the analysis screen", !!h1 && h1.textContent.includes("relevant"), h1 && h1.textContent);
-  const canvases = doc.querySelectorAll("canvas");
-  log("9 chart canvases rendered", canvases.length === 9, `got ${canvases.length}`);
-  log("9 Chart instances mounted with matching canvas ids", mountedCharts.length === 9 &&
-    mountedCharts.every((c) => doc.getElementById(c.id) === [...canvases].find((cv) => cv.id === c.id)),
-    `got ${mountedCharts.length}`);
-  log("Top-20 table has exactly 20 rows", doc.querySelectorAll(".data-table tbody tr").length === 20,
-    `got ${doc.querySelectorAll(".data-table tbody tr").length}`);
-
-  // 12. "Back" must restore the already-built completion card rather than re-running
-  //     renderComplete() (which would re-trigger submission once a backend is wired up).
-  const backBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent.includes("Back"));
-  log("Back button present on analysis screen", !!backBtn);
-  backBtn.click();
-  await sleep(20);
-  h1 = doc.querySelector("h1");
-  log("Back returns to the completion screen", !!h1 && h1.textContent.includes("Thank you"), h1 && h1.textContent);
-  log("Back doesn't re-render a fresh completion card (same payload still shown)",
-    doc.querySelector("pre.summary-box")?.textContent === pre.textContent);
+  // 11. The header breadcrumb (static markup, present regardless of which screen
+  //     survey.js has rendered into #app) is how survey.html links home now -
+  //     no more per-screen "← Home" button.
+  const brandLink = doc.querySelector("a.brand");
+  log("Brand link in the header goes to index.html", !!brandLink && brandLink.getAttribute("href") === "index.html");
+  log('Breadcrumb shows "Survey" as the current page', doc.querySelector(".crumb-current")?.textContent === "Survey");
 
   console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);
   if (failures > 0) process.exitCode = 1;
@@ -274,4 +220,4 @@ main()
     console.error("TEST HARNESS ERROR:", e);
     process.exitCode = 1;
   })
-  .finally(() => server.close());
+  .finally(() => close());

@@ -52,7 +52,7 @@ jobs:
       - name: Stage the static site (exclude dev/test tooling)
         run: |
           mkdir _site
-          cp index.html style.css app.js data.json analysis.json _site/
+          cp index.html survey.html analysis.html style.css common.js survey.js analysis.js data.json analysis.json _site/
           cp -r assets _site/
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -53,9 +53,12 @@ body {
   padding: 20px 0 8px;
 }
 
-.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; }
+.brand-crumbs { display: flex; align-items: center; gap: 8px; font-size: 16px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; color: inherit; text-decoration: none; }
 .brand-icon { width: 20px; height: 20px; display: block; }
 .brand-text { line-height: 1; }
+.crumb-sep { color: var(--border); }
+.crumb-current { font-weight: 700; color: var(--text-muted); }
 
 .progress-label { color: var(--text-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 
@@ -140,6 +143,20 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
 }
 .intro-facts li { display: flex; gap: 10px; align-items: baseline; }
 .intro-facts .ico { font-size: 16px; }
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 4px 0 28px;
+}
+
+.btn-hero {
+  flex: 1 1 200px;
+  padding: 16px 24px;
+  font-size: 16px;
+  text-align: center;
+}
 
 .intro-sources { margin-bottom: 24px; }
 .intro-sources-label { font-size: 13px; color: var(--text-muted); margin: 0 0 6px; }
@@ -358,13 +375,23 @@ textarea:focus, input[type="text"]:focus {
   margin-top: 8px;
 }
 
-button {
+.btn-row-end {
+  justify-content: flex-end;
+}
+
+button, a.btn-primary, a.btn-secondary {
   font: inherit;
   font-weight: 600;
   padding: 11px 20px;
   border-radius: 999px;
   border: 1px solid transparent;
   cursor: pointer;
+}
+
+a.btn-primary, a.btn-secondary {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
 }
 
 .btn-primary {

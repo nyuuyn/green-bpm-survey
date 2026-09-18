@@ -16,12 +16,24 @@ No ratings, analysis, or internal notes live here.
 
 ## How it works
 
-- `data.json` — 425 guidelines (`id`, `name`, `category`, `reference`, `guideline`, `source`,
-  `sourceLabel`), generated from the private repo's `guidelines/*/guidelines.csv` files.
-- `index.html` / `style.css` / `app.js` — a small vanilla-JS single-page app, no build step,
-  no framework. On load it randomly samples `SAMPLE_SIZE` (25) guidelines. Before rating starts,
-  a one-time **"About you"** screen collects respondent background — separately from personal
-  data, and not used to identify anyone:
+Three static pages, no build step, no framework:
+
+- **`index.html`** — the landing page. Fully static (no JS): explains the project's goal and
+  guideline sources, and links to the other two pages. This is the page people should land on
+  first (shared links, GitHub Pages root).
+- **`survey.html`** + **`survey.js`** — the rating flow. `data.json` (425 guidelines: `id`,
+  `name`, `category`, `reference`, `guideline`, `source`, `sourceLabel`, generated from the
+  private repo's `guidelines/*/guidelines.csv` files) is fetched on load, `SAMPLE_SIZE` (25) of
+  them are sampled, and rating starts immediately - no separate intro/Start step, since that
+  content now lives on the landing page instead.
+- **`analysis.html`** + **`analysis.js`** — the charts (see "Analysis page" below).
+  Independently reachable - doesn't require taking the survey first.
+- **`common.js`** — the handful of things `survey.js` and `analysis.js` both need
+  (`RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS`, the tiny `el()` DOM builder,
+  `renderApp()`), loaded before either page script.
+
+Before rating starts, a one-time **"About you"** screen collects respondent background —
+separately from personal data, and not used to identify anyone:
   - **BPM experience** (None / studied it / practitioner at a few duration bands)
   - **Sustainability/green-IT experience** — a *separate* axis from BPM experience, since the
     two are independent (a BPM expert can be new to sustainability and vice versa)
@@ -51,7 +63,7 @@ No ratings, analysis, or internal notes live here.
 
 ### Test mode (current state)
 
-`SUBMIT_ENDPOINT` in `app.js` is currently `null`. In this state, finishing the survey doesn't
+`SUBMIT_ENDPOINT` in `survey.js` is currently `null`. In this state, finishing the survey doesn't
 submit anywhere — responses are shown on-screen as JSON and downloadable, so the whole flow is
 testable without a backend. To go live, deploy a submission backend (see the parent repo's
 notes on the GitHub Pages + Google Sheets approach) and set `SUBMIT_ENDPOINT` to its URL.
@@ -96,21 +108,22 @@ for source, label in SOURCES.items():
 json.dump(items, open("data.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 ```
 
-## Analysis screen
+## Analysis page
 
-After finishing the survey, respondents can click "See the guideline analysis" from the
-Thank-you screen to view charts (via [Chart.js](https://www.chartjs.org/), loaded from a CDN -
-no build step) covering the existing Claude AI-generated rating pass across all 425
-guidelines: relevance distribution, BPM Scope/Lifecycle coverage, generic-vs-specific split,
-and a top-20 table. This reuses `RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS` from
-the rating form so the two stay in sync.
+`analysis.html` shows charts (via [Chart.js](https://www.chartjs.org/), loaded from a CDN - no
+build step) covering the existing Claude AI-generated rating pass across all 425 guidelines:
+relevance distribution, BPM Scope/Lifecycle coverage, generic-vs-specific split, and a top-20
+table. It's reachable directly from the landing page, or from the survey's Thank-you screen -
+taking the survey isn't required to see it. This reuses
+`RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS` from `common.js` so the rating form and
+the analysis page can't drift apart.
 
 It's driven by `analysis.json` - one flat record per guideline (`id`, `name`, `source`,
 `bpmNative`, `relevance`, `scope`, `generic`, `lifecycle`), regenerated the same way as
 `data.json`: run `generate_analysis_json.py` from the **private** repo (it joins each
 source's `guidelines.csv` with `survey_claude.csv`), then copy `analysis.json` here.
 
-All aggregation happens client-side in `app.js` (`countsPerSource`, `relevanceDistribution`,
+All aggregation happens client-side in `analysis.js` (`countsPerSource`, `relevanceDistribution`,
 etc.) rather than being pre-computed into `analysis.json` - deliberately, so that once a
 submission backend exists and real human ratings come in, those same functions can be fed a
 merged Claude+human record array without changing their shape. That merge isn't wired up
@@ -118,16 +131,22 @@ yet; today the page only shows the Claude pass.
 
 ## Tests
 
-`test_flow.mjs` is a headless functional test (jsdom + a self-hosted static server, no external
-dependencies beyond `npm install`) covering: the "About you" screen (validation, the
-Role=Other conditional free-text field), sampling, the rating-list rendering (row count, progress
-counter), submit validation (blocking Finish on incomplete rows), multi-select Scope, the
-Relevance=0 → Generic disabled/blank behavior, row expand/collapse on header click, the
-Not-Applicable mutual-exclusivity rule, the final payload shape, and the analysis screen
-(chart/table mounting, and Back restoring the completion screen without re-submitting) - 43
-assertions. Chart.js itself is stubbed out since jsdom has no `<canvas>` 2D context, so only
-the surrounding DOM/aggregation logic is covered here - see the Playwright suite below for
-real chart rendering.
+Three headless functional tests (jsdom + a self-hosted static server, no external dependencies
+beyond `npm install`), one per page - 50 assertions total:
+
+- `test_landing.mjs` — index.html is static, so this just parses the markup: both CTAs link to
+  the right page and are styled prominently, no `<script>` tags.
+- `test_flow.mjs` — survey.html: boots straight into "About you" (no intro/Start step), that
+  screen's validation (including the Role=Other conditional free-text field), the rating-list
+  rendering (row count, progress counter), submit validation (blocking Finish on incomplete
+  rows), multi-select Scope, the Relevance=0 → Generic disabled/blank behavior, row
+  expand/collapse on header click, the Not-Applicable mutual-exclusivity rule, the final
+  payload shape, and that the completion screen links to `analysis.html`.
+- `test_analysis.mjs` — analysis.html standalone (no survey completion needed): chart/table
+  mounting, legends, and that "Home" is a plain link rather than a JS state restore. Chart.js
+  itself is stubbed out since jsdom has no `<canvas>` 2D context, so only the surrounding
+  DOM/aggregation logic is covered here - see the Playwright suite below for real chart
+  rendering.
 
 ```bash
 npm install
@@ -160,6 +179,8 @@ down. CI (`.github/workflows/test.yml`) runs both this and `npm test` on every p
 - [x] Respondent background ("About you": BPM experience, sustainability experience, role)
 - [x] GitHub Pages enabled — live at <https://nyuuyn.github.io/green-bpm-survey/>
 - [x] Post-survey analysis screen (Claude AI-rating pass only, charts via Chart.js)
+- [x] Split into a landing page (`index.html`) plus standalone `survey.html` / `analysis.html`
+      pages, backed by a real-browser Playwright suite (`tests_e2e/`) as a regression check
 - [ ] Submission backend (Google Apps Script + Sheet) deployed and `SUBMIT_ENDPOINT` set
 - [ ] Known open design question for whenever the backend is wired up: the private repo's
       `survey.csv` currently assumes one row per guideline `ID` (`validate_survey.py` rejects

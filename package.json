@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "serve": "python -m http.server 8123",
-    "test": "node test_flow.mjs",
+    "test": "node test_landing.mjs && node test_flow.mjs && node test_analysis.mjs",
     "test:e2e": "pytest"
   },
   "repository": {

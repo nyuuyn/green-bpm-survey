@@ -8,12 +8,35 @@ import re
 
 from playwright.sync_api import expect
 
-from helpers import check, complete_survey, fill_about_you, start_survey
+from helpers import check, complete_survey, fill_about_you, finish_rating, start_survey
 
 
-def test_intro_screen_has_start_button(page, base_url):
-    page.goto(f"{base_url}/index.html")
-    expect(page.get_by_role("button", name="Start", exact=True)).to_be_visible()
+def test_survey_page_boots_directly_into_about_you(page, base_url):
+    # No intro/Start step on survey.html anymore - that content moved to the
+    # landing page (index.html); this page fetches data.json and renders
+    # "About you" immediately.
+    start_survey(page, base_url)
+    expect(page.locator("h1")).to_have_text("About you")
+
+
+def test_header_breadcrumb_present_on_every_survey_screen(page, base_url):
+    # The header breadcrumb ("Green BPM Survey / Survey") is static markup, not
+    # part of what survey.js re-renders into #app - present and consistent no
+    # matter which of the three screens is currently showing.
+    crumb = page.locator(".crumb-current")
+    brand_link = page.locator("a.brand")
+
+    start_survey(page, base_url)
+    expect(crumb).to_have_text("Survey")
+
+    fill_about_you(page)
+    expect(crumb).to_have_text("Survey")
+
+    finish_rating(page)
+    expect(crumb).to_have_text("Survey")
+
+    brand_link.click()
+    expect(page).to_have_url(f"{base_url}/index.html")
 
 
 def test_about_you_validation(page, base_url):

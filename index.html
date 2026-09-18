@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Green BPM Relevance Survey</title>
-<meta name="description" content="Help rate how relevant sustainability guidelines are to Business Process Management.">
+<title>Green BPM Guideline Survey</title>
+<meta name="description" content="Is sustainability guidance actually relevant to Business Process Management? Rate guidelines, or see how an AI-generated pass rated them.">
 <link rel="icon" href="assets/img/envite-icon.svg">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -16,12 +16,51 @@
       <img src="assets/img/envite-icon.svg" alt="" class="brand-icon" aria-hidden="true">
       <span class="brand-text">Green BPM Survey</span>
     </span>
-    <span id="progressLabel" class="progress-label" hidden></span>
   </header>
 
-  <div id="progressBar" class="progress-bar" hidden><div id="progressFill" class="progress-fill"></div></div>
+  <main id="app">
+    <div class="card">
+      <p class="intro-eyebrow">
+        <img src="assets/img/envite-icon.svg" alt="" class="eyebrow-icon">
+        <span>A research initiative by </span>
+        <a class="ref-link" href="https://envite.de" target="_blank" rel="noopener">envite Consulting</a>
+      </p>
+      <h1>Is sustainability guidance actually relevant to Business Process Management?</h1>
+      <p class="intro-lead">
+        We collected 425 sustainability guidelines from cloud providers, the Green Software
+        Foundation, W3C, and academic BPM/lean literature. We'd like your judgment on how relevant
+        each one is to designing, modeling, executing, and monitoring business processes — as
+        opposed to being general cloud/software advice. Your ratings, together with an existing
+        AI-generated pass, will help distill a focused Green BPM Guideline out of all this raw guidance.
+      </p>
+      <ul class="intro-facts">
+        <li><span class="ico">📝</span><span>Rate 25 randomly selected guidelines — about 10–15 minutes.</span></li>
+        <li><span class="ico">📊</span><span>For each one: how relevant it is (0–3), which part of the process it touches, and which BPM lifecycle phase it applies to.</span></li>
+        <li><span class="ico">🤖</span><span>Or skip straight to the analysis — see how an AI-generated first pass (Claude) rated all 425 guidelines already.</span></li>
+        <li><span class="ico">🔒</span><span>Anonymous — no account, no personal data collected.</span></li>
+      </ul>
 
-  <main id="app"></main>
+      <div class="hero-cta">
+        <a class="btn-primary btn-hero" href="survey.html">Take the survey →</a>
+        <a class="btn-secondary btn-hero" href="analysis.html">See the analysis →</a>
+      </div>
+
+      <div class="intro-sources">
+        <p class="intro-sources-label">Guidelines are drawn from cloud frameworks, web standards, and BPM-specific pattern catalogs:</p>
+        <ul class="source-list">
+          <li><a class="ref-link" href="https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html" target="_blank" rel="noopener">AWS Well-Architected Framework — Sustainability Pillar</a></li>
+          <li><a class="ref-link" href="https://learn.microsoft.com/en-us/azure/well-architected/sustainability/" target="_blank" rel="noopener">Azure Well-Architected Framework — Sustainability</a></li>
+          <li><a class="ref-link" href="https://cloud.google.com/architecture/framework/sustainability" target="_blank" rel="noopener">Google Cloud Well-Architected Framework — Sustainability</a></li>
+          <li><a class="ref-link" href="https://patterns.greensoftware.foundation/" target="_blank" rel="noopener">Green Software Foundation Patterns Catalog</a></li>
+          <li><a class="ref-link" href="https://www.w3.org/TR/web-sustainability-guidelines/" target="_blank" rel="noopener">W3C Web Sustainability Guidelines</a></li>
+          <li><a class="ref-link" href="https://www.iaas.uni-stuttgart.de/publications/INPROC-2011-65-Green_Business_Process_Patterns_web.pdf" target="_blank" rel="noopener">Green Business Process Patterns (Nowak et al., 2011)</a></li>
+          <li><a class="ref-link" href="https://process-pattern.app/" target="_blank" rel="noopener">process-pattern.app</a></li>
+          <li><a class="ref-link" href="https://www.epa.gov/sustainability/lean-environment-toolkit-preface" target="_blank" rel="noopener">EPA Lean & Environment Toolkit</a></li>
+          <li><a class="ref-link" href="https://www.lean.org/the-lean-post/articles/how-lean-can-help-you-go-green/" target="_blank" rel="noopener">Lean Enterprise Institute — sustainability articles</a></li>
+        </ul>
+      </div>
+    </div>
+  </main>
 
   <footer class="footer">
     <p>
@@ -40,7 +79,5 @@
   </footer>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-<script src="app.js"></script>
 </body>
 </html>

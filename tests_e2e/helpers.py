@@ -12,8 +12,9 @@ def check(page, name, value):
 
 
 def start_survey(page, base_url):
-    page.goto(f"{base_url}/index.html")
-    page.get_by_role("button", name="Start", exact=True).click()
+    # survey.html boots straight into "About you" - the pitch/intro content now
+    # lives on the landing page (index.html), which links here.
+    page.goto(f"{base_url}/survey.html")
     page.wait_for_selector("h1:has-text('About you')")
 
 
