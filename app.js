@@ -134,6 +134,11 @@ function renderIntro() {
   setProgress(0, 0);
   renderApp(
     el("div", { class: "card" }, [
+      el("p", { class: "intro-eyebrow" }, [
+        el("img", { src: "assets/img/envite-icon.svg", alt: "", class: "eyebrow-icon" }),
+        el("span", {}, "A research initiative by "),
+        el("a", { class: "ref-link", href: "https://envite.de", target: "_blank", rel: "noopener" }, "envite Consulting"),
+      ]),
       el("h1", {}, "Is sustainability guidance actually relevant to Business Process Management?"),
       el("p", { class: "intro-lead" },
         "We collected 425 sustainability guidelines from cloud providers, the Green Software " +
