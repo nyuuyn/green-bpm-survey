@@ -179,23 +179,11 @@ function renderRespondentInfo() {
   setProgress(0, 0);
 
   const errorEl = el("p", { class: "error-text" });
+  errorEl.hidden = true;
   const roleOtherWrap = el("div", { style: "margin-top:8px" }, [
     el("input", { type: "text", name: "roleOther", placeholder: "Please specify your role" }),
   ]);
   roleOtherWrap.hidden = true;
-
-  const form = el("form", {
-    onsubmit: (e) => {
-      e.preventDefault();
-      const data = collectRespondentInfo(form);
-      if (!data.ok) {
-        errorEl.textContent = data.error;
-        return;
-      }
-      state.respondent = data.respondent;
-      renderRatingList();
-    },
-  });
 
   const roleGroup = radioGroup("role", ROLE_OPTIONS, { vertical: true });
   roleGroup.addEventListener("change", (e) => {
@@ -204,20 +192,55 @@ function renderRespondentInfo() {
     if (roleOtherWrap.hidden) roleOtherWrap.querySelector("input").value = "";
   });
 
+  const bpmFieldset = el("fieldset", { class: "field-group" }, [
+    el("legend", { class: "sr-only" }, "BPM experience"),
+    el("div", { class: "field-group-title" }, ["BPM experience", el("span", { class: "hint" }, "Your own background with business process management.")]),
+    radioGroup("bpmExperience", EXPERIENCE_OPTIONS, { vertical: true }),
+  ]);
+  const sustainabilityFieldset = el("fieldset", { class: "field-group" }, [
+    el("legend", { class: "sr-only" }, "Sustainability / green-IT experience"),
+    el("div", { class: "field-group-title" }, ["Sustainability / green-IT experience", el("span", { class: "hint" }, "Separate from BPM — your background with sustainability specifically.")]),
+    radioGroup("sustainabilityExperience", EXPERIENCE_OPTIONS, { vertical: true }),
+  ]);
+  const roleFieldset = el("fieldset", { class: "field-group" }, [
+    el("legend", { class: "sr-only" }, "Role"),
+    el("div", { class: "field-group-title" }, ["Role", el("span", { class: "hint" }, "Whichever best describes you.")]),
+    roleGroup,
+    roleOtherWrap,
+  ]);
+
+  const allFieldsets = [bpmFieldset, sustainabilityFieldset, roleFieldset];
+  const fieldsetByName = {
+    bpmExperience: bpmFieldset,
+    sustainabilityExperience: sustainabilityFieldset,
+    role: roleFieldset,
+    roleOther: roleFieldset,
+  };
+
+  const form = el("form", {
+    onsubmit: (e) => {
+      e.preventDefault();
+      const data = collectRespondentInfo(form);
+      allFieldsets.forEach((fs) => fs.classList.remove("invalid"));
+      if (!data.ok) {
+        errorEl.hidden = false;
+        errorEl.textContent = data.error;
+        const target = fieldsetByName[data.field] || roleFieldset;
+        target.classList.add("invalid");
+        target.parentNode.insertBefore(errorEl, target);
+        errorEl.scrollIntoView?.({ behavior: "smooth", block: "center" });
+        return;
+      }
+      errorEl.hidden = true;
+      state.respondent = data.respondent;
+      renderRatingList();
+    },
+  });
+
   form.append(
-    el("fieldset", {}, [
-      el("legend", {}, ["BPM experience", el("span", { class: "hint" }, "Your own background with business process management.")]),
-      radioGroup("bpmExperience", EXPERIENCE_OPTIONS, { vertical: true }),
-    ]),
-    el("fieldset", {}, [
-      el("legend", {}, ["Sustainability / green-IT experience", el("span", { class: "hint" }, "Separate from BPM — your background with sustainability specifically.")]),
-      radioGroup("sustainabilityExperience", EXPERIENCE_OPTIONS, { vertical: true }),
-    ]),
-    el("fieldset", {}, [
-      el("legend", {}, ["Role", el("span", { class: "hint" }, "Whichever best describes you.")]),
-      roleGroup,
-      roleOtherWrap,
-    ]),
+    bpmFieldset,
+    sustainabilityFieldset,
+    roleFieldset,
     errorEl,
     el("div", { class: "btn-row" }, [
       el("span"),
@@ -241,10 +264,10 @@ function collectRespondentInfo(form) {
   const role = fd.get("role");
   const roleOther = (fd.get("roleOther") || "").trim();
 
-  if (!bpmExperience) return { ok: false, error: "Please select your BPM experience." };
-  if (!sustainabilityExperience) return { ok: false, error: "Please select your sustainability/green-IT experience." };
-  if (!role) return { ok: false, error: "Please select a role." };
-  if (role === "Other" && !roleOther) return { ok: false, error: "Please specify your role, or choose a different option." };
+  if (!bpmExperience) return { ok: false, field: "bpmExperience", error: "Please select your BPM experience." };
+  if (!sustainabilityExperience) return { ok: false, field: "sustainabilityExperience", error: "Please select your sustainability/green-IT experience." };
+  if (!role) return { ok: false, field: "role", error: "Please select a role." };
+  if (role === "Other" && !roleOther) return { ok: false, field: "roleOther", error: "Please specify your role, or choose a different option." };
 
   return {
     ok: true,
@@ -259,6 +282,7 @@ function collectRespondentInfo(form) {
 function renderRatingList() {
   const total = state.items.length;
   const errorEl = el("p", { class: "error-text" });
+  errorEl.hidden = true;
   const rows = state.items.map((item, i) => buildRatingRow(item, i));
 
   function refreshProgress() {
@@ -377,12 +401,15 @@ function handleFinish(form, rows, errorEl) {
   });
 
   if (invalidCount > 0) {
+    errorEl.hidden = false;
     errorEl.textContent = `${invalidCount} guideline(s) still need an answer — see the highlighted row(s) below.`;
+    firstInvalid.parentNode.insertBefore(errorEl, firstInvalid);
     toggleRow(firstInvalid, true);
-    firstInvalid.scrollIntoView?.({ behavior: "smooth", block: "center" });
+    errorEl.scrollIntoView?.({ behavior: "smooth", block: "center" });
     return;
   }
 
+  errorEl.hidden = true;
   errorEl.textContent = "";
   state.responses = responses;
   renderComplete();

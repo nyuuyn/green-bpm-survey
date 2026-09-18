@@ -38,7 +38,7 @@ body {
 }
 
 .wrap {
-  max-width: 640px;
+  max-width: 780px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
@@ -157,6 +157,35 @@ fieldset {
   border: none;
   padding: 0;
   margin: 0 0 22px;
+}
+
+.field-group {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px 16px;
+}
+
+.field-group.invalid {
+  border-color: var(--danger);
+}
+
+.field-group-title {
+  font-weight: 600;
+  font-size: 13.5px;
+  margin-bottom: 8px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 legend {
