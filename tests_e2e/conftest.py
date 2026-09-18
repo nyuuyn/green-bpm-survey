@@ -1,8 +1,9 @@
 """Spins up the site's own static file server for the Playwright suite.
 
 Mirrors README.md's "npm run serve" (python -m http.server) rather than opening
-index.html via file:// - app.js's fetch("data.json")/fetch("analysis.json") calls
-require http, same reason the repo doesn't support file:// today.
+index.html via file:// - survey.js's fetch("data.json") and analysis.js's
+fetch("analysis_<round>.json") calls require http, same reason the repo
+doesn't support file:// today.
 
 Overrides pytest-playwright's `base_url` fixture, which is its supported extension
 point for exactly this - once set, `page.goto("/index.html")` in tests resolves

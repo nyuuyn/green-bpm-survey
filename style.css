@@ -467,6 +467,35 @@ a.btn-primary, a.btn-secondary {
 
 .analysis-link-row { margin-top: 18px; }
 
+.analysis-intro { margin-bottom: 16px; }
+.analysis-intro h1 { margin-bottom: 12px; }
+.analysis-intro .intro-lead { margin-bottom: 0; }
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  font: inherit;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
 .analysis-card .btn-row { margin-bottom: 18px; }
 
 .analysis-grid {

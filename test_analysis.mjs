@@ -37,25 +37,36 @@ function log(label, ok, extra = "") {
   if (!ok) failures++;
 }
 
-const CHART_IDS = [
+const CHART_NAMES = [
   "chart-per-source", "chart-relevance-dist", "chart-high-relevance", "chart-relevance-mix",
   "chart-scope-counts", "chart-scope-native", "chart-generic-share", "chart-lifecycle", "chart-mean-by-scope",
 ];
+const chartIdsFor = (roundId) => CHART_NAMES.map((n) => `${n}-${roundId}`);
 
 async function main() {
   const doc = window.document;
 
-  await sleep(300); // allow fetch("analysis.json") + chart mounting to settle
+  await sleep(300); // allow fetch("analysis_claude.json") + chart mounting to settle
 
   const h1 = doc.querySelector("h1");
   log("Analysis page heading present", !!h1 && h1.textContent.includes("relevant"), h1 && h1.textContent);
 
+  // Tab bar: one tab per round in ANALYSIS_ROUNDS - 3 today (general/sustainability/bpm
+  // personas), "AI (General)" active by default with no hash present.
+  const tabs = doc.querySelectorAll(".tab");
+  log("One tab per survey round (3 today)", tabs.length === 3, `got ${tabs.length}`);
+  log('"AI (General)" tab is active by default', doc.querySelector(".tab.active")?.textContent === "AI (General)");
+
+  const claudeChartIds = chartIdsFor("claude");
   const canvases = doc.querySelectorAll("canvas");
-  log("9 chart canvases rendered", canvases.length === CHART_IDS.length, `got ${canvases.length}`);
-  log("9 Chart instances mounted with matching canvas ids", mountedCharts.length === CHART_IDS.length &&
+  log("9 chart canvases rendered for the active round", canvases.length === claudeChartIds.length, `got ${canvases.length}`);
+  log("9 Chart instances mounted with matching canvas ids", mountedCharts.length === claudeChartIds.length &&
     mountedCharts.every((c) => doc.getElementById(c.id) === [...canvases].find((cv) => cv.id === c.id)),
     `got ${mountedCharts.length}`);
-  log("Every expected canvas id is present", CHART_IDS.every((id) => !!doc.getElementById(id)));
+  log("Every expected canvas id is present, suffixed by round", claudeChartIds.every((id) => !!doc.getElementById(id)));
+
+  const claudePanel = doc.querySelector('.analysis-card[data-round="claude"]');
+  log("The claude round's panel is visible", !!claudePanel && claudePanel.hidden === false);
 
   log("4 chart legends present", doc.querySelectorAll(".chart-legend").length === 4,
     `got ${doc.querySelectorAll(".chart-legend").length}`);
@@ -68,8 +79,37 @@ async function main() {
   log('Breadcrumb shows "Analysis" as the current page', doc.querySelector(".crumb-current")?.textContent === "Analysis");
 
   const downloadLink = [...doc.querySelectorAll("a")].find((a) => a.textContent.includes("Download full dataset"));
-  log("Download-full-dataset link points at analysis.json",
-    !!downloadLink && downloadLink.getAttribute("href") === "analysis.json");
+  log("Download-full-dataset link points at this round's own JSON file",
+    !!downloadLink && downloadLink.getAttribute("href") === "analysis_claude.json");
+
+  // Switch to the sustainability tab - lazy-loads its data and mounts its own
+  // suffixed canvases, without touching the (still-in-DOM, now hidden) claude panel.
+  const sustainabilityTab = [...tabs].find((t) => t.textContent === "AI (Sustainability Expert)");
+  sustainabilityTab.click();
+  await sleep(300);
+
+  log('Hash updates to "#sustainability" on tab click', window.location.hash === "#sustainability");
+  log('"AI (Sustainability Expert)" tab is now active',
+    doc.querySelector(".tab.active")?.textContent === "AI (Sustainability Expert)");
+  log("Claude panel is now hidden (not destroyed)", claudePanel.hidden === true);
+
+  const sustainabilityChartIds = chartIdsFor("sustainability");
+  log("Sustainability round's canvases mounted", sustainabilityChartIds.every((id) => !!doc.getElementById(id)));
+  log("18 Chart instances total (9 claude + 9 sustainability, no duplicates)",
+    mountedCharts.length === 18, `got ${mountedCharts.length}`);
+
+  const visiblePanel = doc.querySelector(".analysis-card:not([hidden])");
+  const downloadLinkAfterSwitch = [...visiblePanel.querySelectorAll("a")].find((a) => a.textContent.includes("Download full dataset"));
+  log("Download link now points at the sustainability round's JSON",
+    downloadLinkAfterSwitch.getAttribute("href") === "analysis_sustainability.json");
+
+  // Switching back to an already-loaded round toggles visibility only - no re-fetch/re-mount.
+  const generalTab = [...tabs].find((t) => t.textContent === "AI (General)");
+  generalTab.click();
+  await sleep(100);
+  log("Switching back to claude doesn't re-mount its charts",
+    mountedCharts.length === 18, `got ${mountedCharts.length}`);
+  log("Claude panel visible again after switching back", claudePanel.hidden === false);
 
   console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);
   if (failures > 0) process.exitCode = 1;

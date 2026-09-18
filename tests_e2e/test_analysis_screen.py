@@ -5,13 +5,14 @@ canvas. This suite runs in a real browser, so it can.
 
 analysis.html is now a standalone page (independently reachable from the
 landing page), so most of these navigate straight to it instead of completing
-the survey first.
+the survey first. It also shows one tab per survey round (ANALYSIS_ROUNDS in
+analysis.js) - three today (general/sustainability/BPM Claude personas).
 """
 from playwright.sync_api import expect
 
 from helpers import canvas_has_content, complete_survey
 
-CHART_IDS = [
+CHART_NAMES = [
     "chart-per-source",
     "chart-relevance-dist",
     "chart-high-relevance",
@@ -24,35 +25,74 @@ CHART_IDS = [
 ]
 
 
+def _chart_ids(round_id):
+    return [f"{name}-{round_id}" for name in CHART_NAMES]
+
+
 def _open_analysis_page(page, base_url):
     page.goto(f"{base_url}/analysis.html")
     page.wait_for_selector("h1:has-text('relevant')")
 
 
+def _active_panel(page):
+    return page.locator(".analysis-card:not([hidden])")
+
+
 def test_analysis_page_renders_all_charts_with_real_content(page, base_url):
     _open_analysis_page(page, base_url)
 
-    expect(page.locator("canvas")).to_have_count(len(CHART_IDS))
-    for chart_id in CHART_IDS:
+    chart_ids = _chart_ids("claude")
+    expect(page.locator("canvas")).to_have_count(len(chart_ids))
+    for chart_id in chart_ids:
         expect(page.locator(f"#{chart_id}")).to_be_visible()
         assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
+
+
+def test_analysis_page_has_three_tabs_with_general_active_by_default(page, base_url):
+    _open_analysis_page(page, base_url)
+    expect(page.locator(".tab")).to_have_count(3)
+    expect(page.locator(".tab.active")).to_have_text("AI (General)")
+
+
+def test_switching_tabs_lazy_loads_and_renders_the_other_personas(page, base_url):
+    _open_analysis_page(page, base_url)
+
+    page.get_by_role("button", name="AI (Sustainability Expert)").click()
+    expect(page).to_have_url(f"{base_url}/analysis.html#sustainability")
+    expect(page.locator(".tab.active")).to_have_text("AI (Sustainability Expert)")
+
+    sustainability_ids = _chart_ids("sustainability")
+    for chart_id in sustainability_ids:
+        expect(page.locator(f"#{chart_id}")).to_be_visible()
+        assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
+
+    page.get_by_role("button", name="AI (BPM Expert)").click()
+    expect(page).to_have_url(f"{base_url}/analysis.html#bpm")
+    for chart_id in _chart_ids("bpm"):
+        expect(page.locator(f"#{chart_id}")).to_be_visible()
+
+    # Switching back to an already-loaded round (claude) shouldn't duplicate its
+    # canvases - all three rounds' charts stay in the DOM (hidden, not destroyed).
+    page.get_by_role("button", name="AI (General)").click()
+    expect(page.locator("canvas")).to_have_count(len(CHART_NAMES) * 3)
+    expect(_active_panel(page)).to_have_attribute("data-round", "claude")
 
 
 def test_analysis_page_legends_present(page, base_url):
     _open_analysis_page(page, base_url)
 
-    legends = page.locator(".chart-legend")
+    legends = _active_panel(page).locator(".chart-legend")
     # relevance-mix, high-relevance-share, scope-native, generic-share
     expect(legends).to_have_count(4)
 
-    high_relevance_card = page.locator(".chart-card", has=page.locator("#chart-high-relevance"))
+    high_relevance_card = page.locator(".chart-card", has=page.locator("#chart-high-relevance-claude"))
     expect(high_relevance_card.locator(".chart-legend")).to_contain_text("General source")
     expect(high_relevance_card.locator(".chart-legend")).to_contain_text("BPM-native source")
 
 
 def test_top_20_table_has_20_rows(page, base_url):
     _open_analysis_page(page, base_url)
-    expect(page.locator(".data-table tbody tr")).to_have_count(20)
+    expect(_active_panel(page).locator(".data-table tbody tr")).to_have_count(20)
 
 
 def test_header_breadcrumb_shows_current_page_and_links_home(page, base_url):
@@ -68,10 +108,10 @@ def test_header_breadcrumb_shows_current_page_and_links_home(page, base_url):
     expect(page.get_by_role("link", name="Take the survey")).to_be_visible()
 
 
-def test_download_full_dataset_link_points_at_analysis_json(page, base_url):
+def test_download_full_dataset_link_points_at_this_rounds_json(page, base_url):
     _open_analysis_page(page, base_url)
-    link = page.get_by_role("link", name="Download full dataset (JSON)")
-    expect(link).to_have_attribute("href", "analysis.json")
+    link = _active_panel(page).get_by_role("link", name="Download full dataset (JSON)")
+    expect(link).to_have_attribute("href", "analysis_claude.json")
 
 
 def test_completion_screen_link_navigates_to_analysis_page(page, base_url):

@@ -1,0 +1,6170 @@
+[
+{
+"id": "AWS.Region.1",
+"name": "Choose Region based on both business requirements and sustainability goals",
+"source": "aws",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "AWS.Demand.1",
+"name": "Scale workload infrastructure dynamically",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Execution"
+]
+},
+{
+"id": "AWS.Demand.2",
+"name": "Align SLAs with sustainability goals",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "AWS.Demand.3",
+"name": "Stop the creation and maintenance of unused\r\n  assets",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "AWS.Demand.4",
+"name": "Optimize geographic placement of workloads based on their networking requirements",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "AWS.Demand.5",
+"name": "Optimize team member resources for activities\r\n  performed",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.Demand.6",
+"name": "Implement buffering or throttling to flatten the demand curve",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Execution"
+]
+},
+{
+"id": "AWS.SWA.1",
+"name": "Optimize software and architecture for asynchronous\r\n  and scheduled jobs",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Execution"
+]
+},
+{
+"id": "AWS.SWA.2",
+"name": "Remove or refactor workload components with low or\r\n  no use",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "AWS.SWA.3",
+"name": "Optimize areas of code that consume the most time or\r\n  resources",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "AWS.SWA.4",
+"name": "Optimize impact on devices and\r\n  equipment",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.SWA.5",
+"name": "Use software patterns and architectures that best\r\n  support data access and storage patterns",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "AWS.Data.1",
+"name": "Implement a data classification policy",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "AWS.Data.2",
+"name": "Use technologies that support data access and\r\n  storage patterns",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.Data.3",
+"name": "Use policies to manage the lifecycle of your datasets",
+"source": "aws",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.Data.4",
+"name": "Use elasticity and automation to expand block storage or file system",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.Data.5",
+"name": "Remove unneeded or redundant data",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "AWS.Data.6",
+"name": "Use shared file systems or storage to access\r\n  common data",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.Data.7",
+"name": "Minimize data movement across networks",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.Data.8",
+"name": "Back up data only when difficult to recreate",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.HWS.1",
+"name": "Use the minimum amount of hardware to meet your\r\n  needs",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.HWS.2",
+"name": "Use instance types with the least impact",
+"source": "aws",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.HWS.3",
+"name": "Use managed services",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.HWS.4",
+"name": "Optimize your use of hardware-based compute accelerators",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Execution"
+]
+},
+{
+"id": "AWS.Dev.0",
+"name": "Communicate and cascade your sustainability goals",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "AWS.Dev.1",
+"name": "Adopt methods that can rapidly introduce\r\n  sustainability improvements",
+"source": "aws",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "AWS.Dev.2",
+"name": "Keep your workload up-to-date",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.Dev.3",
+"name": "Increase utilization of build environments",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "AWS.Dev.4",
+"name": "Use managed device farms for testing",
+"source": "aws",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.REL.1",
+"name": "Use circuit breaker patterns to stop repeated failing operations",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.REL.2",
+"name": "Implement request throttling during overload conditions",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.REL.3",
+"name": "Use graceful degradation patterns where possible",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Execution"
+]
+},
+{
+"id": "MA.REL.4",
+"name": "Detect failure patterns early with monitoring and alerting",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "MA.REL.5",
+"name": "Design workloads to isolate dependency failures",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Execution"
+]
+},
+{
+"id": "MA.REL.6",
+"name": "Align resiliency architecture to defined business continuity requirements",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.7",
+"name": "Evaluate whether multi-region deployments are truly required",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.8",
+"name": "Assess monolith versus microservice tradeoffs carefully",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.9",
+"name": "Right-size failover environments instead of mirroring peak production scale",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.10",
+"name": "Regularly review backup, replication, and retention strategies",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.REL.11",
+"name": "Use asynchronous processing for burst-prone operations",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Modeling",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.REL.12",
+"name": "Implement buffering and queue-based workload management",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.REL.13",
+"name": "Batch non-urgent operations where appropriate",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "MA.REL.14",
+"name": "Tune autoscaling policies to avoid aggressive short-term scaling reactions",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.REL.15",
+"name": "Evaluate managed PaaS and serverless services where appropriate",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.16",
+"name": "Keep platform services, runtimes, and dependencies updated",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.REL.17",
+"name": "Match service tiers and scalability models to actual workload demand",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.18",
+"name": "Remove zombie workloads, orphaned resources, and inactive environments regularly",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.REL.19",
+"name": "Shut down non-production environments when not in use",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.REL.20",
+"name": "Avoid dedicated infrastructure allocations unless workload requirements justify them",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.REL.21",
+"name": "Tune autoscaling behavior to avoid aggressive short-term scaling reactions",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.REL.22",
+"name": "Use Spot VMs only for interrupt-tolerant workloads",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.23",
+"name": "Choose regions close to users when latency affects workload reliability",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.24",
+"name": "Evaluate carbon intensity, latency, and resiliency tradeoffs together when selecting deployment regions",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.25",
+"name": "Use load testing and chaos engineering to assess how the workload behaves under outages, traffic spikes, and traffic dips",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "MA.REL.26",
+"name": "Use chaos engineering to simulate conditions that increase energy usage and identify inefficient execution paths",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "MA.REL.27",
+"name": "Define expected system behavior under constrained or inefficient operating conditions",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.REL.28",
+"name": "Consider implementing an eco version of the application that reduces features or performance to minimize energy usage",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.REL.29",
+"name": "Evaluate the tradeoff of running chaos engineering and load tests, since these activities themselves consume additional compute and increase emissions",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.REL.30",
+"name": "Schedule and scope chaos engineering intentionally to balance resilience validation with the environmental cost of testing",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.SEC.1",
+"name": "Block malicious traffic as early as possible by using edge or network-level controls",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.2",
+"name": "Use rate limiting and throttling to control excessive or abusive request patterns",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.3",
+"name": "Apply identity-based access controls to restrict unauthorized usage",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.4",
+"name": "Design security layers to filter traffic early rather than at application level",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.5",
+"name": "Avoid excessive overlapping security layers unless required",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.6",
+"name": "Harden networking components to reduce exposure and filter unwanted traffic early",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.7",
+"name": "Harden identity and access controls to ensure only legitimate usage patterns are allowed",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.8",
+"name": "Harden cloud resource configurations to eliminate weak points and misconfigurations",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.9",
+"name": "Harden application and code assets to prevent vulnerabilities from being exploited",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.10",
+"name": "Harden operational and management access paths to reduce administrative misuse or accidental impact",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.11",
+"name": "Filter logs before ingestion into SIEM systems",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.SEC.12",
+"name": "Collect only security signals required for detection and analysis",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.SEC.13",
+"name": "Use cloud-native data collection rules to control and refine telemetry intake",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.14",
+"name": "Avoid forwarding full raw datasets when aggregated or filtered signals are sufficient",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.15",
+"name": "Design security monitoring pipelines with purpose, not full-fidelity collection by default",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.SEC.16",
+"name": "Apply security controls closer to the source of traffic instead of relying on centralized inspection paths",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.17",
+"name": "Avoid hub-and-spoke routing for traffic that does not require centralized inspection",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.18",
+"name": "Use cloud-native security services that enable local analysis and enforcement",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.SEC.19",
+"name": "Design traffic flows to minimize intermediate hops introduced purely for security inspection",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.1",
+"name": "Track cost at the feature or workload level, not only at the infrastructure level",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "MA.COST.2",
+"name": "Use cost signals as one input to sustainability measurement",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "MA.COST.3",
+"name": "Define explicit efficiency baselines for critical systems",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "MA.COST.4",
+"name": "Treat observability spend as part of the optimization scope",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.5",
+"name": "Assign cost accountability at the workload level",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.COST.6",
+"name": "Challenge local optimizations that shift cost elsewhere",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Model",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis",
+"Optimization"
+]
+},
+{
+"id": "MA.COST.7",
+"name": "Reduce API chattiness, payload size, and unnecessary repeat calls",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.8",
+"name": "Prioritize algorithm and execution-path improvements in code that dominates runtime cost",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.9",
+"name": "Cache responses that are repeated, predictable, or expensive to regenerate",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.10",
+"name": "Be cautious about adding abstraction in performance-critical paths",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.11",
+"name": "Choose monolith or microservices based on real scaling and isolation needs",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.12",
+"name": "Evaluate SSR and CSR choices against their total compute and transfer footprint",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.13",
+"name": "Remove cross-service data duplication and redundant domain models where possible",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Modeling",
+"Optimization"
+]
+},
+{
+"id": "MA.COST.14",
+"name": "Auto-scale workloads against observed demand rather than assumed peak usage",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.COST.15",
+"name": "Shut down or downsize non-production environments when they are not needed",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.16",
+"name": "Remove orphaned and zombie resources on a regular cadence",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.17",
+"name": "Match platform tiers and reservations to actual usage patterns",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.18",
+"name": "Favor containers, PaaS, or serverless when they fit the workload",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.19",
+"name": "Use Spot VMs only where interruption is acceptable and recovery is understood",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.20",
+"name": "Optimize CI/CD pipelines with caching, reuse, and incremental builds",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.21",
+"name": "Consider lower-carbon regions as part of workload placement decisions",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.COST.22",
+"name": "Schedule batch workloads to take advantage of lower-carbon or lower-cost periods",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.COST.23",
+"name": "Place workloads closer to users when latency and transfer patterns justify it",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.24",
+"name": "Avoid cross-region routing and replication that do not serve a clear workload need",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.25",
+"name": "Reassess regional deployment choices against actual usage over time",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.26",
+"name": "Use CDNs for content that is requested repeatedly at scale",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.27",
+"name": "Compress payloads and choose transfer formats with care",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.28",
+"name": "Reduce cross-service chaining and fan-out from a single user action",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Model",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Modeling"
+]
+},
+{
+"id": "MA.COST.29",
+"name": "Keep traffic within regional boundaries when the architecture allows it",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.30",
+"name": "Place workloads near users when delivery patterns make that worthwhile",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.31",
+"name": "Centralize media processing when the same transformations would otherwise be repeated",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.32",
+"name": "Match storage tiers to how often data is actually accessed",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.33",
+"name": "Remove stale, redundant, or low-value data on purpose",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.34",
+"name": "Control logging and telemetry growth before retention becomes passive sprawl",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.35",
+"name": "Avoid duplicating datasets across services unless there is a clear reason",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.36",
+"name": "Review backup retention policies against actual recovery requirements",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.COST.37",
+"name": "Compress stored data where the tradeoff is favorable",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.38",
+"name": "Scale CI/CD resources dynamically instead of keeping capacity always available",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.39",
+"name": "Cache build artifacts aggressively where reuse is reliable",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.40",
+"name": "Run tests for changed components when full-suite execution is not necessary",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.41",
+"name": "Introduce incremental build strategies where tooling supports them well",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.42",
+"name": "Remove redundant pipeline stages and duplicate checks",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.COST.43",
+"name": "Avoid always-on full-suite testing when risk does not justify it",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.OPEX.1",
+"name": "Establish a baseline of current carbon emissions for all workloads and services",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring",
+"Analysis"
+]
+},
+{
+"id": "MA.OPEX.2",
+"name": "Use emissions monitoring tools such as the Azure Carbon Optimizer to track environmental impact",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "MA.OPEX.3",
+"name": "Define carbon reduction targets for the workload and individual workload components",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "MA.OPEX.4",
+"name": "Track sustainability using a combination of factors and a measurable metric such as an SCI score",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring",
+"Analysis"
+]
+},
+{
+"id": "MA.OPEX.5",
+"name": "Record and assess the impact of all sustainability-related changes and optimizations",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis",
+"Optimization"
+]
+},
+{
+"id": "MA.OPEX.6",
+"name": "Follow organizational governance to enforce sustainability outcomes in workload teams",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.OPEX.7",
+"name": "Use existing cost governance controls and policies as part of sustainability initiatives",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.OPEX.8",
+"name": "Utilize built-in Azure Policy controls to enforce efficient resource configurations and operational standards",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.OPEX.9",
+"name": "Create a dedicated sustainability-focused Azure Policy initiative",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.OPEX.10",
+"name": "Implement data lifecycle management policies to ensure only necessary data is collected, retained, and processed",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.OPEX.11",
+"name": "Regularly review policy compliance and identify opportunities for further optimization",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.OPEX.12",
+"name": "Establish a sustainability community or center of excellence responsible for promoting cloud efficiency and green software practices",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.OPEX.13",
+"name": "Provide ongoing sustainability and green software training for architects, developers, and operations teams",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.OPEX.14",
+"name": "Define sustainability policies, targets, and expectations, and communicate them regularly across the organization",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.OPEX.15",
+"name": "Create a centralized repository for sustainability guidance, best practices, and lessons learned",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.OPEX.16",
+"name": "Encourage regular knowledge-sharing sessions, workshops, or internal webinars focused on sustainability",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.OPEX.17",
+"name": "Include sustainability metrics and objectives as part of workload governance, performance reviews, or KPIs",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring",
+"Analysis"
+]
+},
+{
+"id": "MA.OPEX.18",
+"name": "Recognize and reward teams that achieve sustainability goals through incentives, gamification, or certifications",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.OPEX.19",
+"name": "Promote carbon-aware and carbon-optimized application design practices across all workload teams",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.PERF.1",
+"name": "Optimize API communication patterns by reducing chatty interactions, minimizing payload sizes, and using efficient message encoding techniques",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.2",
+"name": "Implement request throttling and response caching by using services such as Azure API Management",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.3",
+"name": "Monitor API usage patterns and continuously optimize high-volume or inefficient endpoints",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring",
+"Optimization"
+]
+},
+{
+"id": "MA.PERF.4",
+"name": "Evaluate rendering strategies and select server-side or client-side rendering based on user device capabilities, network conditions, and workload requirements",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.5",
+"name": "Leverage caching mechanisms, whether centralized on the server or within the browser, to minimize repeated rendering and data processing operations",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.6",
+"name": "Design lightweight and efficient user interfaces by minimizing unnecessary components, pages, and media assets",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.7",
+"name": "Optimize content delivery by using appropriately sized images and videos, avoiding unnecessary asset downloads, and leveraging system fonts where practical",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.8",
+"name": "Improve user navigation and findability, and consider offering resource-efficient experiences such as simplified interfaces or dark mode options",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.9",
+"name": "Profile workloads to understand concurrency patterns, resource utilization, and opportunities for performance optimization or parallelization",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "MA.PERF.10",
+"name": "Evaluate specialized compute options, such as GPU-based resources, where they provide efficiency gains",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.11",
+"name": "Establish CPU and memory baselines and incorporate sustainability-focused testing, monitoring, alerts, and quality gates into deployment pipelines",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "MA.PERF.12",
+"name": "Use content delivery networks (CDNs), caching strategies, including in-memory caching where appropriate, and data compression techniques to reduce network traffic and optimize content delivery",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.13",
+"name": "Deploy workloads and content closer to users and keep dependent resources within the same cloud and region where practical",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.14",
+"name": "Regularly review and tune caching configurations, such as cache retention and expiration settings, to maximize efficiency and resource utilization",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.PERF.15",
+"name": "Apply storage compression, optimize database queries, and reduce unnecessary data transfer to improve storage efficiency and performance",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.PERF.16",
+"name": "Align data with appropriate storage access tiers and lifecycle policies, ensuring frequently accessed data is kept in hot storage while infrequently accessed data is moved to cold or archive storage",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "MA.PERF.17",
+"name": "Implement and regularly review backup, recovery point, and log retention policies using services such as Azure Backup and Azure Monitor to prevent unnecessary data accumulation",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.18",
+"name": "Review platform and service tier decisions to ensure they align with actual workload demand and resource utilization patterns",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.19",
+"name": "Prefer services and architectures that support dynamic scaling based on demand rather than fixed provisioned capacity",
+"source": "azure",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "MA.PERF.20",
+"name": "Evaluate whether higher-tier services are necessary for required features, and avoid overprovisioning where possible",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.21",
+"name": "Implement caching in CI/CD pipelines to store and reuse build outputs and artifacts between runs when inputs don't change",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.22",
+"name": "Use local caching on self-hosted CI/CD agents where possible to minimize network transfers and external data movement",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "MA.PERF.23",
+"name": "Identify and modernize legacy applications by migrating to modern cloud-native architectures such as serverless or optimized PaaS services",
+"source": "azure",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "MA.PERF.24",
+"name": "Keep platforms, services, and operating systems up to date by using automated update mechanisms such as Azure Automation Update Management",
+"source": "azure",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.REGION.1",
+"name": "Understand the carbon intensity of cloud regions",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GCP.REGION.2",
+"name": "Incorporate CFE in your location-selection strategy",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GCP.REGION.3",
+"name": "Use time-of-day scheduling",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GCP.AIML.1",
+"name": "Architect for energy efficiency by using TPUs",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.2",
+"name": "Follow the 4Ms best practices for resource selection",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.3",
+"name": "Select efficient AI models",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.4",
+"name": "Use domain-specific, hyper-efficient solutions",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.5",
+"name": "Apply appropriate model compression techniques",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.6",
+"name": "Use specialized hardware",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.7",
+"name": "Use parameter-efficient fine-tuning",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.8",
+"name": "Optimize model training processes",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.9",
+"name": "Improve inference efficiency",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.10",
+"name": "Measure and monitor",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "GCP.AIML.11",
+"name": "Implement carbon-aware scheduling",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GCP.AIML.12",
+"name": "Optimize data pipelines",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.AIML.13",
+"name": "Embrace MLOps",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "GCP.AIML.14",
+"name": "Use managed services",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.1",
+"name": "Use horizontal scaling",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.2",
+"name": "Configure appropriate scaling policies",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.3",
+"name": "Combine reactive and proactive scaling",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.4",
+"name": "Design stateless applications",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.5",
+"name": "Schedule for low carbon intensity",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GCP.RESOURCE.6",
+"name": "Use Spot VMs for noncritical workloads",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.7",
+"name": "Consolidate and parallelize jobs",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "GCP.RESOURCE.8",
+"name": "Use managed services",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.9",
+"name": "Match VM machine families to workload requirements",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.10",
+"name": "Upgrade to the latest machine types",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.11",
+"name": "Leverage the scale-to-zero capability of Cloud Run",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GCP.RESOURCE.12",
+"name": "Automate resource optimization using GKE",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GCP.RESOURCE.13",
+"name": "Configure carbon-aware scheduling",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GCP.RESOURCE.14",
+"name": "Optimize for cold start efficiency",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.RESOURCE.15",
+"name": "Balance redundancy and utilization",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GCP.SOFTWARE.1",
+"name": "Eliminate redundant logic and feature bloat",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.2",
+"name": "Refactor",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.3",
+"name": "Avoid unnecessary operations",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.4",
+"name": "Prioritize code readability and reusability",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.5",
+"name": "Cache frequent data",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.6",
+"name": "Cache API responses",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.7",
+"name": "Prioritize in-memory caching",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.8",
+"name": "Select appropriate cache-write strategies",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.9",
+"name": "Use smart eviction policies",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.10",
+"name": "Focus on reducing complexity",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.11",
+"name": "Avoid redundant work",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.12",
+"name": "Optimize for search and retrieval",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.13",
+"name": "Minimize memory footprint",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.14",
+"name": "Use specialized structures",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.15",
+"name": "Prefer event-driven logic over polling",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Model",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Modeling"
+]
+},
+{
+"id": "GCP.SOFTWARE.16",
+"name": "Prevent constant high frequency",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.17",
+"name": "Use asynchronous processing",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.18",
+"name": "Strict memory management",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.19",
+"name": "Optimize disk I/O",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.20",
+"name": "Batch operations",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.21",
+"name": "Use compression",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.22",
+"name": "Minimize payload size",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.23",
+"name": "Reduce round-trips",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.24",
+"name": "Minimization and compression",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.25",
+"name": "Lazy loading",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.26",
+"name": "Smaller JavaScript bundles",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.27",
+"name": "Browser caching",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.28",
+"name": "Efficient rendering",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.29",
+"name": "Lightweight design patterns",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.SOFTWARE.30",
+"name": "Accessibility and performance",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.1",
+"name": "Identify and eliminate duplication",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.2",
+"name": "Remove shadow data and dark data",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.3",
+"name": "Minimize the data volume for AI workloads",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.4",
+"name": "Integrate data quality checks",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.5",
+"name": "Review the value density of data",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.6",
+"name": "Critically evaluate the need for backups",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.7",
+"name": "Select an appropriate Cloud Storage class",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.8",
+"name": "Implement aggressive data lifecycle policies",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.9",
+"name": "Mandate resource tagging",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.10",
+"name": "Right-size and deprovision compute storage",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.11",
+"name": "Optimize the storage format",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.12",
+"name": "Select low-carbon storage regions",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GCP.STORAGE.13",
+"name": "Minimize replication",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GCP.STORAGE.14",
+"name": "Optimize data processing locations",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.STORAGE.15",
+"name": "Optimize data movement for your partners and customers",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.1",
+"name": "Grant permissions",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.2",
+"name": "Automate data export",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.3",
+"name": "Define carbon-related key performance indicators (KPIs)",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring",
+"Analysis"
+]
+},
+{
+"id": "GCP.MEASURE.4",
+"name": "Prioritize by scope",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "GCP.MEASURE.5",
+"name": "Use dual-accounting",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "GCP.MEASURE.6",
+"name": "Correlate with cost",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "GCP.MEASURE.7",
+"name": "Annotate data to measure return on effort (ROE)",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Analysis",
+"Optimization"
+]
+},
+{
+"id": "GCP.MEASURE.8",
+"name": "Decommission unattended projects",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.9",
+"name": "Right-size resources",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.10",
+"name": "Adopt carbon-aware scheduling",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GCP.MEASURE.11",
+"name": "Reduce data sprawl",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.12",
+"name": "Refine application code",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.13",
+"name": "Implement GreenOps governance",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.14",
+"name": "Use Carbon Footprint data for reporting and compliance",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.15",
+"name": "Invest in training and awareness",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.MEASURE.16",
+"name": "Define carbon requirements",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GCP.MEASURE.17",
+"name": "Automate GreenOps",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.CULTURE.1",
+"name": "Connect to the big picture",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.CULTURE.2",
+"name": "Communicate financial and sustainability goals",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.CULTURE.3",
+"name": "Embrace a shared fate mindset",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.CULTURE.4",
+"name": "Provide role-based sustainability training",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.CULTURE.5",
+"name": "Empower managers to advocate for sustainability",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.CULTURE.6",
+"name": "Align with industry standards and frameworks",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.CULTURE.7",
+"name": "Define carbon KPIs and NFRs",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring",
+"Analysis"
+]
+},
+{
+"id": "GCP.CULTURE.8",
+"name": "Measure return on effort",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "GCP.CULTURE.9",
+"name": "Recognize and celebrate carbon reduction",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.GUIDELINES.1",
+"name": "W3C Web Sustainability Guidelines",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.GUIDELINES.2",
+"name": "Green Software Foundation",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GCP.GUIDELINES.3",
+"name": "Greenhouse Gas Protocol",
+"source": "gcp",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.ARCH.1",
+"name": "Adopt serverless architecture for AI/ML workload processes",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution"
+]
+},
+{
+"id": "GSF.ARCH.2",
+"name": "Choose the region that is closest to users",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.ARCH.3",
+"name": "Containerize your workloads",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.ARCH.4",
+"name": "Implement stateless design",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.ARCH.5",
+"name": "Queue non-urgent processing requests",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.ARCH.6",
+"name": "Run AI models at the edge",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GSF.ARCH.7",
+"name": "Scale logical components independently",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "GSF.ARCH.8",
+"name": "Select efficient accelerators and instance types for AI workloads",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GSF.ARCH.9",
+"name": "Use on-demand execution for AI and agent workloads",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Execution"
+]
+},
+{
+"id": "GSF.ARCH.10",
+"name": "Evaluate other CPU architectures",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.ARCH.11",
+"name": "Use serverless cloud services",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DESIGN.1",
+"name": "Prioritise system-first typography selection based on user needs",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "GSF.DEV.1",
+"name": "Avoid an excessive DOM size",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.2",
+"name": "Avoid chaining critical requests",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.3",
+"name": "Avoid tracking unnecessary data",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Analysis"
+]
+},
+{
+"id": "GSF.DEV.4",
+"name": "Cache static data",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "GSF.DEV.5",
+"name": "Compress stored data",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.6",
+"name": "Compress transmitted data",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.7",
+"name": "Defer offscreen images",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "GSF.DEV.8",
+"name": "Deprecate GIFs for animated content",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "GSF.DEV.9",
+"name": "Enable text compression",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.10",
+"name": "Keep request counts low",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "GSF.DEV.11",
+"name": "Leverage pre-trained models and transfer learning",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.12",
+"name": "Minimize main thread work",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.13",
+"name": "Minimize the total number of deployed environments",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.14",
+"name": "Optimize agent orchestration to reduce unnecessary model calls",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "GSF.DEV.15",
+"name": "Optimize data storage formats for AI training and inference",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.16",
+"name": "Optimize image size",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "GSF.DEV.17",
+"name": "Reduce transmitted data",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.18",
+"name": "Remove unused CSS definitions",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "GSF.DEV.19",
+"name": "Select efficient ML frameworks and inference runtimes",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.20",
+"name": "Serve images in modern formats",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "GSF.DEV.21",
+"name": "Terminate TLS at border gateway",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.22",
+"name": "Use Asynchronous network calls instead of synchronous",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.23",
+"name": "Use compiled languages",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.24",
+"name": "Use right-sized and energy-efficient AI models",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.DEV.25",
+"name": "Use server-side rendering for high-traffic pages",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.1",
+"name": "Delete unused storage resources",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.2",
+"name": "Match utilization requirements of virtual machines (VMs)",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.3",
+"name": "Match utilization requirements with pre-configured servers",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.4",
+"name": "Optimise storage utilization",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.5",
+"name": "Optimize average CPU utilization",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.6",
+"name": "Optimize peak CPU utilization",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.7",
+"name": "Optimize power consumption for edge AI inference",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.8",
+"name": "Remove unused assets",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.9",
+"name": "Scale down applications when not in use",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.10",
+"name": "Scale down kubernetes applications when not in use",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.11",
+"name": "Scale infrastructure with user load",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "GSF.OPS.12",
+"name": "Scale Kubernetes workloads based on relevant demand metrics",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "GSF.OPS.13",
+"name": "Set storage retention policies",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.14",
+"name": "Time-shift Kubernetes cron jobs",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "GSF.OPS.15",
+"name": "Use carbon-aware scheduling and region selection for AI workloads",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GSF.OPS.16",
+"name": "Use circuit breaker patterns",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.17",
+"name": "Scan for vulnerabilities",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.18",
+"name": "Use cloud native network security tools and controls",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.OPS.19",
+"name": "Use DDoS protection",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.REQ.1",
+"name": "Encrypt what is necessary",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data",
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.REQ.2",
+"name": "Match your service level objectives to business needs",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GSF.REQ.3",
+"name": "Shed lower priority traffic",
+"source": "gsf",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.UX.1",
+"name": "Identify, assess, disclose, review, and mitigate sustainability impacts",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Analysis",
+"Monitoring"
+]
+},
+{
+"id": "W3C.UX.2",
+"name": "Understand user requirements or constraints",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.UX.3",
+"name": "Integrate sustainability into every stage of the ideation process",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.UX.4",
+"name": "Design efficient and streamlined user journeys",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Model",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "W3C.UX.5",
+"name": "Design to assist and not to distract",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.UX.6",
+"name": "Avoid being manipulative or deceptive",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.UX.7",
+"name": "Make deliverables understandable and reusable",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Modeling"
+]
+},
+{
+"id": "W3C.UX.8",
+"name": "Use a design system for interface consistency",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.UX.9",
+"name": "Optimize media to reduce resource use",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.UX.10",
+"name": "Ensure animation is proportionate and easy to control",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.UX.11",
+"name": "Use optimized web typography",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.UX.12",
+"name": "Avoid unwanted notifications",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.UX.13",
+"name": "Reduce the impact of downloadable and physical documents",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "W3C.UX.14",
+"name": "Involve users early in the project",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.UX.15",
+"name": "Audit and test for bugs or issues requiring resolution",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "W3C.UX.16",
+"name": "Validate usability through testing and real-world usage",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "W3C.UX.17",
+"name": "Provide cross-platform compatibility support",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.WEBDEV.1",
+"name": "Set goals based on performance and energy impact",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Monitoring"
+]
+},
+{
+"id": "W3C.WEBDEV.2",
+"name": "Minify and remove unused code",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.WEBDEV.3",
+"name": "Modularize bandwidth-heavy components",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.WEBDEV.4",
+"name": "Avoid redundancy and duplication in code",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.WEBDEV.5",
+"name": "Treat third parties the same as first parties",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.WEBDEV.6",
+"name": "Ensure code follows good semantic practices",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.WEBDEV.7",
+"name": "Defer the loading of non-critical resources",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.WEBDEV.8",
+"name": "Structure metadata for machine readability",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.WEBDEV.9",
+"name": "Use media queries that support sustainability goals",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.WEBDEV.10",
+"name": "Ensure layouts work for different devices and requirements",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.WEBDEV.11",
+"name": "Use sustainable JavaScript and APIs",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.WEBDEV.12",
+"name": "Use dependencies sparingly and maintain them",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.WEBDEV.13",
+"name": "Include expected and beneficial files",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.WEBDEV.14",
+"name": "Use the most efficient solution for your service",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.WEBDEV.15",
+"name": "Use the latest stable language version",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.WEBDEV.16",
+"name": "Reduce the number and complexity of database queries",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.HOSTING.1",
+"name": "Use sustainable hosting",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution"
+]
+},
+{
+"id": "W3C.HOSTING.2",
+"name": "Optimize caching and support offline access",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.HOSTING.3",
+"name": "Reduce data transfer with compression",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.HOSTING.4",
+"name": "Setup necessary error pages and redirection links",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "W3C.HOSTING.5",
+"name": "Avoid maintaining unnecessary virtualized environments or containers",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.HOSTING.6",
+"name": "Use automation wisely",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "W3C.HOSTING.7",
+"name": "Define the frequency of data refreshes",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.HOSTING.8",
+"name": "Back up critical data at routine intervals",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.HOSTING.9",
+"name": "Assess the impact and requirements of data processing",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization",
+"Execution"
+]
+},
+{
+"id": "W3C.HOSTING.10",
+"name": "Use Content Delivery Networks (CDNs) when beneficial",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "W3C.HOSTING.11",
+"name": "Ensure infrastructure fits project requirements",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "W3C.HOSTING.12",
+"name": "Store data according to the needs of your users",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "W3C.BIZ.1",
+"name": "Have an ethical and sustainable product strategy",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.BIZ.2",
+"name": "Assign a sustainability advocate",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.BIZ.3",
+"name": "Inform, raise awareness, and train for sustainability",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.4",
+"name": "Communicate the environmental impact of user choices",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Model",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Execution"
+]
+},
+{
+"id": "W3C.BIZ.5",
+"name": "Calculate the environmental impact",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis",
+"Design"
+]
+},
+{
+"id": "W3C.BIZ.6",
+"name": "Define clear organizational sustainability goals and metrics",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Monitoring"
+]
+},
+{
+"id": "W3C.BIZ.7",
+"name": "Validate web sustainability efforts through external verification",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "W3C.BIZ.8",
+"name": "Support mandatory disclosures and reporting",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring",
+"Analysis"
+]
+},
+{
+"id": "W3C.BIZ.9",
+"name": "Create one or more impact business models",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.10",
+"name": "Follow a product management and maintenance strategy",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring",
+"Optimization"
+]
+},
+{
+"id": "W3C.BIZ.11",
+"name": "Implement continuous improvement procedures",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Optimization",
+"Analysis"
+]
+},
+{
+"id": "W3C.BIZ.12",
+"name": "Document updates and evolutions",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.13",
+"name": "Evaluate if a digital product or service is necessary",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Analysis"
+]
+},
+{
+"id": "W3C.BIZ.14",
+"name": "Provide a supplier standards of practice document",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Monitoring"
+]
+},
+{
+"id": "W3C.BIZ.15",
+"name": "Share economic benefits",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.16",
+"name": "Share decision-making power with affected parties",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.BIZ.17",
+"name": "Use Diversity, Equity, Justice, Inclusion (DEJI) practices",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.18",
+"name": "Promote responsible data practices",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution"
+]
+},
+{
+"id": "W3C.BIZ.19",
+"name": "Establish responsible practices around AI and emerging or disruptive technologies",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Worker/Task"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution"
+]
+},
+{
+"id": "W3C.BIZ.20",
+"name": "Adopt responsible financial practices",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.21",
+"name": "Adopt organizational philanthropy practices",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.22",
+"name": "Plan for a digital product or service's care and end-of-life",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "W3C.BIZ.23",
+"name": "Repair, reuse, refurbish, recycle or reduce e-waste",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.24",
+"name": "Define performance, environmental, and human budgets",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Monitoring",
+"Analysis"
+]
+},
+{
+"id": "W3C.BIZ.25",
+"name": "Use and contribute to open source",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "W3C.BIZ.26",
+"name": "Create a business continuity and disaster recovery plan",
+"source": "w3c",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GBPP.BASIC.1",
+"name": "Green Compensation",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GBPP.BASIC.2",
+"name": "Green Variant",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Modeling"
+]
+},
+{
+"id": "GBPP.BASIC.3",
+"name": "Resource Change",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Worker/Task",
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "GBPP.BASIC.4",
+"name": "Green Feature",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GBPP.PROC.1",
+"name": "Common Process Improvement for Environmental Aspects",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis",
+"Optimization"
+]
+},
+{
+"id": "GBPP.PROC.2",
+"name": "Process Automation",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Worker/Task",
+"Infrastructure/Platform"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution"
+]
+},
+{
+"id": "GBPP.PROC.3",
+"name": "Human Process Performance",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Optimization"
+]
+},
+{
+"id": "GBPP.SOURCE.1",
+"name": "Outsourcing",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "GBPP.SOURCE.2",
+"name": "Insourcing",
+"source": "gbpp",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Infrastructure/Platform"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Optimization"
+]
+},
+{
+"id": "PPA.1",
+"name": "Automate for environmental impact",
+"source": "ppatterns",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Worker/Task",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Modeling"
+]
+},
+{
+"id": "PPA.2",
+"name": "Green Compensation",
+"source": "ppatterns",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Process Model",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution"
+]
+},
+{
+"id": "PPA.3",
+"name": "Green Feature",
+"source": "ppatterns",
+"bpmNative": true,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "PPA.4",
+"name": "Green Variant",
+"source": "ppatterns",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Worker/Task",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Modeling",
+"Execution"
+]
+},
+{
+"id": "PPA.5",
+"name": "Human Process Performance",
+"source": "ppatterns",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Worker/Task",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "PPA.6",
+"name": "Shift Workload",
+"source": "ppatterns",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution",
+"Optimization"
+]
+},
+{
+"id": "LEAN.VSM.1",
+"name": "Green Value Stream Mapping",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Modeling",
+"Analysis"
+]
+},
+{
+"id": "LEAN.VSM.2",
+"name": "Track Environmental Metrics Per Process",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis",
+"Monitoring"
+]
+},
+{
+"id": "LEAN.WASTE.1",
+"name": "Eighth (Environmental) Waste Category",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "LEAN.WASTE.2",
+"name": "Seven Green Wastes Taxonomy",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "LEAN.WASTE.3",
+"name": "Gemba-Based Environmental Process Walk",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis",
+"Optimization"
+]
+},
+{
+"id": "LEAN.MONITOR.1",
+"name": "Visual Control for Environmental Performance",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "LEAN.CI.1",
+"name": "Evaluate Environmental Impact in Every Process Improvement",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis",
+"Optimization"
+]
+},
+{
+"id": "LEAN.CI.2",
+"name": "Environmental Checklist in Process Review Events",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "LEAN.DESIGN.1",
+"name": "Involve Environmental Expertise Early in Process Redesign",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "LEAN.DESIGN.2",
+"name": "Weigh Lifecycle and Health Impact, Not Just Volume",
+"source": "lean",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design",
+"Analysis"
+]
+}
+]

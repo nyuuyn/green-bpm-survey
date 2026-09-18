@@ -110,24 +110,29 @@ json.dump(items, open("data.json", "w", encoding="utf-8"), ensure_ascii=False, i
 
 ## Analysis page
 
-`analysis.html` shows charts (via [Chart.js](https://www.chartjs.org/), loaded from a CDN - no
-build step) covering the existing Claude AI-generated rating pass across all 425 guidelines:
-relevance distribution, BPM Scope/Lifecycle coverage, generic-vs-specific split, and a top-20
-table. It's reachable directly from the landing page, or from the survey's Thank-you screen -
-taking the survey isn't required to see it. This reuses
-`RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS` from `common.js` so the rating form and
-the analysis page can't drift apart.
+The Green BPM Guideline is being distilled through multiple survey rounds - an AI-generated
+preliminary pass (Claude, live today), an internal expert survey with envite Consulting (BPM,
+architecture, and sustainability practitioners), and eventually a public survey.
+`analysis.html` shows one **tab per round**, each independently rated and analyzed: relevance
+distribution, BPM Scope/Lifecycle coverage, generic-vs-specific split, and a top-20 table, via
+[Chart.js](https://www.chartjs.org/) (loaded from a CDN, no build step). It's reachable
+directly from the landing page, or from the survey's Thank-you screen - taking the survey
+isn't required to see it. This reuses `RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS`
+from `common.js` so the rating form and the analysis page can't drift apart.
 
-It's driven by `analysis.json` - one flat record per guideline (`id`, `name`, `source`,
-`bpmNative`, `relevance`, `scope`, `generic`, `lifecycle`), regenerated the same way as
-`data.json`: run `generate_analysis_json.py` from the **private** repo (it joins each
-source's `guidelines.csv` with `survey_claude.csv`), then copy `analysis.json` here.
+Each round is driven by its own `analysis_<round>.json` - one flat record per guideline (`id`,
+`name`, `source`, `bpmNative`, `relevance`, `scope`, `generic`, `lifecycle`), regenerated the
+same way as `data.json`. `analysis_claude.json` comes from `generate_analysis_json.py` in the
+**private** repo (it joins each source's `guidelines.csv` with `survey_claude.csv`); a future
+round's generator will follow the same output convention. The active tab is reflected in the
+URL hash (`analysis.html#envite`) so a specific round's results are linkable.
 
-All aggregation happens client-side in `analysis.js` (`countsPerSource`, `relevanceDistribution`,
-etc.) rather than being pre-computed into `analysis.json` - deliberately, so that once a
-submission backend exists and real human ratings come in, those same functions can be fed a
-merged Claude+human record array without changing their shape. That merge isn't wired up
-yet; today the page only shows the Claude pass.
+Adding a round once its data exists is: generate `analysis_<round>.json`, copy it into this
+repo, add one `{ id, label, file, blurb }` entry to `ANALYSIS_ROUNDS` in `analysis.js` - no
+other code changes needed, since the chart/table-building functions already just take a plain
+records array and a round id (for unique canvas ids). Each round's panel is fetched and its
+charts mounted lazily, the first time that tab is opened - switching back to an
+already-loaded tab just toggles visibility instead of re-fetching.
 
 ## Tests
 
@@ -181,6 +186,9 @@ down. CI (`.github/workflows/test.yml`) runs both this and `npm test` on every p
 - [x] Post-survey analysis screen (Claude AI-rating pass only, charts via Chart.js)
 - [x] Split into a landing page (`index.html`) plus standalone `survey.html` / `analysis.html`
       pages, backed by a real-browser Playwright suite (`tests_e2e/`) as a regression check
+- [x] Analysis page supports multiple survey rounds as tabs (`ANALYSIS_ROUNDS` in
+      `analysis.js`) - three AI (Claude) passes today: general, sustainability-expert-framed,
+      and BPM-expert-framed persona test data; envite/public human rounds slot in later
 - [ ] Submission backend (Google Apps Script + Sheet) deployed and `SUBMIT_ENDPOINT` set
 - [ ] Known open design question for whenever the backend is wired up: the private repo's
       `survey.csv` currently assumes one row per guideline `ID` (`validate_survey.py` rejects
