@@ -1,1 +1,8 @@
 node_modules/
+
+# Playwright e2e suite (tests_e2e/)
+.venv/
+__pycache__/
+.pytest_cache/
+test-results/
+playwright-report/

@@ -126,13 +126,33 @@ Relevance=0 → Generic disabled/blank behavior, row expand/collapse on header c
 Not-Applicable mutual-exclusivity rule, the final payload shape, and the analysis screen
 (chart/table mounting, and Back restoring the completion screen without re-submitting) - 43
 assertions. Chart.js itself is stubbed out since jsdom has no `<canvas>` 2D context, so only
-the surrounding DOM/aggregation logic is covered here; the actual chart rendering was checked
-manually in a real browser.
+the surrounding DOM/aggregation logic is covered here - see the Playwright suite below for
+real chart rendering.
 
 ```bash
 npm install
 npm test
 ```
+
+### End-to-end tests (Playwright)
+
+`tests_e2e/` is a `pytest-playwright` suite that drives the site in a real browser instead of
+jsdom - the only way to actually verify the analysis screen's charts render (non-blank
+`<canvas>` pixels), and the only way to exercise a real file download (the "Download
+responses" button). It spins up its own static file server per test session (same as
+`npm run serve`, just from Python), so nothing else needs to be running first.
+
+```bash
+python -m venv .venv
+.venv/Scripts/activate   # or: source .venv/bin/activate on macOS/Linux
+pip install -r tests_e2e/requirements.txt
+playwright install chromium
+pytest                    # or: npm run test:e2e
+```
+
+Runs headless by default; add `--headed` to watch it, or `--headed --slowmo=250` to slow it
+down. CI (`.github/workflows/test.yml`) runs both this and `npm test` on every push/PR to
+`main`.
 
 ## Status
 
