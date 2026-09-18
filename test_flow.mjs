@@ -68,6 +68,17 @@ async function main() {
     form.dispatchEvent(new window.Event("submit", { bubbles: true, cancelable: true }));
   }
 
+  function progressLabel() {
+    return doc.getElementById("progressLabel").textContent.trim();
+  }
+
+  function fillDefault(i) {
+    check(`relevance-${i}`, "3");
+    check(`scope-${i}`, "Organizational/Governance");
+    check(`generic-${i}`, "Yes");
+    check(`lifecycle-${i}`, "Not Applicable");
+  }
+
   // 1. Intro screen renders with a Start button.
   await sleep(50);
   const startBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent === "Start");
@@ -78,7 +89,7 @@ async function main() {
   await sleep(300); // allow the fetch + render to complete
 
   let h1 = doc.querySelector("h1");
-  log('Routes to "About you" screen before question 1', !!h1 && h1.textContent === "About you", h1 && h1.textContent);
+  log('Routes to "About you" screen before the rating list', !!h1 && h1.textContent === "About you", h1 && h1.textContent);
 
   // 2a. Submitting with nothing filled should block with an error.
   submit();
@@ -100,76 +111,92 @@ async function main() {
   await sleep(20);
 
   h1 = doc.querySelector("h1");
-  log("Advances to question 1 after respondent info completed", !h1 || h1.textContent !== "About you");
+  log("Advances to the rating list after respondent info completed", !!h1 && h1.textContent === "Rate each guideline", h1 && h1.textContent);
 
-  let h2 = doc.querySelector("h2");
-  log("Question 1 rendered (h2 present)", !!h2, h2 && h2.textContent.slice(0, 50));
-  log("Progress label shows 1 / 25", doc.getElementById("progressLabel").textContent.trim() === "1 / 25");
+  const rows = doc.querySelectorAll(".rating-row");
+  log("All 25 guidelines rendered as rows", rows.length === 25, `got ${rows.length}`);
+  log("Progress starts at 0 / 25", progressLabel() === "0 / 25", progressLabel());
   log("No Keywords field present", !doc.querySelector('input[name="keywords"]'));
 
-  // 3. Try submitting with nothing filled -> should show validation error, not advance.
+  // 3. Clicking Finish with nothing filled should block with an error, not advance.
   submit();
   await sleep(20);
-  log("Empty submit blocked with error", doc.querySelector(".error-text").textContent.includes("Relevance"));
+  log("Empty Finish blocked with error", doc.querySelector(".error-text").textContent.includes("25 guideline"));
+  log("Still on the rating list after a blocked Finish", doc.querySelector("h1").textContent === "Rate each guideline");
 
-  // 4. BPM Scope is multi-select: checking two scope boxes should both stay checked (not radio behavior).
-  check("scope", "Process Model");
-  check("scope", "Worker/Task");
-  log("Scope allows multiple selections", isChecked("scope", "Process Model") && isChecked("scope", "Worker/Task"));
+  // 4. Row 0: BPM Scope is multi-select - checking two scope boxes should both stay checked,
+  //    even before Relevance has been touched (Scope/Generic/Lifecycle must not be disabled
+  //    just because Relevance happens to still be blank).
+  check("scope-0", "Process Model");
+  check("scope-0", "Worker/Task");
+  log("Scope allows multiple selections", isChecked("scope-0", "Process Model") && isChecked("scope-0", "Worker/Task"));
+  log("Touching Scope before Relevance doesn't disable other fields",
+    ![...doc.querySelectorAll('input[name="generic-0"]')].some((i) => i.disabled));
 
-  // 5. Selecting Relevance = 0 disables and clears Generic.
-  check("generic", "No");
-  check("relevance", "0");
-  const genericInputsDisabled = [...doc.querySelectorAll('input[name="generic"]')].every((i) => i.disabled);
-  const genericCleared = ![...doc.querySelectorAll('input[name="generic"]')].some((i) => i.checked);
-  log("Relevance=0 disables Generic inputs", genericInputsDisabled);
-  log("Relevance=0 clears any prior Generic selection", genericCleared);
+  check("relevance-0", "4");
+  const row0Body = doc.querySelector('.rating-row[data-index="0"] .rating-row-body');
+  log("Picking a relevance score expands the row", row0Body.hidden === false);
+  check("generic-0", "Yes");
+  check("lifecycle-0", "Design");
+  const row0 = doc.querySelector('.rating-row[data-index="0"]');
+  log("Row 0 marked complete once all fields are set", row0.classList.contains("complete"));
+  log("Progress shows 1 / 25 after completing row 0", progressLabel() === "1 / 25", progressLabel());
 
-  // 6. Submitting with Relevance=0 should NOT require Generic (it's blank, not missing).
-  check("lifecycle", "Not Applicable");
+  // 5. Row 1: Relevance=0 means there's nothing left to classify - Scope, Generic, and
+  //    Lifecycle all get disabled and cleared (mirroring the existing Generic-at-0 behavior),
+  //    and the row is immediately complete with no further input required.
+  check("relevance-1", "0");
+  const row1 = doc.querySelector('.rating-row[data-index="1"]');
+  log("Relevance=0 disables Scope, Generic, and Lifecycle", ["scope-1", "generic-1", "lifecycle-1"].every(
+    (name) => [...doc.querySelectorAll(`input[name="${name}"]`)].every((i) => i.disabled)
+  ));
+  log("Relevance=0 clears any prior selections in those fields",
+    !doc.querySelector('input[name="scope-1"]:checked') &&
+    !doc.querySelector('input[name="generic-1"]:checked') &&
+    !doc.querySelector('input[name="lifecycle-1"]:checked'));
+  log("Row 1 marked complete immediately at Relevance=0", row1.classList.contains("complete"));
+  log("Progress shows 2 / 25 after Relevance=0 alone completes row 1", progressLabel() === "2 / 25", progressLabel());
+
+  // 6. Row 2: switching Relevance away from 0 re-enables Scope, Generic, and Lifecycle together.
+  check("relevance-2", "0");
+  log("Row 2 Relevance=0 disables Scope", [...doc.querySelectorAll('input[name="scope-2"]')].every((i) => i.disabled));
+  check("relevance-2", "4");
+  log("Row 2 non-zero Relevance re-enables Scope, Generic, and Lifecycle", ["scope-2", "generic-2", "lifecycle-2"].every(
+    (name) => [...doc.querySelectorAll(`input[name="${name}"]`)].every((i) => !i.disabled)
+  ));
+  check("scope-2", "Process Data");
+  check("generic-2", "No");
+  check("lifecycle-2", "Design");
+  log("Row 2 marked complete once all required fields are set",
+    row1.parentElement.querySelector('.rating-row[data-index="2"]').classList.contains("complete"));
+
+  // 7. Row 4: Not Applicable mutual exclusivity in BPM Lifecycle (needs a non-zero Relevance
+  //    first, since Lifecycle is disabled at Relevance=0).
+  check("relevance-4", "3");
+  check("lifecycle-4", "Design");
+  check("lifecycle-4", "Not Applicable");
+  log("Checking Not Applicable unchecks Design", !isChecked("lifecycle-4", "Design") && isChecked("lifecycle-4", "Not Applicable"));
+  check("lifecycle-4", "Monitoring");
+  log("Picking a phase after NA unchecks Not Applicable", !isChecked("lifecycle-4", "Not Applicable"));
+  check("scope-4", "Worker/Task");
+  check("generic-4", "No");
+
+  // 8. Row 3: header click toggles the collapsed/expanded body independent of field values.
+  const row3Header = doc.querySelector('.rating-row[data-index="3"] .rating-row-header');
+  const row3Body = doc.querySelector('.rating-row[data-index="3"] .rating-row-body');
+  log("Row 3 starts collapsed", row3Body.hidden === true);
+  row3Header.click();
+  log("Clicking the header expands row 3", row3Body.hidden === false);
+  row3Header.click();
+  log("Clicking the header again collapses row 3", row3Body.hidden === true);
+
+  // 9. Fill every remaining row with a default valid answer.
+  for (let i = 3; i < rows.length; i++) fillDefault(i);
+  log("Progress shows 25 / 25 once every row is answered", progressLabel() === "25 / 25", progressLabel());
+
+  // 10. Finish -> completion screen.
   submit();
-  await sleep(20);
-  log("Advanced to question 2 despite Generic being unset at Relevance=0",
-    doc.getElementById("progressLabel").textContent.trim() === "2 / 25");
-
-  // 7. Switching relevance away from 0 re-enables Generic.
-  check("relevance", "4");
-  const genericReenabled = [...doc.querySelectorAll('input[name="generic"]')].every((i) => !i.disabled);
-  log("Non-zero Relevance re-enables Generic inputs", genericReenabled);
-
-  // 8. Not Applicable mutual exclusivity: check Design, then Not Applicable -> Design should uncheck.
-  check("scope", "Infrastructure/Platform");
-  check("lifecycle", "Design");
-  check("lifecycle", "Not Applicable");
-  log("Checking Not Applicable unchecks Design", !isChecked("lifecycle", "Design") && isChecked("lifecycle", "Not Applicable"));
-  check("lifecycle", "Monitoring");
-  log("Picking a phase after NA unchecks Not Applicable", !isChecked("lifecycle", "Not Applicable"));
-
-  // fill rest, go back to question 1, verify answer persisted (including multi-select scope)
-  check("generic", "Yes");
-  const backBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent === "Back");
-  log("Back button present on question 2", !!backBtn);
-  backBtn.click();
-  await sleep(20);
-  log("Going back restores question 1's prior Relevance", isChecked("relevance", "0"));
-  log("Going back restores question 1's multi-select Scope", isChecked("scope", "Process Model") && isChecked("scope", "Worker/Task"));
-
-  // go forward again through question 1 (still valid as filled) to question 2
-  submit();
-  await sleep(20);
-
-  // 9. Fast-forward: answer all remaining questions to reach the completion screen.
-  let guard = 0;
-  while (!doc.querySelector("h1") && guard < 30) {
-    check("relevance", "3");
-    check("scope", "Organizational/Governance");
-    check("generic", "Yes");
-    check("lifecycle", "Not Applicable");
-    if (!doc.querySelector("form")) break;
-    submit();
-    await sleep(15);
-    guard++;
-  }
+  await sleep(50);
 
   h1 = doc.querySelector("h1");
   log("Reached completion screen", !!h1 && h1.textContent.includes("Thank you"), h1 && h1.textContent);
@@ -188,7 +215,10 @@ async function main() {
   log("No response has a Keywords field", parsed.responses.every((r) => !("Keywords" in r)));
 
   const zeroRelevanceResponse = parsed.responses.find((r) => r["BPM Relevance"] === "0");
-  log("Relevance=0 response has blank Generic", !!zeroRelevanceResponse && zeroRelevanceResponse.Generic === "",
+  log("Relevance=0 response has blank Scope, Generic, and Lifecycle", !!zeroRelevanceResponse
+    && zeroRelevanceResponse["BPM Scope"] === ""
+    && zeroRelevanceResponse.Generic === ""
+    && zeroRelevanceResponse["BPM Lifecycle"] === "",
     zeroRelevanceResponse && JSON.stringify(zeroRelevanceResponse));
 
   const multiScopeResponse = parsed.responses.find((r) => r["BPM Scope"].includes(","));

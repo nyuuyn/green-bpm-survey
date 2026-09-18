@@ -26,7 +26,10 @@ const SCOPE_OPTIONS = [
   "Organizational/Governance",
 ];
 
-const GENERIC_OPTIONS = ["No", "Yes"];
+const GENERIC_OPTIONS = [
+  { value: "Yes", label: "General practice" },
+  { value: "No", label: "BPM-specific" },
+];
 
 const LIFECYCLE_OPTIONS = [
   "Design",
@@ -74,7 +77,6 @@ const ROLE_OPTIONS = [
 const state = {
   sessionId: crypto.randomUUID(),
   items: [],
-  index: 0,
   responses: [], // one object per answered item, same order as state.items
   respondent: null, // filled in by renderRespondentInfo before rating starts
 };
@@ -186,8 +188,7 @@ function renderRespondentInfo() {
         return;
       }
       state.respondent = data.respondent;
-      state.index = 0;
-      renderQuestion();
+      renderRatingList();
     },
   });
 
@@ -250,73 +251,136 @@ function collectRespondentInfo(form) {
   };
 }
 
-function renderQuestion() {
-  const item = state.items[state.index];
+function renderRatingList() {
   const total = state.items.length;
-  setProgress(state.index + 1, total);
-
   const errorEl = el("p", { class: "error-text" });
+  const rows = state.items.map((item, i) => buildRatingRow(item, i));
+
+  function refreshProgress() {
+    setProgress(rows.filter((rowEl) => rowEl.classList.contains("complete")).length, total);
+  }
 
   const form = el("form", {
     onsubmit: (e) => {
       e.preventDefault();
-      const data = collectAnswer(form);
-      if (!data.ok) {
-        errorEl.textContent = data.error;
-        return;
-      }
-      state.responses[state.index] = data.answer;
-      if (state.index + 1 < total) {
-        state.index += 1;
-        renderQuestion();
-      } else {
-        renderComplete();
-      }
+      handleFinish(form, rows, errorEl);
     },
   });
 
-  const genericFs = genericField();
-  const relevanceFs = relevanceField((value) => setGenericEnabled(genericFs, value !== "0"));
-
   form.append(
-    relevanceFs,
-    scopeField(),
-    genericFs,
-    lifecycleField(),
-    justificationField(),
+    el("div", { class: "rating-list" }, rows),
     errorEl,
     el("div", { class: "btn-row" }, [
-      state.index > 0
-        ? el("button", { type: "button", class: "btn-secondary", onclick: goBack }, "Back")
-        : el("span"),
-      el("button", { type: "submit", class: "btn-primary" }, state.index + 1 < total ? "Next" : "Finish"),
+      el("span"),
+      el("button", { type: "submit", class: "btn-primary" }, "Finish"),
     ])
   );
 
+  form.addEventListener("change", (e) => {
+    const i = rowIndexFromName(e.target.name);
+    if (i === null) return;
+    const rowEl = rows[i];
+    const a = readRowAnswer(form, i);
+    const enabled = a.relevance !== "0";
+    ["scope-fieldset", "generic-fieldset", "lifecycle-fieldset"].forEach((role) => {
+      const fs = rowEl.querySelector(`[data-role="${role}"]`);
+      if (fs) setFieldsetEnabled(fs, enabled);
+    });
+    if (a.relevance !== "") toggleRow(rowEl, true);
+    rowEl.classList.toggle("complete", validateRowAnswer(a) === null);
+    rowEl.classList.remove("invalid");
+    refreshProgress();
+  });
+
   renderApp(
     el("div", { class: "card" }, [
-      el("div", { class: "badges" }, [
-        el("span", { class: "badge" }, item.sourceLabel),
-        item.category ? el("span", { class: "badge" }, item.category) : null,
-      ]),
-      el("h2", {}, item.name),
-      el("p", { class: "guideline-text" }, item.guideline),
-      el("a", { class: "ref-link", href: item.reference, target: "_blank", rel: "noopener" }, "View original source ↗"),
+      el("h1", {}, "Rate each guideline"),
+      el("p", { class: "intro-lead" },
+        "Click a guideline to rate it — picking a relevance score opens the rest of its fields. " +
+        "You can jump between guidelines in any order and come back to finish later."),
       form,
     ])
   );
 
-  // restore previously entered answer if navigating back/forward
-  const prior = state.responses[state.index];
-  if (prior) {
-    fillForm(form, prior);
-    setGenericEnabled(genericFs, prior["BPM Relevance"] !== "0");
-  }
+  refreshProgress();
 }
 
-function goBack() {
-  state.index -= 1;
-  renderQuestion();
+function buildRatingRow(item, i) {
+  const relevanceName = `relevance-${i}`;
+
+  const bodyEl = el("div", { class: "rating-row-body" }, [
+    scopeField(`scope-${i}`),
+    genericField(`generic-${i}`),
+    lifecycleField(`lifecycle-${i}`),
+    justificationField(`justification-${i}`),
+  ]);
+  bodyEl.hidden = true;
+
+  const headerEl = el("div", { class: "rating-row-header", onclick: () => toggleRow(rowEl) }, [
+    el("div", { class: "rating-row-top" }, [
+      el("span", { class: "rating-row-num" }, `${i + 1}.`),
+      el("span", { class: "row-status" }),
+      el("span", { class: "badge" }, item.sourceLabel),
+      el("span", { class: "chevron" }, "▾"),
+    ]),
+    el("span", { class: "rating-row-label" }, item.name),
+    el("p", { class: "rating-row-guideline" }, item.guideline),
+    el("a", {
+      class: "ref-link", href: item.reference, target: "_blank", rel: "noopener",
+      onclick: (e) => e.stopPropagation(),
+    }, "For more details, view the original source ↗"),
+    el("div", { class: "relevance-dots-row", onclick: (e) => e.stopPropagation() }, [
+      el("span", { class: "relevance-dots-label" }, "BPM Relevance"),
+      relevanceDots(relevanceName),
+    ]),
+  ]);
+
+  const rowEl = el("div", { class: "rating-row", "data-index": String(i) }, [headerEl, bodyEl]);
+  return rowEl;
+}
+
+function toggleRow(rowEl, force) {
+  const bodyEl = rowEl.querySelector(".rating-row-body");
+  const expand = force !== undefined ? force : bodyEl.hidden;
+  bodyEl.hidden = !expand;
+  rowEl.querySelector(".chevron").textContent = expand ? "▴" : "▾";
+  rowEl.classList.toggle("expanded", expand);
+}
+
+function rowIndexFromName(name) {
+  const m = /-(\d+)$/.exec(name || "");
+  return m ? Number(m[1]) : null;
+}
+
+function handleFinish(form, rows, errorEl) {
+  let firstInvalid = null;
+  let invalidCount = 0;
+  const responses = new Array(state.items.length);
+
+  state.items.forEach((item, i) => {
+    const a = readRowAnswer(form, i);
+    const err = validateRowAnswer(a);
+    const rowEl = rows[i];
+    rowEl.classList.toggle("invalid", !!err);
+    rowEl.classList.toggle("complete", !err);
+    if (err) {
+      invalidCount += 1;
+      if (!firstInvalid) firstInvalid = rowEl;
+    } else {
+      responses[i] = buildAnswerRecord(item, a);
+    }
+  });
+
+  if (invalidCount > 0) {
+    errorEl.textContent = `${invalidCount} guideline(s) still need an answer — see the highlighted row(s) below.`;
+    toggleRow(firstInvalid, true);
+    firstInvalid.scrollIntoView?.({ behavior: "smooth", block: "center" });
+    return;
+  }
+
+  errorEl.textContent = "";
+  state.responses = responses;
+  renderComplete();
 }
 
 /* ---------- Form field builders ---------- */
@@ -347,62 +411,53 @@ function checkboxGroup(name, options, { vertical = false } = {}) {
   );
 }
 
-function relevanceField(onChange) {
-  const group = radioGroup("relevance", RELEVANCE_OPTIONS);
-  group.addEventListener("change", (e) => {
-    if (e.target.name === "relevance") onChange(e.target.value);
-  });
-  return el("fieldset", {}, [
-    el("legend", {}, ["BPM Relevance", el("span", { class: "hint" }, "How relevant is this guideline to business process design, modeling, execution, or monitoring?")]),
-    group,
-  ]);
+function relevanceDots(name) {
+  return el("div", { class: "relevance-dots" },
+    RELEVANCE_OPTIONS.map((opt, i) => {
+      const id = `${name}-${i}`;
+      return el("div", { class: "option dot" }, [
+        el("input", { type: "radio", name, id, value: opt.value }),
+        el("label", { for: id, title: opt.label }, opt.value),
+      ]);
+    })
+  );
 }
 
-function scopeField() {
-  return el("fieldset", {}, [
+function scopeField(name) {
+  return el("fieldset", { "data-role": "scope-fieldset" }, [
     el("legend", {}, ["BPM Scope", el("span", { class: "hint" }, "Select every layer this guideline actually acts on — often more than one.")]),
-    checkboxGroup("scope", SCOPE_OPTIONS, { vertical: true }),
+    checkboxGroup(name, SCOPE_OPTIONS),
   ]);
 }
 
-function genericField() {
-  const naNote = el("p", { class: "hint", "data-role": "generic-na-note", hidden: true },
-    "Not applicable — this guideline scored 0 on BPM Relevance, so there's no BPM argument left to classify.");
+function genericField(name) {
   return el("fieldset", { "data-role": "generic-fieldset" }, [
-    el("legend", {}, ["Generic?", el("span", { class: "hint" }, "Is this just general good practice, or a BPM-specific argument?")]),
-    radioGroup("generic", GENERIC_OPTIONS),
-    naNote,
+    el("legend", {}, ["General practice, or BPM-specific?", el("span", { class: "hint" }, "Would this guideline make just as much sense outside of BPM, or is the argument specific to business processes?")]),
+    radioGroup(name, GENERIC_OPTIONS),
   ]);
 }
 
-function setGenericEnabled(fieldset, enabled) {
-  fieldset.querySelectorAll('input[name="generic"]').forEach((input) => {
+// Relevance=0 means there's nothing left to classify, so Scope/Generic/Lifecycle are hidden
+// entirely rather than just disabled - fewer fields to scroll past for the common case where
+// most sampled guidelines score low.
+function setFieldsetEnabled(fieldset, enabled) {
+  fieldset.querySelectorAll("input").forEach((input) => {
     input.disabled = !enabled;
     if (!enabled) input.checked = false;
   });
-  fieldset.classList.toggle("fieldset-disabled", !enabled);
-  const note = fieldset.querySelector('[data-role="generic-na-note"]');
-  if (note) note.hidden = enabled;
+  fieldset.hidden = !enabled;
 }
 
-function lifecycleField() {
-  const naRow = el("div", { style: "margin-top:8px" }, [
-    el("div", { class: "option" }, [
-      el("input", { type: "checkbox", name: "lifecycle", id: "lifecycle-na", value: "Not Applicable" }),
-      el("label", { for: "lifecycle-na" }, "Not Applicable"),
-    ]),
-  ]);
-
-  const fieldset = el("fieldset", {}, [
+function lifecycleField(name) {
+  const fieldset = el("fieldset", { "data-role": "lifecycle-fieldset" }, [
     el("legend", {}, ["BPM Lifecycle", el("span", { class: "hint" }, "Select every phase that applies, or Not Applicable alone.")]),
-    checkboxGroup("lifecycle", LIFECYCLE_OPTIONS),
-    naRow,
+    checkboxGroup(name, [...LIFECYCLE_OPTIONS, "Not Applicable"]),
   ]);
 
   // Enforce mutual exclusivity live, rather than only on submit.
   fieldset.addEventListener("change", (e) => {
-    if (e.target.name !== "lifecycle" || !e.target.checked) return;
-    const all = fieldset.querySelectorAll('input[name="lifecycle"]');
+    if (e.target.name !== name || !e.target.checked) return;
+    const all = fieldset.querySelectorAll(`input[name="${name}"]`);
     if (e.target.value === "Not Applicable") {
       all.forEach((cb) => { if (cb !== e.target) cb.checked = false; });
     } else {
@@ -414,64 +469,51 @@ function lifecycleField() {
   return fieldset;
 }
 
-function justificationField() {
+function justificationField(name) {
   return el("fieldset", {}, [
     el("legend", {}, ["Justification", el("span", { class: "hint" }, "Optional — briefly explain your rating.")]),
-    el("textarea", { name: "justification", placeholder: "Why did you rate it this way?" }),
+    el("textarea", { name, placeholder: "Why did you rate it this way?" }),
   ]);
 }
 
 /* ---------- Collecting & validating ---------- */
 
-function collectAnswer(form) {
+function readRowAnswer(form, i) {
   const fd = new FormData(form);
-  const relevance = fd.get("relevance");
-  const scope = fd.getAll("scope");
-  const generic = fd.get("generic") || ""; // absent when the fieldset is disabled (Relevance = 0)
-  const lifecycle = fd.getAll("lifecycle");
-  const justification = (fd.get("justification") || "").trim();
-
-  if (!relevance) return { ok: false, error: "Please select a BPM Relevance score." };
-  if (scope.length === 0) return { ok: false, error: "Please select at least one BPM Scope." };
-  if (relevance !== "0" && !generic) return { ok: false, error: "Please select Yes or No for Generic." };
-  if (lifecycle.length === 0) return { ok: false, error: "Please select at least one BPM Lifecycle phase, or Not Applicable." };
-  if (lifecycle.includes("Not Applicable") && lifecycle.length > 1) {
-    return { ok: false, error: "Not Applicable can't be combined with other lifecycle phases." };
-  }
-
-  const item = state.items[state.index];
   return {
-    ok: true,
-    answer: {
-      ID: item.id,
-      "BPM Relevance": relevance,
-      "BPM Scope": scope.join(", "),
-      Generic: relevance === "0" ? "" : generic,
-      "BPM Justification": justification,
-      "BPM Lifecycle": lifecycle.join(", "),
-      Discussion: "",
-    },
+    relevance: fd.get(`relevance-${i}`) || "",
+    scope: fd.getAll(`scope-${i}`),
+    generic: fd.get(`generic-${i}`) || "", // absent when the fieldset is disabled (Relevance = 0)
+    lifecycle: fd.getAll(`lifecycle-${i}`),
+    justification: (fd.get(`justification-${i}`) || "").trim(),
   };
 }
 
-function fillForm(form, answer) {
-  const setRadio = (name, value) => {
-    form.querySelectorAll(`input[name="${name}"]`).forEach((input) => {
-      input.checked = input.value === value;
-    });
+function validateRowAnswer(a) {
+  if (!a.relevance) return "Please select a BPM Relevance score.";
+  // Relevance 0 means "not relevant to BPM at all" - there's no scope, generic-vs-specific,
+  // or lifecycle argument left to classify, so nothing further is required.
+  if (a.relevance === "0") return null;
+  if (a.scope.length === 0) return "Please select at least one BPM Scope.";
+  if (!a.generic) return "Please select Yes or No for Generic.";
+  if (a.lifecycle.length === 0) return "Please select at least one BPM Lifecycle phase, or Not Applicable.";
+  if (a.lifecycle.includes("Not Applicable") && a.lifecycle.length > 1) {
+    return "Not Applicable can't be combined with other lifecycle phases.";
+  }
+  return null;
+}
+
+function buildAnswerRecord(item, a) {
+  const zero = a.relevance === "0";
+  return {
+    ID: item.id,
+    "BPM Relevance": a.relevance,
+    "BPM Scope": zero ? "" : a.scope.join(", "),
+    Generic: zero ? "" : a.generic,
+    "BPM Justification": a.justification,
+    "BPM Lifecycle": zero ? "" : a.lifecycle.join(", "),
+    Discussion: "",
   };
-  const setChecklist = (name, values) => {
-    form.querySelectorAll(`input[name="${name}"]`).forEach((input) => {
-      input.checked = values.includes(input.value);
-    });
-  };
-  setRadio("relevance", answer["BPM Relevance"]);
-  const scopes = answer["BPM Scope"] ? answer["BPM Scope"].split(",").map((s) => s.trim()) : [];
-  setChecklist("scope", scopes);
-  setRadio("generic", answer.Generic);
-  const lifecycles = answer["BPM Lifecycle"] ? answer["BPM Lifecycle"].split(",").map((s) => s.trim()) : [];
-  setChecklist("lifecycle", lifecycles);
-  form.querySelector('textarea[name="justification"]').value = answer["BPM Justification"] || "";
 }
 
 /* ---------- Completion / submission ---------- */

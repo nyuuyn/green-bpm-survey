@@ -33,7 +33,10 @@ No ratings, analysis, or internal notes live here.
   authoritative regardless of who gave it. It's stored once per session (in the payload's
   `respondent` object), not repeated per guideline.
 
-  Then it walks the respondent through the guidelines one at a time, collecting:
+  Then it shows all sampled guidelines as a collapsible list, one row per guideline. Picking a
+  Relevance score expands that row's remaining fields; rows can be worked in any order and stay
+  visibly marked (✓ complete / ! invalid after a blocked submit) so progress is legible without
+  paging through 25 separate screens. Each row collects:
   - **BPM Relevance** (0–5)
   - **BPM Scope** — multi-select, since many guidelines act on more than one layer
   - **Generic** (Yes/No) — automatically disabled and left blank when Relevance is 0, since
@@ -97,10 +100,10 @@ json.dump(items, open("data.json", "w", encoding="utf-8"), ensure_ascii=False, i
 
 `test_flow.mjs` is a headless functional test (jsdom + a self-hosted static server, no external
 dependencies beyond `npm install`) covering: the "About you" screen (validation, the
-Role=Other conditional free-text field), sampling, question rendering, submit validation,
-multi-select Scope, the Relevance=0 → Generic disabled/blank behavior, back/forward navigation
-with answer persistence, the Not-Applicable mutual-exclusivity rule, and the final payload shape
-(27 assertions).
+Role=Other conditional free-text field), sampling, the rating-list rendering (row count, progress
+counter), submit validation (blocking Finish on incomplete rows), multi-select Scope, the
+Relevance=0 → Generic disabled/blank behavior, row expand/collapse on header click, the
+Not-Applicable mutual-exclusivity rule, and the final payload shape (35 assertions).
 
 ```bash
 npm install

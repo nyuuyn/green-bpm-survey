@@ -28,6 +28,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -142,14 +143,6 @@ fieldset {
   margin: 0 0 22px;
 }
 
-.fieldset-disabled {
-  opacity: 0.45;
-}
-
-.fieldset-disabled .option label {
-  cursor: not-allowed;
-}
-
 legend {
   font-weight: 600;
   font-size: 13.5px;
@@ -210,6 +203,90 @@ legend {
 
 .option-row.vertical { flex-direction: column; }
 .option-row.vertical .option label { border-radius: var(--radius); }
+
+.rating-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.rating-row {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.rating-row.invalid { border-color: var(--danger); }
+
+.rating-row-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.rating-row-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating-row-num { color: var(--text-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.row-status { font-size: 13px; width: 1em; text-align: center; }
+.row-status::before { content: "○"; color: var(--text-muted); }
+.rating-row.complete .row-status::before { content: "✓"; color: var(--accent); font-weight: 700; }
+.rating-row.invalid .row-status::before { content: "!"; color: var(--danger); font-weight: 700; }
+
+.rating-row-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.rating-row-guideline { font-weight: 500; line-height: 1.4; margin: 2px 0 0; }
+
+.chevron { color: var(--text-muted); font-size: 12px; margin-left: auto; }
+
+.relevance-dots-row {
+  cursor: default;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.relevance-dots-label { font-size: 12.5px; color: var(--text-muted); }
+
+.relevance-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.relevance-dots .option label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 13px;
+}
+
+.rating-row-body {
+  padding: 4px 14px 14px;
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+.rating-row-body fieldset:first-of-type { margin-top: 14px; }
 
 textarea, input[type="text"] {
   width: 100%;
