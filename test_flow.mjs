@@ -34,6 +34,18 @@ const dom = new JSDOM(fs.readFileSync("index.html", "utf-8"), {
 const { window } = dom;
 window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 
+// Stub Chart.js: jsdom has no <canvas> 2D context backing, so this only exercises
+// app.js's DOM-building and aggregation logic, not actual pixel rendering.
+const mountedCharts = [];
+window.Chart = class {
+  constructor(canvas, config) {
+    if (!canvas) throw new Error("Chart constructed with no canvas element (bad canvas id?)");
+    this.config = config;
+    mountedCharts.push({ id: canvas.id, config });
+  }
+  destroy() {}
+};
+
 const appJs = fs.readFileSync("app.js", "utf-8");
 dom.window.eval(appJs);
 
@@ -224,6 +236,34 @@ async function main() {
   const multiScopeResponse = parsed.responses.find((r) => r["BPM Scope"].includes(","));
   log("A multi-select Scope response is stored comma-joined", !!multiScopeResponse,
     multiScopeResponse && multiScopeResponse["BPM Scope"]);
+
+  // 11. From the completion screen, "See the guideline analysis" fetches analysis.json
+  //     and renders charts + a top-20 table over the full 425-guideline Claude pass.
+  const analysisBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent.includes("analysis"));
+  log("Analysis link present on completion screen", !!analysisBtn);
+  analysisBtn.click();
+  await sleep(300); // allow fetch("analysis.json") + chart mounting to settle
+
+  h1 = doc.querySelector("h1");
+  log("Navigates to the analysis screen", !!h1 && h1.textContent.includes("relevant"), h1 && h1.textContent);
+  const canvases = doc.querySelectorAll("canvas");
+  log("9 chart canvases rendered", canvases.length === 9, `got ${canvases.length}`);
+  log("9 Chart instances mounted with matching canvas ids", mountedCharts.length === 9 &&
+    mountedCharts.every((c) => doc.getElementById(c.id) === [...canvases].find((cv) => cv.id === c.id)),
+    `got ${mountedCharts.length}`);
+  log("Top-20 table has exactly 20 rows", doc.querySelectorAll(".data-table tbody tr").length === 20,
+    `got ${doc.querySelectorAll(".data-table tbody tr").length}`);
+
+  // 12. "Back" must restore the already-built completion card rather than re-running
+  //     renderComplete() (which would re-trigger submission once a backend is wired up).
+  const backBtn = [...doc.querySelectorAll("button")].find((b) => b.textContent.includes("Back"));
+  log("Back button present on analysis screen", !!backBtn);
+  backBtn.click();
+  await sleep(20);
+  h1 = doc.querySelector("h1");
+  log("Back returns to the completion screen", !!h1 && h1.textContent.includes("Thank you"), h1 && h1.textContent);
+  log("Back doesn't re-render a fresh completion card (same payload still shown)",
+    doc.querySelector("pre.summary-box")?.textContent === pre.textContent);
 
   console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);
   if (failures > 0) process.exitCode = 1;

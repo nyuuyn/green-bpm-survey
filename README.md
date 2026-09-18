@@ -96,6 +96,26 @@ for source, label in SOURCES.items():
 json.dump(items, open("data.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 ```
 
+## Analysis screen
+
+After finishing the survey, respondents can click "See the guideline analysis" from the
+Thank-you screen to view charts (via [Chart.js](https://www.chartjs.org/), loaded from a CDN -
+no build step) covering the existing Claude AI-generated rating pass across all 425
+guidelines: relevance distribution, BPM Scope/Lifecycle coverage, generic-vs-specific split,
+and a top-20 table. This reuses `RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS` from
+the rating form so the two stay in sync.
+
+It's driven by `analysis.json` - one flat record per guideline (`id`, `name`, `source`,
+`bpmNative`, `relevance`, `scope`, `generic`, `lifecycle`), regenerated the same way as
+`data.json`: run `generate_analysis_json.py` from the **private** repo (it joins each
+source's `guidelines.csv` with `survey_claude.csv`), then copy `analysis.json` here.
+
+All aggregation happens client-side in `app.js` (`countsPerSource`, `relevanceDistribution`,
+etc.) rather than being pre-computed into `analysis.json` - deliberately, so that once a
+submission backend exists and real human ratings come in, those same functions can be fed a
+merged Claude+human record array without changing their shape. That merge isn't wired up
+yet; today the page only shows the Claude pass.
+
 ## Tests
 
 `test_flow.mjs` is a headless functional test (jsdom + a self-hosted static server, no external
@@ -103,7 +123,11 @@ dependencies beyond `npm install`) covering: the "About you" screen (validation,
 Role=Other conditional free-text field), sampling, the rating-list rendering (row count, progress
 counter), submit validation (blocking Finish on incomplete rows), multi-select Scope, the
 Relevance=0 → Generic disabled/blank behavior, row expand/collapse on header click, the
-Not-Applicable mutual-exclusivity rule, and the final payload shape (35 assertions).
+Not-Applicable mutual-exclusivity rule, the final payload shape, and the analysis screen
+(chart/table mounting, and Back restoring the completion screen without re-submitting) - 43
+assertions. Chart.js itself is stubbed out since jsdom has no `<canvas>` 2D context, so only
+the surrounding DOM/aggregation logic is covered here; the actual chart rendering was checked
+manually in a real browser.
 
 ```bash
 npm install
@@ -115,6 +139,7 @@ npm test
 - [x] Frontend built and tested (sampling, form, validation, navigation, test-mode payload)
 - [x] Respondent background ("About you": BPM experience, sustainability experience, role)
 - [x] GitHub Pages enabled — live at <https://nyuuyn.github.io/green-bpm-survey/>
+- [x] Post-survey analysis screen (Claude AI-rating pass only, charts via Chart.js)
 - [ ] Submission backend (Google Apps Script + Sheet) deployed and `SUBMIT_ENDPOINT` set
 - [ ] Known open design question for whenever the backend is wired up: the private repo's
       `survey.csv` currently assumes one row per guideline `ID` (`validate_survey.py` rejects
