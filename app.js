@@ -142,14 +142,16 @@ function renderIntro() {
         "We collected 425 sustainability guidelines from cloud providers, the Green Software " +
         "Foundation, W3C, and academic BPM/lean literature. We'd like your judgment on how relevant " +
         "each one is to designing, modeling, executing, and monitoring business processes — as " +
-        "opposed to being general cloud/software advice."),
+        "opposed to being general cloud/software advice. Your ratings, together with an existing " +
+        "AI-generated pass, will help distill a focused Green BPM Guideline out of all this raw guidance."),
       el("ul", { class: "intro-facts" }, [
         el("li", {}, [el("span", { class: "ico" }, "📝"), el("span", {}, `A few quick questions about your background, then you'll rate ${SAMPLE_SIZE} randomly selected guidelines.`)]),
+        el("li", {}, [el("span", { class: "ico" }, "📊"), el("span", {}, "For each one: how relevant it is (0–3), which part of the process it touches, and which BPM lifecycle phase it applies to.")]),
         el("li", {}, [el("span", { class: "ico" }, "⏱️"), el("span", {}, "About 10–15 minutes.")]),
         el("li", {}, [el("span", { class: "ico" }, "🔒"), el("span", {}, "Anonymous — no account, no personal data collected.")]),
       ]),
       el("div", { class: "intro-sources" }, [
-        el("p", { class: "intro-sources-label" }, "Guidelines are drawn from:"),
+        el("p", { class: "intro-sources-label" }, "Guidelines are drawn from cloud frameworks, web standards, and BPM-specific pattern catalogs:"),
         el("ul", { class: "source-list" },
           GUIDELINE_SOURCES.map((s) =>
             el("li", {}, el("a", { class: "ref-link", href: s.url, target: "_blank", rel: "noopener" }, s.label))
