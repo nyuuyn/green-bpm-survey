@@ -68,6 +68,31 @@ def test_analysis_page_has_three_tabs_with_general_active_by_default(page, base_
     expect(page.locator(".tab.active")).to_have_text("AI (General)")
 
 
+def test_round_selector_lives_at_the_top_of_the_results_card(page, base_url):
+    # The tab bar sits at the top of the same card as the results (round
+    # panels / comparison panel), not in the intro card and not floating
+    # unstyled between cards - it stays visible no matter which result shows.
+    _open_analysis_page(page, base_url)
+    expect(page.locator(".analysis-intro .tabs")).to_have_count(0)
+
+    results_card = page.locator(".card", has=page.locator(".tabs"))
+    expect(results_card).not_to_have_class("analysis-intro")
+    expect(results_card.locator(".tabs .tab")).to_have_count(3)
+    expect(results_card.locator(".round-panels")).to_have_count(1)
+    expect(results_card.locator("#comparison-panel")).to_have_count(1)
+
+
+def test_round_and_comparison_panels_have_result_headings(page, base_url):
+    _open_analysis_page(page, base_url)
+    expect(page.locator('.analysis-card[data-round="claude"] h2').first).to_have_text("AI (General) results")
+
+    page.get_by_role("button", name="AI (Sustainability Expert)").click()
+    expect(page.locator("#comparison-panel h2").first).to_have_text("Comparing 2 rounds")
+
+    page.get_by_role("button", name="AI (BPM Expert)").click()
+    expect(page.locator("#comparison-panel h2").first).to_have_text("Comparing 3 rounds")
+
+
 def test_switching_to_a_single_other_round_still_works_like_a_tab(page, base_url):
     """Deselecting the default round and selecting a different single round
     behaves like the old exclusive-tab UI - single-round view, own charts."""

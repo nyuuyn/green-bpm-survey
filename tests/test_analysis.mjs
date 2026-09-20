@@ -63,6 +63,18 @@ async function main() {
   log("One tab per survey round (3 today)", tabs.length === 3, `got ${tabs.length}`);
   log('"AI (General)" tab is active by default', doc.querySelector(".tab.active")?.textContent === "AI (General)");
   log("Exactly one tab is pressed by default", [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 1);
+  // Tabs sit at the top of the same card as the results (round panels /
+  // comparison panel) rather than in the intro card or floating unstyled
+  // between cards - they stay visible no matter which result is showing.
+  const resultsCard = doc.querySelector(".tabs")?.closest(".card");
+  log("Tab bar lives in the same card as the results, not the intro card",
+    !!resultsCard && !resultsCard.classList.contains("analysis-intro") &&
+    resultsCard.contains(doc.querySelector(".round-panels")) &&
+    resultsCard.contains(doc.getElementById("comparison-panel")));
+
+  const claudeHeading = doc.querySelector('.analysis-card[data-round="claude"] h2');
+  log('Claude round panel has a "{round} results" heading', claudeHeading?.textContent === "AI (General) results",
+    claudeHeading?.textContent);
 
   // "Guidelines collected per source" lives once in the intro card, fetched
   // from data.json directly - it's a fact about the corpus, not about any
@@ -112,6 +124,9 @@ async function main() {
 
   log("Single-round panels (claude) are hidden while comparing", claudePanel.hidden === true);
   log("Comparison panel is now visible", comparisonPanel.hidden === false);
+  log('Comparison panel has a "Comparing N rounds" heading',
+    comparisonPanel.querySelector("h2")?.textContent === "Comparing 2 rounds",
+    comparisonPanel.querySelector("h2")?.textContent);
 
   log("4 merged chart canvases present", MERGED_CHART_IDS.every((id) => !!doc.getElementById(id)));
   log("4 small-multiple canvases present for claude", smallMultipleIdsFor("claude").every((id) => !!doc.getElementById(id)));
@@ -146,6 +161,9 @@ async function main() {
   log('Hash becomes "#claude+sustainability+bpm"', window.location.hash === "#claude+sustainability+bpm", window.location.hash);
   log("All three tabs are now pressed",
     [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 3);
+  log('Comparison heading updates to "Comparing 3 rounds"',
+    comparisonPanel.querySelector("h2")?.textContent === "Comparing 3 rounds",
+    comparisonPanel.querySelector("h2")?.textContent);
 
   const comparisonCanvasesAt3 = comparisonPanel.querySelectorAll("canvas");
   log("Comparison panel has 16 canvases at 3 rounds (4 merged + 4x3 small multiples)",

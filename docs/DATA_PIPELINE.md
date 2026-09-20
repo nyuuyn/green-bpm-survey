@@ -104,21 +104,24 @@ doesn't depend on it, it's purely to keep `git diff` reviewable.
 The Green BPM Guideline is being distilled through multiple survey rounds - an AI-generated
 preliminary pass (Claude, live today, under three persona framings), an internal expert survey
 with envite Consulting (BPM, architecture, and sustainability practitioners), and eventually
-this public survey's real results. `analysis.html` shows one **toggle button per round**: select
-exactly one to see that round on its own (relevance distribution, BPM Scope/Lifecycle coverage,
-generic-vs-specific split, and a top-20 table), or select two or more to switch to a **comparison
-panel** instead - see below. Charts render via [Chart.js](https://www.chartjs.org/) (loaded from
-a CDN, no build step). The page is reachable directly from the landing page, or from the survey's
-Thank-you screen - taking the survey isn't required to see it. This reuses
-`RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS` from `common.js` so the rating form and
-the analysis page can't drift apart.
+this public survey's real results. `analysis.html` is two cards: a static **intro card** (what
+this is, plus a "Guidelines collected per source" chart - see below), and a **results card**
+below it with one **toggle button per round** at its top, followed by whatever those buttons
+select. Select exactly one round to see it on its own, headed "`{round label} results`"
+(relevance distribution, BPM Scope/Lifecycle coverage, generic-vs-specific split, and a top-20
+table), or select two or more to see a **comparison panel** instead, headed "Comparing N rounds" -
+see below. The tabs stay at the top of the results card regardless of which of those is showing,
+since they're a sibling of both, not nested inside either. Charts render via
+[Chart.js](https://www.chartjs.org/) (loaded from a CDN, no build step). The page is reachable
+directly from the landing page, or from the survey's Thank-you screen - taking the survey isn't
+required to see it. This reuses `RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS` from
+`common.js` so the rating form and the analysis page can't drift apart.
 
-The intro card at the top (above the round toggles) has its own "Guidelines collected per
-source" chart, fetched from `generated/data.json` directly rather than any round's file
-(`mountIntroSourceChart` in `analysis.js`). It isn't part of any round panel or the comparison
-panel, because it's a fact about the guideline corpus, not about anyone's ratings - every round
-rates the same 425 guidelines, so a per-round or per-comparison copy of this chart would always
-show identical numbers.
+The intro card's "Guidelines collected per source" chart is fetched from `generated/data.json`
+directly rather than any round's file (`mountIntroSourceChart` in `analysis.js`). It isn't part
+of the results card at all, because it's a fact about the guideline corpus, not about anyone's
+ratings - every round rates the same 425 guidelines, so a per-round or per-comparison copy of
+this chart would always show identical numbers.
 
 Each round is driven by its own `generated/analysis_<round>.json` - one flat record per guideline
 (`id`, `name`, `source`, `bpmNative`, `relevance`, `scope`, `generic`, `lifecycle`), produced by

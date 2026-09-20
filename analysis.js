@@ -395,7 +395,8 @@ function buildRoundPanel(round, records) {
     ]),
   ]);
 
-  return el("div", { class: "card analysis-card", "data-round": round.id, hidden: true }, [
+  return el("div", { class: "analysis-card", "data-round": round.id, hidden: true }, [
+    el("h2", {}, `${round.label} results`),
     el("div", { class: "btn-row btn-row-end" }, [
       el("a", { class: "ref-link", href: round.file, download: round.file.replace(/^generated\//, "") }, "Download full dataset (JSON) ↓"),
     ]),
@@ -694,9 +695,10 @@ function buildComparisonPanel(activeList, recordsByRound, pal) {
     activeList.map((round) => el("a", { class: "ref-link", href: round.file, download: round.file.replace(/^generated\//, "") }, `${round.label} data ↓`))
   );
 
-  return el("div", { class: "card analysis-card" }, [
+  return el("div", { class: "analysis-card" }, [
+    el("h2", {}, `Comparing ${activeList.length} rounds`),
     downloadRow,
-    el("p", { class: "intro-lead" }, `Comparing ${activeList.length} rounds: ${activeList.map((r) => r.label).join(", ")}.`),
+    el("p", { class: "intro-lead" }, `${activeList.map((r) => r.label).join(", ")}.`),
 
     el("h2", { class: "top-table-heading" }, "Combined charts"),
     el("p", { class: "chart-desc" }, "The same aggregate charts as a single round, with one series per selected round."),
@@ -812,12 +814,12 @@ function buildPage() {
   );
 
   panelsEl = el("div", { class: "round-panels" },
-    ANALYSIS_ROUNDS.map((round) => el("div", { class: "card analysis-card", "data-round": round.id, hidden: true },
+    ANALYSIS_ROUNDS.map((round) => el("div", { class: "analysis-card", "data-round": round.id, hidden: true },
       el("p", { class: "intro-lead" }, "Loading…")
     ))
   );
 
-  comparisonEl = el("div", { id: "comparison-panel", class: "card analysis-card", hidden: true });
+  comparisonEl = el("div", { id: "comparison-panel", class: "analysis-card", hidden: true });
 
   renderApp(
     el("div", { class: "card analysis-intro" }, [
@@ -837,9 +839,11 @@ function buildPage() {
         ),
       ]),
     ]),
-    tabsEl,
-    panelsEl,
-    comparisonEl
+    el("div", { class: "card" }, [
+      tabsEl,
+      panelsEl,
+      comparisonEl,
+    ])
   );
 
   mountIntroSourceChart();
