@@ -13,7 +13,6 @@ from playwright.sync_api import expect
 from helpers import canvas_has_content, complete_survey
 
 CHART_NAMES = [
-    "chart-per-source",
     "chart-relevance-dist",
     "chart-high-relevance",
     "chart-relevance-mix",
@@ -42,10 +41,25 @@ def test_analysis_page_renders_all_charts_with_real_content(page, base_url):
     _open_analysis_page(page, base_url)
 
     chart_ids = _chart_ids("claude")
-    expect(page.locator("canvas")).to_have_count(len(chart_ids))
-    for chart_id in chart_ids:
+    expect(page.locator("canvas")).to_have_count(len(chart_ids) + 1)  # +1 for the intro's per-source chart
+    for chart_id in ["chart-per-source", *chart_ids]:
         expect(page.locator(f"#{chart_id}")).to_be_visible()
         assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
+
+
+def test_intro_per_source_chart_is_static_and_shared_across_rounds(page, base_url):
+    """Guidelines collected per source is a fact about the corpus (data.json),
+    not about any round's ratings - every round would report the exact same
+    counts - so it lives once in the intro card, unaffected by tab selection."""
+    _open_analysis_page(page, base_url)
+    intro_chart = page.locator(".analysis-intro #chart-per-source")
+    expect(intro_chart).to_be_visible()
+    assert canvas_has_content(page, "chart-per-source")
+
+    page.get_by_role("button", name="AI (Sustainability Expert)").click()
+    expect(page.locator("#comparison-panel")).to_be_visible()
+    expect(page.locator("#chart-per-source")).to_have_count(1)  # still just the one, not duplicated into the comparison panel
+    expect(page.locator("#comparison-panel #chart-per-source")).to_have_count(0)
 
 
 def test_analysis_page_has_three_tabs_with_general_active_by_default(page, base_url):
@@ -72,8 +86,7 @@ def test_switching_to_a_single_other_round_still_works_like_a_tab(page, base_url
 
 
 MERGED_CHART_IDS = [
-    "cmp-chart-per-source", "cmp-chart-relevance-dist", "cmp-chart-scope-counts",
-    "cmp-chart-lifecycle", "cmp-chart-mean-by-scope",
+    "cmp-chart-relevance-dist", "cmp-chart-scope-counts", "cmp-chart-lifecycle", "cmp-chart-mean-by-scope",
 ]
 SMALL_MULTIPLE_KINDS = ["high-relevance", "relevance-mix", "scope-native", "generic-share"]
 
@@ -96,7 +109,7 @@ def test_selecting_two_rounds_shows_the_comparison_panel(page, base_url):
     comparison = page.locator("#comparison-panel")
     expect(comparison).to_be_visible()
 
-    # The 5 merged (one series per round) charts and the 4x2 small-multiple
+    # The 4 merged (one series per round) charts and the 4x2 small-multiple
     # charts (one per round, for the chart types too busy to merge) all
     # actually render pixels, not just exist in the DOM.
     for chart_id in MERGED_CHART_IDS + _small_multiple_ids("claude") + _small_multiple_ids("sustainability"):

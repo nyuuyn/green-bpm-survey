@@ -341,9 +341,34 @@ function mountGenericShareChart(canvasId, records, pal) {
   });
 }
 
+// "Guidelines collected per source" is a fact about the guideline corpus
+// (data.json), not about any round's ratings - every analysis_<round>.json
+// would report the exact same counts, since every round rates the same 425
+// guidelines. So it isn't part of any round panel or the comparison panel;
+// it's mounted once, here, into the intro card, fetched straight from
+// data.json rather than piggybacking on whichever round happens to load
+// first - it stays correct even before any round has loaded.
+async function mountIntroSourceChart() {
+  const pal = chartPalette();
+  const res = await fetch("generated/data.json");
+  const guidelines = await res.json();
+  mountChart("chart-per-source", {
+    type: "bar",
+    data: {
+      labels: ANALYSIS_SOURCE_ORDER.map((s) => SOURCE_SHORT_LABELS[s]),
+      datasets: [{ data: countsPerSource(guidelines), backgroundColor: pal.single, borderRadius: 4 }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: baseTooltip(pal) },
+      scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
+    },
+  });
+}
+
 /* ---- Single-round panel ---- */
 
-// Canvas ids are suffixed per round (chart-per-source-claude, ...) since every
+// Canvas ids are suffixed per round (chart-relevance-dist-claude, ...) since every
 // round's panel stays in the DOM at once (hidden, not destroyed) so switching
 // tabs back and forth doesn't need to re-fetch or re-mount Chart.js instances.
 function buildRoundPanel(round, records) {
@@ -377,8 +402,6 @@ function buildRoundPanel(round, records) {
     el("p", { class: "intro-lead" }, `${round.blurb} ${totalRated} of 425 guidelines have a rating in this round.`),
 
     el("div", { class: "analysis-grid" }, [
-      chartCard("Guidelines collected per source", "How the 425 guidelines are distributed across sources.", id("chart-per-source")),
-
       chartCard("BPM Relevance — overall", "0 = not relevant to BPM at all, 3 = highly relevant.", id("chart-relevance-dist")),
 
       chartCard(
@@ -425,19 +448,8 @@ function buildRoundPanel(round, records) {
 function mountRoundCharts(round, records) {
   const pal = chartPalette();
   const id = (name) => `${name}-${round.id}`;
-  const shortLabels = ANALYSIS_SOURCE_ORDER.map((s) => SOURCE_SHORT_LABELS[s]);
   const legend = { display: false };
   const tooltip = baseTooltip(pal);
-
-  mountChart(id("chart-per-source"), {
-    type: "bar",
-    data: { labels: shortLabels, datasets: [{ data: countsPerSource(records), backgroundColor: pal.single, borderRadius: 4 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend, tooltip },
-      scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
-    },
-  });
 
   mountChart(id("chart-relevance-dist"), {
     type: "bar",
@@ -498,10 +510,14 @@ function mountRoundCharts(round, records) {
  * Two kinds of chart here, plus two cross-analysis views that don't exist in
  * single-round mode at all:
  *
- * 1. Merged charts (mountMergedCharts): the five single-series charts from
- *    the round panel (per-source counts, relevance distribution, scope
- *    counts, lifecycle counts, mean relevance by scope) become grouped bars
- *    with one dataset per selected round - a direct "add a series" merge.
+ * 1. Merged charts (mountMergedCharts): the four single-series charts from
+ *    the round panel (relevance distribution, scope counts, lifecycle
+ *    counts, mean relevance by scope) become grouped bars with one dataset
+ *    per selected round - a direct "add a series" merge. ("Guidelines
+ *    collected per source" isn't here: it's a fact about the guideline
+ *    corpus, not about anyone's ratings, so it's identical across every
+ *    round - it lives once in the intro card instead, see
+ *    mountIntroSourceChart below.)
  * 2. Small multiples (mountSmallMultiples): the four charts that are already
  *    two- or four-series (native/general split, relevance mix, generic
  *    split) would need a 3rd dimension to merge, which doesn't fit in a bar
@@ -589,7 +605,6 @@ function spreadTableCard(activeList, recordsByRound) {
 
 function buildMergedGrid(activeList) {
   return el("div", { class: "analysis-grid" }, [
-    chartCard("Guidelines collected per source", "Same across rounds - included for reference.", "cmp-chart-per-source"),
     chartCard("BPM Relevance — overall", "0 = not relevant to BPM at all, 3 = highly relevant, compared across the selected rounds.", "cmp-chart-relevance-dist"),
     chartCard("Which BPM layer do these guidelines touch?", "Count of guidelines acting on each layer, compared across the selected rounds.", "cmp-chart-scope-counts"),
     chartCard("BPM Lifecycle phases touched", "Phase mentions across all guidelines, compared across the selected rounds.", "cmp-chart-lifecycle"),
@@ -598,7 +613,6 @@ function buildMergedGrid(activeList) {
 }
 
 function mountMergedCharts(activeList, recordsByRound, pal) {
-  const shortLabels = ANALYSIS_SOURCE_ORDER.map((s) => SOURCE_SHORT_LABELS[s]);
   const legend = { display: true, labels: { color: pal.inkSecondary, boxWidth: 12, font: { size: 11.5 } } };
   const tooltip = baseTooltip(pal);
   const datasetsFor = (getter) => activeList.map((round) => ({
@@ -606,15 +620,6 @@ function mountMergedCharts(activeList, recordsByRound, pal) {
   }));
 
   return [
-    mountChart("cmp-chart-per-source", {
-      type: "bar",
-      data: { labels: shortLabels, datasets: datasetsFor(countsPerSource) },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend, tooltip },
-        scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
-      },
-    }),
     mountChart("cmp-chart-relevance-dist", {
       type: "bar",
       data: { labels: RELEVANCE_OPTIONS.map((o) => o.label), datasets: datasetsFor(relevanceDistribution) },
@@ -824,12 +829,18 @@ function buildPage() {
         "perspectives are likely to disagree, ahead of an internal expert survey with envite " +
         "Consulting and eventually a public survey. Select one tab to see that round on its own, " +
         "or select two or more to compare them directly."),
+      chartCard(
+        "Guidelines collected per source",
+        "How the 425 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
+        "chart-per-source"
+      ),
     ]),
     tabsEl,
     panelsEl,
     comparisonEl
   );
 
+  mountIntroSourceChart();
   render();
   window.addEventListener("hashchange", () => {
     activeRounds = roundsFromHash();

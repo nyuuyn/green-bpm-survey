@@ -113,6 +113,13 @@ Thank-you screen - taking the survey isn't required to see it. This reuses
 `RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS` from `common.js` so the rating form and
 the analysis page can't drift apart.
 
+The intro card at the top (above the round toggles) has its own "Guidelines collected per
+source" chart, fetched from `generated/data.json` directly rather than any round's file
+(`mountIntroSourceChart` in `analysis.js`). It isn't part of any round panel or the comparison
+panel, because it's a fact about the guideline corpus, not about anyone's ratings - every round
+rates the same 425 guidelines, so a per-round or per-comparison copy of this chart would always
+show identical numbers.
+
 Each round is driven by its own `generated/analysis_<round>.json` - one flat record per guideline
 (`id`, `name`, `source`, `bpmNative`, `relevance`, `scope`, `generic`, `lifecycle`), produced by
 `data/generate_data.py` (it joins each source's `guidelines.csv` with that round's
@@ -134,12 +141,12 @@ re-fetches.
 
 Selecting two or more rounds replaces the single-round panels with one comparison panel, built
 fresh (and its Chart.js instances destroyed/recreated) every time the selection changes. It has
-four parts, mirroring how each of the single round's 9 chart types either merges cleanly across
+four parts, mirroring how each of the single round's 8 chart types either merges cleanly across
 rounds or doesn't:
 
-1. **Merged charts** (`mountMergedCharts`) - the 5 single-series charts (per-source counts,
-   relevance distribution, scope counts, lifecycle counts, mean relevance by scope) become
-   grouped bars with one dataset per selected round.
+1. **Merged charts** (`mountMergedCharts`) - the 4 single-series charts (relevance distribution,
+   scope counts, lifecycle counts, mean relevance by scope) become grouped bars with one dataset
+   per selected round.
 2. **Small multiples** (`mountSmallMultiples`) - the 4 charts that are already two- or
    four-series (native/general split, relevance mix, generic split) would need a 3rd dimension to
    merge, which doesn't fit in a bar chart - so each selected round gets its own copy instead,

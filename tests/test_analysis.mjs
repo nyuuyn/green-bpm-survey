@@ -38,14 +38,13 @@ function log(label, ok, extra = "") {
 }
 
 const CHART_NAMES = [
-  "chart-per-source", "chart-relevance-dist", "chart-high-relevance", "chart-relevance-mix",
+  "chart-relevance-dist", "chart-high-relevance", "chart-relevance-mix",
   "chart-scope-counts", "chart-scope-native", "chart-generic-share", "chart-lifecycle", "chart-mean-by-scope",
 ];
 const chartIdsFor = (roundId) => CHART_NAMES.map((n) => `${n}-${roundId}`);
 
 const MERGED_CHART_IDS = [
-  "cmp-chart-per-source", "cmp-chart-relevance-dist", "cmp-chart-scope-counts",
-  "cmp-chart-lifecycle", "cmp-chart-mean-by-scope",
+  "cmp-chart-relevance-dist", "cmp-chart-scope-counts", "cmp-chart-lifecycle", "cmp-chart-mean-by-scope",
 ];
 const SMALL_MULTIPLE_KINDS = ["high-relevance", "relevance-mix", "scope-native", "generic-share"];
 const smallMultipleIdsFor = (roundId) => SMALL_MULTIPLE_KINDS.map((k) => `cmp-chart-${k}-${roundId}`);
@@ -65,11 +64,16 @@ async function main() {
   log('"AI (General)" tab is active by default', doc.querySelector(".tab.active")?.textContent === "AI (General)");
   log("Exactly one tab is pressed by default", [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 1);
 
+  // "Guidelines collected per source" lives once in the intro card, fetched
+  // from data.json directly - it's a fact about the corpus, not about any
+  // round's ratings, so it doesn't belong to (or vary with) the active round.
+  log("Intro card's per-source chart is present, outside any round panel",
+    !!doc.getElementById("chart-per-source") && !doc.getElementById("chart-per-source").closest(".analysis-card"));
+
   const claudeChartIds = chartIdsFor("claude");
   const canvases = doc.querySelectorAll("canvas");
-  log("9 chart canvases rendered for the active round", canvases.length === claudeChartIds.length, `got ${canvases.length}`);
-  log("9 Chart instances mounted with matching canvas ids", mountedCharts.length === claudeChartIds.length &&
-    mountedCharts.every((c) => doc.getElementById(c.id) === [...canvases].find((cv) => cv.id === c.id)),
+  log("9 canvases in the document (1 intro + 8 for the active round)", canvases.length === 1 + claudeChartIds.length, `got ${canvases.length}`);
+  log("9 Chart instances mounted (1 intro + 8 for the active round)", mountedCharts.length === 1 + claudeChartIds.length,
     `got ${mountedCharts.length}`);
   log("Every expected canvas id is present, suffixed by round", claudeChartIds.every((id) => !!doc.getElementById(id)));
 
@@ -109,13 +113,15 @@ async function main() {
   log("Single-round panels (claude) are hidden while comparing", claudePanel.hidden === true);
   log("Comparison panel is now visible", comparisonPanel.hidden === false);
 
-  log("5 merged chart canvases present", MERGED_CHART_IDS.every((id) => !!doc.getElementById(id)));
+  log("4 merged chart canvases present", MERGED_CHART_IDS.every((id) => !!doc.getElementById(id)));
   log("4 small-multiple canvases present for claude", smallMultipleIdsFor("claude").every((id) => !!doc.getElementById(id)));
   log("4 small-multiple canvases present for sustainability", smallMultipleIdsFor("sustainability").every((id) => !!doc.getElementById(id)));
+  log("Intro chart is untouched by entering comparison mode (still exactly one)",
+    doc.querySelectorAll("#chart-per-source").length === 1 && !comparisonPanel.querySelector("#chart-per-source"));
 
   const comparisonCanvasesAt2 = comparisonPanel.querySelectorAll("canvas");
-  log("Comparison panel has 13 canvases at 2 rounds (5 merged + 4x2 small multiples)",
-    comparisonCanvasesAt2.length === 13, `got ${comparisonCanvasesAt2.length}`);
+  log("Comparison panel has 12 canvases at 2 rounds (4 merged + 4x2 small multiples)",
+    comparisonCanvasesAt2.length === 12, `got ${comparisonCanvasesAt2.length}`);
 
   const heatmapsAt2 = comparisonPanel.querySelectorAll(".heatmap-table");
   log("One agreement heatmap for 2 selected rounds", heatmapsAt2.length === 1, `got ${heatmapsAt2.length}`);
@@ -142,8 +148,8 @@ async function main() {
     [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 3);
 
   const comparisonCanvasesAt3 = comparisonPanel.querySelectorAll("canvas");
-  log("Comparison panel has 17 canvases at 3 rounds (5 merged + 4x3 small multiples)",
-    comparisonCanvasesAt3.length === 17, `got ${comparisonCanvasesAt3.length}`);
+  log("Comparison panel has 16 canvases at 3 rounds (4 merged + 4x3 small multiples)",
+    comparisonCanvasesAt3.length === 16, `got ${comparisonCanvasesAt3.length}`);
 
   const heatmapsAt3 = comparisonPanel.querySelectorAll(".heatmap-table");
   log("Three pairwise agreement heatmaps for 3 selected rounds (3 choose 2)", heatmapsAt3.length === 3, `got ${heatmapsAt3.length}`);
@@ -158,7 +164,7 @@ async function main() {
   log('Hash is back to "#claude"', window.location.hash === "#claude", window.location.hash);
   log("Comparison panel is hidden again", comparisonPanel.hidden === true);
   log("Claude panel is visible again", claudePanel.hidden === false);
-  log("Claude's 9 canvases are still exactly the original elements (no re-mount)",
+  log("Claude's 8 canvases are still exactly the original elements (no re-mount)",
     chartIdsFor("claude").every((id) => !!doc.getElementById(id)));
 
   // --- The last remaining active tab can't be deselected down to zero. ---
