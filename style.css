@@ -542,6 +542,11 @@ a.btn-primary, a.btn-secondary {
 
 .top-table-heading { margin-top: 8px; }
 
+.comparison-section { margin-top: 28px; }
+
+.heatmap-table th, .heatmap-table td { text-align: center; white-space: nowrap; }
+.heatmap-table td { font-variant-numeric: tabular-nums; font-weight: 600; }
+
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--border);

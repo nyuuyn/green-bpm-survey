@@ -54,28 +54,88 @@ def test_analysis_page_has_three_tabs_with_general_active_by_default(page, base_
     expect(page.locator(".tab.active")).to_have_text("AI (General)")
 
 
-def test_switching_tabs_lazy_loads_and_renders_the_other_personas(page, base_url):
+def test_switching_to_a_single_other_round_still_works_like_a_tab(page, base_url):
+    """Deselecting the default round and selecting a different single round
+    behaves like the old exclusive-tab UI - single-round view, own charts."""
     _open_analysis_page(page, base_url)
 
-    page.get_by_role("button", name="AI (Sustainability Expert)").click()
+    page.get_by_role("button", name="AI (Sustainability Expert)").click()  # now 2 active (comparison)
+    page.get_by_role("button", name="AI (General)").click()  # deselect claude -> back to 1 active
+
     expect(page).to_have_url(f"{base_url}/analysis.html#sustainability")
     expect(page.locator(".tab.active")).to_have_text("AI (Sustainability Expert)")
+    expect(page.locator("#comparison-panel")).to_be_hidden()
 
-    sustainability_ids = _chart_ids("sustainability")
-    for chart_id in sustainability_ids:
+    for chart_id in _chart_ids("sustainability"):
         expect(page.locator(f"#{chart_id}")).to_be_visible()
         assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
 
-    page.get_by_role("button", name="AI (BPM Expert)").click()
-    expect(page).to_have_url(f"{base_url}/analysis.html#bpm")
-    for chart_id in _chart_ids("bpm"):
-        expect(page.locator(f"#{chart_id}")).to_be_visible()
 
-    # Switching back to an already-loaded round (claude) shouldn't duplicate its
-    # canvases - all three rounds' charts stay in the DOM (hidden, not destroyed).
+MERGED_CHART_IDS = [
+    "cmp-chart-per-source", "cmp-chart-relevance-dist", "cmp-chart-scope-counts",
+    "cmp-chart-lifecycle", "cmp-chart-mean-by-scope",
+]
+SMALL_MULTIPLE_KINDS = ["high-relevance", "relevance-mix", "scope-native", "generic-share"]
+
+
+def _small_multiple_ids(round_id):
+    return [f"cmp-chart-{kind}-{round_id}" for kind in SMALL_MULTIPLE_KINDS]
+
+
+def test_selecting_two_rounds_shows_the_comparison_panel(page, base_url):
+    _open_analysis_page(page, base_url)
+
+    page.get_by_role("button", name="AI (Sustainability Expert)").click()
+    expect(page).to_have_url(f"{base_url}/analysis.html#claude+sustainability")
+
+    # Both tabs read as selected; the single-round panels are hidden in favor
+    # of the comparison panel.
+    expect(page.get_by_role("button", name="AI (General)")).to_have_class("tab active")
+    expect(page.get_by_role("button", name="AI (Sustainability Expert)")).to_have_class("tab active")
+    expect(page.locator('.analysis-card[data-round="claude"]')).to_be_hidden()
+    comparison = page.locator("#comparison-panel")
+    expect(comparison).to_be_visible()
+
+    # The 5 merged (one series per round) charts and the 4x2 small-multiple
+    # charts (one per round, for the chart types too busy to merge) all
+    # actually render pixels, not just exist in the DOM.
+    for chart_id in MERGED_CHART_IDS + _small_multiple_ids("claude") + _small_multiple_ids("sustainability"):
+        expect(comparison.locator(f"#{chart_id}")).to_be_visible()
+        assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
+    expect(comparison.locator("canvas")).to_have_count(len(MERGED_CHART_IDS) + 4 * 2)
+
+    # Guideline-level cross-analysis: one agreement heatmap for the pair, plus
+    # a table of the guidelines these two rounds disagree on most.
+    expect(comparison.locator(".heatmap-table")).to_have_count(1)
+    expect(comparison.locator(".heatmap-table thead th")).to_have_count(5)  # blank corner + 4 relevance scores
+
+    spread_table = comparison.locator(".data-table").filter(has_text="Spread")
+    expect(spread_table.locator("thead th")).to_have_text(
+        ["Source", "Guideline", "AI (General)", "AI (Sustainability Expert)", "Spread"]
+    )
+    expect(spread_table.locator("tbody tr")).to_have_count(20)
+
+
+def test_selecting_a_third_round_rebuilds_the_comparison_panel(page, base_url):
+    _open_analysis_page(page, base_url)
+    page.get_by_role("button", name="AI (Sustainability Expert)").click()
+    page.get_by_role("button", name="AI (BPM Expert)").click()
+
+    expect(page).to_have_url(f"{base_url}/analysis.html#claude+sustainability+bpm")
+    comparison = page.locator("#comparison-panel")
+    expect(comparison.locator("canvas")).to_have_count(len(MERGED_CHART_IDS) + 4 * 3)
+    expect(comparison.locator(".heatmap-table")).to_have_count(3)  # one per pair: 3 choose 2
+
+
+def test_the_only_active_tab_cannot_be_deselected(page, base_url):
+    _open_analysis_page(page, base_url)
+    # Clicking the sole active tab is a true no-op - it returns before touching
+    # location.hash at all, so a default (hash-less) load stays hash-less.
+    url_before = page.url
     page.get_by_role("button", name="AI (General)").click()
-    expect(page.locator("canvas")).to_have_count(len(CHART_NAMES) * 3)
-    expect(_active_panel(page)).to_have_attribute("data-round", "claude")
+    expect(page).to_have_url(url_before)
+    expect(page.get_by_role("button", name="AI (General)")).to_have_class("tab active")
+    expect(page.locator('.analysis-card[data-round="claude"]')).to_be_visible()
 
 
 def test_analysis_page_legends_present(page, base_url):

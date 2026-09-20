@@ -43,6 +43,13 @@ const CHART_NAMES = [
 ];
 const chartIdsFor = (roundId) => CHART_NAMES.map((n) => `${n}-${roundId}`);
 
+const MERGED_CHART_IDS = [
+  "cmp-chart-per-source", "cmp-chart-relevance-dist", "cmp-chart-scope-counts",
+  "cmp-chart-lifecycle", "cmp-chart-mean-by-scope",
+];
+const SMALL_MULTIPLE_KINDS = ["high-relevance", "relevance-mix", "scope-native", "generic-share"];
+const smallMultipleIdsFor = (roundId) => SMALL_MULTIPLE_KINDS.map((k) => `cmp-chart-${k}-${roundId}`);
+
 async function main() {
   const doc = window.document;
 
@@ -51,11 +58,12 @@ async function main() {
   const h1 = doc.querySelector("h1");
   log("Analysis page heading present", !!h1 && h1.textContent.includes("relevant"), h1 && h1.textContent);
 
-  // Tab bar: one tab per round in ANALYSIS_ROUNDS - 3 today (general/sustainability/bpm
-  // personas), "AI (General)" active by default with no hash present.
+  // Tab bar: one toggle button per round in ANALYSIS_ROUNDS - 3 today (general/
+  // sustainability/bpm personas), "AI (General)" active by default with no hash present.
   const tabs = doc.querySelectorAll(".tab");
   log("One tab per survey round (3 today)", tabs.length === 3, `got ${tabs.length}`);
   log('"AI (General)" tab is active by default', doc.querySelector(".tab.active")?.textContent === "AI (General)");
+  log("Exactly one tab is pressed by default", [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 1);
 
   const claudeChartIds = chartIdsFor("claude");
   const canvases = doc.querySelectorAll("canvas");
@@ -67,6 +75,9 @@ async function main() {
 
   const claudePanel = doc.querySelector('.analysis-card[data-round="claude"]');
   log("The claude round's panel is visible", !!claudePanel && claudePanel.hidden === false);
+
+  const comparisonPanel = doc.getElementById("comparison-panel");
+  log("Comparison panel exists and starts hidden", !!comparisonPanel && comparisonPanel.hidden === true);
 
   log("4 chart legends present", doc.querySelectorAll(".chart-legend").length === 4,
     `got ${doc.querySelectorAll(".chart-legend").length}`);
@@ -82,34 +93,80 @@ async function main() {
   log("Download-full-dataset link points at this round's own JSON file",
     !!downloadLink && downloadLink.getAttribute("href") === "generated/analysis_claude.json");
 
-  // Switch to the sustainability tab - lazy-loads its data and mounts its own
-  // suffixed canvases, without touching the (still-in-DOM, now hidden) claude panel.
+  // --- Selecting a 2nd round switches from the single-round view to the
+  // comparison panel, without destroying the still-loaded claude panel. ---
   const sustainabilityTab = [...tabs].find((t) => t.textContent === "AI (Sustainability Expert)");
+  const bpmTab = [...tabs].find((t) => t.textContent === "AI (BPM Expert)");
   sustainabilityTab.click();
   await sleep(300);
 
-  log('Hash updates to "#sustainability" on tab click', window.location.hash === "#sustainability");
-  log('"AI (Sustainability Expert)" tab is now active',
-    doc.querySelector(".tab.active")?.textContent === "AI (Sustainability Expert)");
-  log("Claude panel is now hidden (not destroyed)", claudePanel.hidden === true);
+  log('Hash becomes "#claude+sustainability" (insertion order)', window.location.hash === "#claude+sustainability",
+    window.location.hash);
+  log("Both claude and sustainability tabs are now pressed",
+    [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 2);
+  log("bpm tab is still unpressed", bpmTab.getAttribute("aria-pressed") === "false");
 
-  const sustainabilityChartIds = chartIdsFor("sustainability");
-  log("Sustainability round's canvases mounted", sustainabilityChartIds.every((id) => !!doc.getElementById(id)));
-  log("18 Chart instances total (9 claude + 9 sustainability, no duplicates)",
-    mountedCharts.length === 18, `got ${mountedCharts.length}`);
+  log("Single-round panels (claude) are hidden while comparing", claudePanel.hidden === true);
+  log("Comparison panel is now visible", comparisonPanel.hidden === false);
 
-  const visiblePanel = doc.querySelector(".analysis-card:not([hidden])");
-  const downloadLinkAfterSwitch = [...visiblePanel.querySelectorAll("a")].find((a) => a.textContent.includes("Download full dataset"));
-  log("Download link now points at the sustainability round's JSON",
-    downloadLinkAfterSwitch.getAttribute("href") === "generated/analysis_sustainability.json");
+  log("5 merged chart canvases present", MERGED_CHART_IDS.every((id) => !!doc.getElementById(id)));
+  log("4 small-multiple canvases present for claude", smallMultipleIdsFor("claude").every((id) => !!doc.getElementById(id)));
+  log("4 small-multiple canvases present for sustainability", smallMultipleIdsFor("sustainability").every((id) => !!doc.getElementById(id)));
 
-  // Switching back to an already-loaded round toggles visibility only - no re-fetch/re-mount.
-  const generalTab = [...tabs].find((t) => t.textContent === "AI (General)");
-  generalTab.click();
-  await sleep(100);
-  log("Switching back to claude doesn't re-mount its charts",
-    mountedCharts.length === 18, `got ${mountedCharts.length}`);
-  log("Claude panel visible again after switching back", claudePanel.hidden === false);
+  const comparisonCanvasesAt2 = comparisonPanel.querySelectorAll("canvas");
+  log("Comparison panel has 13 canvases at 2 rounds (5 merged + 4x2 small multiples)",
+    comparisonCanvasesAt2.length === 13, `got ${comparisonCanvasesAt2.length}`);
+
+  const heatmapsAt2 = comparisonPanel.querySelectorAll(".heatmap-table");
+  log("One agreement heatmap for 2 selected rounds", heatmapsAt2.length === 1, `got ${heatmapsAt2.length}`);
+  log("Heatmap is a 4x4 relevance grid", heatmapsAt2[0]?.querySelectorAll("tbody td").length === 16,
+    `got ${heatmapsAt2[0]?.querySelectorAll("tbody td").length}`);
+
+  const spreadTable = [...comparisonPanel.querySelectorAll(".data-table")].find((t) => !t.classList.contains("heatmap-table"));
+  const spreadHeaders = [...(spreadTable?.querySelectorAll("thead th") ?? [])].map((th) => th.textContent);
+  log("Disagreement table has one column per selected round plus Source/Guideline/Spread",
+    JSON.stringify(spreadHeaders) === JSON.stringify(["Source", "Guideline", "AI (General)", "AI (Sustainability Expert)", "Spread"]),
+    spreadHeaders.join(", "));
+
+  const comparisonDownloadLinks = [...comparisonPanel.querySelectorAll("a.ref-link")].map((a) => a.getAttribute("href"));
+  log("Comparison panel links to both rounds' JSON files",
+    comparisonDownloadLinks.includes("generated/analysis_claude.json") && comparisonDownloadLinks.includes("generated/analysis_sustainability.json"),
+    comparisonDownloadLinks.join(", "));
+
+  // --- Selecting a 3rd round rebuilds the comparison panel around all three. ---
+  bpmTab.click();
+  await sleep(300);
+
+  log('Hash becomes "#claude+sustainability+bpm"', window.location.hash === "#claude+sustainability+bpm", window.location.hash);
+  log("All three tabs are now pressed",
+    [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 3);
+
+  const comparisonCanvasesAt3 = comparisonPanel.querySelectorAll("canvas");
+  log("Comparison panel has 17 canvases at 3 rounds (5 merged + 4x3 small multiples)",
+    comparisonCanvasesAt3.length === 17, `got ${comparisonCanvasesAt3.length}`);
+
+  const heatmapsAt3 = comparisonPanel.querySelectorAll(".heatmap-table");
+  log("Three pairwise agreement heatmaps for 3 selected rounds (3 choose 2)", heatmapsAt3.length === 3, `got ${heatmapsAt3.length}`);
+
+  // --- Deselecting back down to one round returns to the single-round view,
+  // reusing the already-loaded claude panel instead of re-fetching/re-mounting it. ---
+  sustainabilityTab.click();
+  await sleep(300);
+  bpmTab.click();
+  await sleep(300);
+
+  log('Hash is back to "#claude"', window.location.hash === "#claude", window.location.hash);
+  log("Comparison panel is hidden again", comparisonPanel.hidden === true);
+  log("Claude panel is visible again", claudePanel.hidden === false);
+  log("Claude's 9 canvases are still exactly the original elements (no re-mount)",
+    chartIdsFor("claude").every((id) => !!doc.getElementById(id)));
+
+  // --- The last remaining active tab can't be deselected down to zero. ---
+  const claudeTab = [...tabs].find((t) => t.textContent === "AI (General)");
+  claudeTab.click();
+  await sleep(50);
+  log("Clicking the only active tab again is a no-op (stays selected)",
+    window.location.hash === "#claude" && claudeTab.classList.contains("active"));
 
   console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);
   if (failures > 0) process.exitCode = 1;

@@ -104,10 +104,11 @@ doesn't depend on it, it's purely to keep `git diff` reviewable.
 The Green BPM Guideline is being distilled through multiple survey rounds - an AI-generated
 preliminary pass (Claude, live today, under three persona framings), an internal expert survey
 with envite Consulting (BPM, architecture, and sustainability practitioners), and eventually
-this public survey's real results. `analysis.html` shows one **tab per round**, each
-independently rated and analyzed: relevance distribution, BPM Scope/Lifecycle coverage,
-generic-vs-specific split, and a top-20 table, via [Chart.js](https://www.chartjs.org/) (loaded
-from a CDN, no build step). It's reachable directly from the landing page, or from the survey's
+this public survey's real results. `analysis.html` shows one **toggle button per round**: select
+exactly one to see that round on its own (relevance distribution, BPM Scope/Lifecycle coverage,
+generic-vs-specific split, and a top-20 table), or select two or more to switch to a **comparison
+panel** instead - see below. Charts render via [Chart.js](https://www.chartjs.org/) (loaded from
+a CDN, no build step). The page is reachable directly from the landing page, or from the survey's
 Thank-you screen - taking the survey isn't required to see it. This reuses
 `RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS` from `common.js` so the rating form and
 the analysis page can't drift apart.
@@ -116,12 +117,40 @@ Each round is driven by its own `generated/analysis_<round>.json` - one flat rec
 (`id`, `name`, `source`, `bpmNative`, `relevance`, `scope`, `generic`, `lifecycle`), produced by
 `data/generate_data.py` (it joins each source's `guidelines.csv` with that round's
 `survey_claude*.csv`; a future real-human round will filter `survey.csv` by respondent group
-instead, following the same output convention). The active tab is reflected in the URL hash
-(`analysis.html#claude`) so a specific round's results are linkable.
+instead, following the same output convention). The selected round(s) are reflected in the URL
+hash, ids joined by `+` (`analysis.html#claude+bpm`), so a specific single round or comparison is
+linkable.
 
 Adding a round once its data exists is: extend `data/generate_data.py`'s `ROUNDS` (or add a new
 generator function) to emit `generated/analysis_<round>.json`, add one `{ id, label, file, blurb }`
-entry to `ANALYSIS_ROUNDS` in `analysis.js` - no other code changes needed, since the chart/table-
-building functions already just take a plain records array and a round id (for unique canvas
-ids). Each round's panel is fetched and its charts mounted lazily, the first time that tab is
-opened - switching back to an already-loaded tab just toggles visibility instead of re-fetching.
+entry to `ANALYSIS_ROUNDS` in `analysis.js` - no other code changes needed, since every chart/
+table-building function already just takes a plain records array (or a map of them, for the
+comparison panel) rather than anything round-count-specific. Each round's data is fetched once
+and cached (`recordsByRound` in `analysis.js`) the first time it's needed, whether that's opening
+its single-round tab or including it in a comparison - re-selecting an already-loaded round never
+re-fetches.
+
+### Comparison panel (2+ rounds selected)
+
+Selecting two or more rounds replaces the single-round panels with one comparison panel, built
+fresh (and its Chart.js instances destroyed/recreated) every time the selection changes. It has
+four parts, mirroring how each of the single round's 9 chart types either merges cleanly across
+rounds or doesn't:
+
+1. **Merged charts** (`mountMergedCharts`) - the 5 single-series charts (per-source counts,
+   relevance distribution, scope counts, lifecycle counts, mean relevance by scope) become
+   grouped bars with one dataset per selected round.
+2. **Small multiples** (`mountSmallMultiples`) - the 4 charts that are already two- or
+   four-series (native/general split, relevance mix, generic split) would need a 3rd dimension to
+   merge, which doesn't fit in a bar chart - so each selected round gets its own copy instead,
+   reusing the exact mount functions the single-round panel uses.
+3. **Relevance agreement heatmap** (`buildHeatmapSection`) - guideline-level, one 4x4 heatmap per
+   *pair* of selected rounds (only pairwise makes sense here), counting how many guidelines got
+   each combination of relevance scores from both rounds. The diagonal is exact agreement.
+4. **Disagreement table** (`spreadTableCard`) - guidelines rated in every selected round, ranked
+   by the gap between the highest and lowest relevance score given, for spotting the specific
+   guidelines where rounds disagree most.
+
+Round colors in the merged charts and heatmap intensity both reuse the palette's existing
+`relevanceSteps` (see `roundColor()` in `analysis.js`) rather than introducing new hues, keeping
+the same "one green family" design language as the single-round charts.

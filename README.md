@@ -45,8 +45,11 @@ Three static pages, no build step, no framework:
   `id`, `name`, `category`, `reference`, `guideline`, `source`, `sourceLabel`) is fetched on load,
   `SAMPLE_SIZE` (25) of them are sampled, and rating starts immediately - no separate
   intro/Start step, since that content lives on the landing page instead.
-- **`analysis.html`** + **`analysis.js`** — the charts, one tab per rating round. Independently
-  reachable - doesn't require taking the survey first. Details: [`docs/DATA_PIPELINE.md`](docs/DATA_PIPELINE.md#analysis-page).
+- **`analysis.html`** + **`analysis.js`** — the charts, one toggle button per rating round.
+  Select a single round to see its own charts, or select two or more to compare them directly
+  (merged charts, per-round small multiples, a relevance-agreement heatmap, and a table of the
+  guidelines the selected rounds disagree on most). Independently reachable - doesn't require
+  taking the survey first. Details: [`docs/DATA_PIPELINE.md`](docs/DATA_PIPELINE.md#analysis-page).
 - **`common.js`** — the handful of things `survey.js` and `analysis.js` both need
   (`RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS`, the tiny `el()` DOM builder,
   `renderApp()`), loaded before either page script.
