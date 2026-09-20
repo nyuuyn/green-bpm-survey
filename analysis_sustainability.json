@@ -44,7 +44,7 @@
 },
 {
 "id": "AWS.Demand.3",
-"name": "Stop the creation and maintenance of unused\r\n  assets",
+"name": "Stop the creation and maintenance of unused\n  assets",
 "source": "aws",
 "bpmNative": false,
 "relevance": 2,
@@ -74,7 +74,7 @@
 },
 {
 "id": "AWS.Demand.5",
-"name": "Optimize team member resources for activities\r\n  performed",
+"name": "Optimize team member resources for activities\n  performed",
 "source": "aws",
 "bpmNative": false,
 "relevance": 1,
@@ -102,7 +102,7 @@
 },
 {
 "id": "AWS.SWA.1",
-"name": "Optimize software and architecture for asynchronous\r\n  and scheduled jobs",
+"name": "Optimize software and architecture for asynchronous\n  and scheduled jobs",
 "source": "aws",
 "bpmNative": false,
 "relevance": 2,
@@ -116,7 +116,7 @@
 },
 {
 "id": "AWS.SWA.2",
-"name": "Remove or refactor workload components with low or\r\n  no use",
+"name": "Remove or refactor workload components with low or\n  no use",
 "source": "aws",
 "bpmNative": false,
 "relevance": 2,
@@ -131,7 +131,7 @@
 },
 {
 "id": "AWS.SWA.3",
-"name": "Optimize areas of code that consume the most time or\r\n  resources",
+"name": "Optimize areas of code that consume the most time or\n  resources",
 "source": "aws",
 "bpmNative": false,
 "relevance": 2,
@@ -145,7 +145,7 @@
 },
 {
 "id": "AWS.SWA.4",
-"name": "Optimize impact on devices and\r\n  equipment",
+"name": "Optimize impact on devices and\n  equipment",
 "source": "aws",
 "bpmNative": false,
 "relevance": 1,
@@ -159,7 +159,7 @@
 },
 {
 "id": "AWS.SWA.5",
-"name": "Use software patterns and architectures that best\r\n  support data access and storage patterns",
+"name": "Use software patterns and architectures that best\n  support data access and storage patterns",
 "source": "aws",
 "bpmNative": false,
 "relevance": 2,
@@ -188,7 +188,7 @@
 },
 {
 "id": "AWS.Data.2",
-"name": "Use technologies that support data access and\r\n  storage patterns",
+"name": "Use technologies that support data access and\n  storage patterns",
 "source": "aws",
 "bpmNative": false,
 "relevance": 1,
@@ -244,7 +244,7 @@
 },
 {
 "id": "AWS.Data.6",
-"name": "Use shared file systems or storage to access\r\n  common data",
+"name": "Use shared file systems or storage to access\n  common data",
 "source": "aws",
 "bpmNative": false,
 "relevance": 1,
@@ -289,7 +289,7 @@
 },
 {
 "id": "AWS.HWS.1",
-"name": "Use the minimum amount of hardware to meet your\r\n  needs",
+"name": "Use the minimum amount of hardware to meet your\n  needs",
 "source": "aws",
 "bpmNative": false,
 "relevance": 1,
@@ -361,7 +361,7 @@
 },
 {
 "id": "AWS.Dev.1",
-"name": "Adopt methods that can rapidly introduce\r\n  sustainability improvements",
+"name": "Adopt methods that can rapidly introduce\n  sustainability improvements",
 "source": "aws",
 "bpmNative": false,
 "relevance": 2,

@@ -28,7 +28,7 @@
 },
 {
 "id": "AWS.Demand.3",
-"name": "Stop the creation and maintenance of unused\r\n  assets",
+"name": "Stop the creation and maintenance of unused\n  assets",
 "category": "Alignment to demand",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_user_a4.html",
 "guideline": "Decommission unused assets in your workload to reduce the number of cloud resources required to support your demand and minimize waste.",
@@ -46,7 +46,7 @@
 },
 {
 "id": "AWS.Demand.5",
-"name": "Optimize team member resources for activities\r\n  performed",
+"name": "Optimize team member resources for activities\n  performed",
 "category": "Alignment to demand",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_user_a6.html",
 "guideline": "Optimize resources provided to team members to minimize the environmental sustainability impact while supporting their needs. ",
@@ -64,7 +64,7 @@
 },
 {
 "id": "AWS.SWA.1",
-"name": "Optimize software and architecture for asynchronous\r\n  and scheduled jobs",
+"name": "Optimize software and architecture for asynchronous\n  and scheduled jobs",
 "category": "Software and Architecture",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_software_a2.html",
 "guideline": "Use efficient software and architecture patterns such as queue-driven to maintain consistent high utilization of deployed resources.",
@@ -73,7 +73,7 @@
 },
 {
 "id": "AWS.SWA.2",
-"name": "Remove or refactor workload components with low or\r\n  no use",
+"name": "Remove or refactor workload components with low or\n  no use",
 "category": "Software and Architecture",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_software_a3.html",
 "guideline": "Remove components that are unused and no longer required, and refactor components with little utilization to minimize waste in your workload.",
@@ -82,7 +82,7 @@
 },
 {
 "id": "AWS.SWA.3",
-"name": "Optimize areas of code that consume the most time or\r\n  resources",
+"name": "Optimize areas of code that consume the most time or\n  resources",
 "category": "Software and Architecture",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_software_a4.html",
 "guideline": "Optimize your code that runs within different components of your architecture to minimize resource usage while maximizing performance.",
@@ -91,7 +91,7 @@
 },
 {
 "id": "AWS.SWA.4",
-"name": "Optimize impact on devices and\r\n  equipment",
+"name": "Optimize impact on devices and\n  equipment",
 "category": "Software and Architecture",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_software_a5.html",
 "guideline": "Understand the devices and equipment used in your architecture and use strategies to reduce their usage. This can minimize the overall environmental impact of your cloud workload. ",
@@ -100,7 +100,7 @@
 },
 {
 "id": "AWS.SWA.5",
-"name": "Use software patterns and architectures that best\r\n  support data access and storage patterns",
+"name": "Use software patterns and architectures that best\n  support data access and storage patterns",
 "category": "Software and Architecture",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_software_a6.html",
 "guideline": "Understand how data is used within your workload, consumed by your users, transferred, and stored. Use software patterns and architectures that best support data access and storage to minimize the compute, networking, and storage resources required to support the workload.",
@@ -118,7 +118,7 @@
 },
 {
 "id": "AWS.Data.2",
-"name": "Use technologies that support data access and\r\n  storage patterns",
+"name": "Use technologies that support data access and\n  storage patterns",
 "category": "Data Management",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_data_a3.html",
 "guideline": "Use storage technologies that best support how your data is accessed and stored to minimize the resources provisioned while supporting your workload. ",
@@ -154,7 +154,7 @@
 },
 {
 "id": "AWS.Data.6",
-"name": "Use shared file systems or storage to access\r\n  common data",
+"name": "Use shared file systems or storage to access\n  common data",
 "category": "Data Management",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_data_a7.html",
 "guideline": "Adopt shared file systems or storage to avoid data duplication and allow for more efficient infrastructure for your workload. ",
@@ -181,7 +181,7 @@
 },
 {
 "id": "AWS.HWS.1",
-"name": "Use the minimum amount of hardware to meet your\r\n  needs",
+"name": "Use the minimum amount of hardware to meet your\n  needs",
 "category": "Hardware and services",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_hardware_a2.html",
 "guideline": "Use the minimum amount of hardware for your workload to efficiently meet your business needs.",
@@ -226,7 +226,7 @@
 },
 {
 "id": "AWS.Dev.1",
-"name": "Adopt methods that can rapidly introduce\r\n  sustainability improvements",
+"name": "Adopt methods that can rapidly introduce\n  sustainability improvements",
 "category": "Process and culture",
 "reference": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sus_sus_dev_a2.html",
 "guideline": "Adopt methods and processes to validate potential improvements, minimize testing costs, and deliver small improvements.",
