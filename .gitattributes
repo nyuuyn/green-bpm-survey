@@ -1,0 +1,8 @@
+# Force LF line endings on checkout for every text file, regardless of the
+# checking-out machine's core.autocrlf setting. Without this, a Windows
+# checkout with autocrlf=true silently turns embedded \r\n inside multi-line
+# quoted CSV fields (data/guidelines/*/guidelines.csv) into \r\n\r\n-tainted
+# content, which then leaks into data.json/analysis_*.json and diverges from
+# what a clean (e.g. CI/Linux) checkout regenerates - exactly the kind of
+# drift the CI data-freshness check exists to catch.
+* text=auto eol=lf
