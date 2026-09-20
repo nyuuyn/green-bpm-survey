@@ -7,12 +7,12 @@
  * exploring how much persona shifts relevance judgments), then an internal
  * expert survey (envite Consulting - BPM, architecture, and sustainability
  * practitioners), and eventually a public survey. Each round gets its own
- * analysis_<round>.json (generated the same way as data.json - see the
- * private repo's generate_analysis_json.py) and its own tab here, so this
- * page never looks like it's presenting one pass as the final word.
+ * analysis_<round>.json (generated the same way as data.json - see
+ * data/generate_data.py) and its own tab here, so this page never looks like
+ * it's presenting one pass as the final word.
  *
- * Adding a round later is: generate analysis_<round>.json, copy it into this
- * repo, add one entry to ANALYSIS_ROUNDS below.
+ * Adding a round later is: extend data/generate_data.py to emit
+ * analysis_<round>.json, add one entry to ANALYSIS_ROUNDS below.
  */
 
 const ANALYSIS_ROUNDS = [

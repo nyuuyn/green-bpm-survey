@@ -1,8 +1,0 @@
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
-.idea/
-
-# Generated for the frontend repo by generate_analysis_json*.py (one file per
-# survey round) - copy them there, don't commit them here.
-analysis_*.json

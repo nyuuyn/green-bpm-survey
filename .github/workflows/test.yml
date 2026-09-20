@@ -6,6 +6,19 @@ on:
   pull_request:
 
 jobs:
+  data:
+    name: Data pipeline (freshness + schema)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python data/generate_data.py
+      - name: Fail if data.json/analysis_*.json weren't regenerated after a CSV edit
+        run: git diff --exit-code -- data.json 'analysis_*.json'
+      - run: python data/validate_survey.py
+
   unit:
     name: Unit tests (jsdom)
     runs-on: ubuntu-latest
@@ -35,7 +48,7 @@ jobs:
   # set to "GitHub Actions" (Settings -> Pages -> Build and deployment).
   deploy:
     name: Deploy to GitHub Pages
-    needs: [unit, e2e]
+    needs: [data, unit, e2e]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:

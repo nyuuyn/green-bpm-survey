@@ -18,6 +18,8 @@ import glob
 import os
 import sys
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 RELEVANCE_VALUES = {"", "0", "1", "2", "3"}
 SCOPE_VALUES = {
     "Process Model",
@@ -46,7 +48,7 @@ EXPERIENCE_VALUES = {
     "Prefer not to say",
 }
 
-RESPONDENTS_PATH = "respondents.csv"
+RESPONDENTS_PATH = os.path.join(SCRIPT_DIR, "respondents.csv")
 
 
 def load_respondent_ids(path=RESPONDENTS_PATH):
@@ -179,7 +181,7 @@ def validate_file(path, respondent_ids=None):
 
 
 def main():
-    pattern = sys.argv[1] if len(sys.argv) > 1 else "guidelines/*/survey.csv"
+    pattern = sys.argv[1] if len(sys.argv) > 1 else os.path.join(SCRIPT_DIR, "guidelines/*/survey.csv")
 
     total_errors = 0
 
