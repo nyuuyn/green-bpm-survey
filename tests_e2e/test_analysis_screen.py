@@ -111,7 +111,7 @@ def test_header_breadcrumb_shows_current_page_and_links_home(page, base_url):
 def test_download_full_dataset_link_points_at_this_rounds_json(page, base_url):
     _open_analysis_page(page, base_url)
     link = _active_panel(page).get_by_role("link", name="Download full dataset (JSON)")
-    expect(link).to_have_attribute("href", "analysis_claude.json")
+    expect(link).to_have_attribute("href", "generated/analysis_claude.json")
 
 
 def test_completion_screen_link_navigates_to_analysis_page(page, base_url):

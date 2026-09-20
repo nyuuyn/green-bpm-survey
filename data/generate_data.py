@@ -9,7 +9,7 @@ Single-source-of-truth generator for everything the frontend fetches:
   left-joined with that round's survey_claude*.csv on ID, mirroring
   data/analysis.ipynb's load_source(). Fetched by analysis.js, one file per tab.
 
-Both output kinds land at the repo root (../ from this file), where the
+Both output kinds land in generated/ (../generated from this file), where the
 GitHub Pages deploy step already expects them (see .github/workflows/test.yml).
 
 Usage: python data/generate_data.py
@@ -23,7 +23,7 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).parent
 GUIDELINES_DIR = DATA_DIR / "guidelines"
-OUTPUT_ROOT = DATA_DIR.parent
+OUTPUT_ROOT = DATA_DIR.parent / "generated"
 
 SOURCES = {
     "aws": "AWS Well-Architected - Sustainability Pillar",
@@ -94,6 +94,7 @@ def build_analysis_json(survey_filename):
 
 
 def main():
+    OUTPUT_ROOT.mkdir(exist_ok=True)
     write_json(OUTPUT_ROOT / "data.json", build_data_json())
     for round_name, survey_filename in ROUNDS.items():
         write_json(OUTPUT_ROOT / f"analysis_{round_name}.json", build_analysis_json(survey_filename))

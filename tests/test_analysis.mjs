@@ -46,7 +46,7 @@ const chartIdsFor = (roundId) => CHART_NAMES.map((n) => `${n}-${roundId}`);
 async function main() {
   const doc = window.document;
 
-  await sleep(300); // allow fetch("analysis_claude.json") + chart mounting to settle
+  await sleep(300); // allow fetch("generated/analysis_claude.json") + chart mounting to settle
 
   const h1 = doc.querySelector("h1");
   log("Analysis page heading present", !!h1 && h1.textContent.includes("relevant"), h1 && h1.textContent);
@@ -80,7 +80,7 @@ async function main() {
 
   const downloadLink = [...doc.querySelectorAll("a")].find((a) => a.textContent.includes("Download full dataset"));
   log("Download-full-dataset link points at this round's own JSON file",
-    !!downloadLink && downloadLink.getAttribute("href") === "analysis_claude.json");
+    !!downloadLink && downloadLink.getAttribute("href") === "generated/analysis_claude.json");
 
   // Switch to the sustainability tab - lazy-loads its data and mounts its own
   // suffixed canvases, without touching the (still-in-DOM, now hidden) claude panel.
@@ -101,7 +101,7 @@ async function main() {
   const visiblePanel = doc.querySelector(".analysis-card:not([hidden])");
   const downloadLinkAfterSwitch = [...visiblePanel.querySelectorAll("a")].find((a) => a.textContent.includes("Download full dataset"));
   log("Download link now points at the sustainability round's JSON",
-    downloadLinkAfterSwitch.getAttribute("href") === "analysis_sustainability.json");
+    downloadLinkAfterSwitch.getAttribute("href") === "generated/analysis_sustainability.json");
 
   // Switching back to an already-loaded round toggles visibility only - no re-fetch/re-mount.
   const generalTab = [...tabs].find((t) => t.textContent === "AI (General)");

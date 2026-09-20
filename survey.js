@@ -518,7 +518,7 @@ async function renderComplete() {
 /* ---------- Boot ---------- */
 
 async function boot() {
-  const res = await fetch("data.json");
+  const res = await fetch("generated/data.json");
   const all = await res.json();
   state.items = shuffle(all).slice(0, Math.min(SAMPLE_SIZE, all.length));
   renderRespondentInfo();

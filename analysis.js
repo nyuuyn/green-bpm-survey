@@ -19,19 +19,19 @@ const ANALYSIS_ROUNDS = [
   {
     id: "claude",
     label: "AI (General)",
-    file: "analysis_claude.json",
+    file: "generated/analysis_claude.json",
     blurb: "An AI-generated preliminary pass with no persona framing: Claude rated all 425 guidelines across 8 sources for BPM relevance, ahead of the human rounds below.",
   },
   {
     id: "sustainability",
     label: "AI (Sustainability Expert)",
-    file: "analysis_sustainability.json",
+    file: "generated/analysis_sustainability.json",
     blurb: "Same 425 guidelines, rated by Claude framed as a sustainability/green-IT expert with only lay BPM exposure - test data exploring how a sustainability-first lens shifts relevance judgments, ahead of a real expert survey.",
   },
   {
     id: "bpm",
     label: "AI (BPM Expert)",
-    file: "analysis_bpm.json",
+    file: "generated/analysis_bpm.json",
     blurb: "Same 425 guidelines, rated by Claude framed as a BPM expert with only lay sustainability exposure - test data exploring how a process-first lens shifts relevance judgments, ahead of a real expert survey.",
   },
   // Next: an internal expert survey with envite Consulting (BPM, architecture,
@@ -218,7 +218,7 @@ function buildRoundPanel(round, records) {
 
   return el("div", { class: "card analysis-card", "data-round": round.id, hidden: true }, [
     el("div", { class: "btn-row btn-row-end" }, [
-      el("a", { class: "ref-link", href: round.file, download: round.file }, "Download full dataset (JSON) ↓"),
+      el("a", { class: "ref-link", href: round.file, download: round.file.replace(/^generated\//, "") }, "Download full dataset (JSON) ↓"),
     ]),
     el("p", { class: "intro-lead" }, `${round.blurb} ${totalRated} of 425 guidelines have a rating in this round.`),
 

@@ -1,0 +1,45 @@
+name: Deploy
+
+# Actions can't express a "needs" dependency across separate workflow files, so
+# this listens for the Test workflow (test.yml) finishing instead of running
+# its own copy of the test jobs. Only runs after a push to main (not PRs) -
+# a failing test blocks this entirely, so the live site keeps serving its last
+# good deploy instead of a broken one. Requires Pages' source to be set to
+# "GitHub Actions" (Settings -> Pages -> Build and deployment).
+on:
+  workflow_run:
+    workflows: [Test]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Pin to the exact commit Test just validated, not whatever main
+          # happens to be at when this fires - avoids deploying a newer,
+          # untested commit if two pushes land close together.
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Stage the static site (exclude dev/test tooling)
+        run: |
+          mkdir _site
+          cp index.html survey.html analysis.html style.css common.js survey.js analysis.js _site/
+          cp -r generated assets _site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+      - id: deployment
+        uses: actions/deploy-pages@v4
