@@ -829,11 +829,13 @@ function buildPage() {
         "perspectives are likely to disagree, ahead of an internal expert survey with envite " +
         "Consulting and eventually a public survey. Select one tab to see that round on its own, " +
         "or select two or more to compare them directly."),
-      chartCard(
-        "Guidelines collected per source",
-        "How the 425 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
-        "chart-per-source"
-      ),
+      el("div", { class: "analysis-grid" }, [
+        chartCard(
+          "Guidelines collected per source",
+          "How the 425 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
+          "chart-per-source"
+        ),
+      ]),
     ]),
     tabsEl,
     panelsEl,
