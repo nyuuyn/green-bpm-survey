@@ -254,10 +254,11 @@ function buildRatingRow(item, i) {
     ]),
     el("span", { class: "rating-row-label" }, item.name),
     el("p", { class: "rating-row-guideline" }, item.guideline),
+    ...(item.context ? [el("p", { class: "rating-row-context" }, item.context)] : []),
     el("a", {
       class: "ref-link", href: item.reference, target: "_blank", rel: "noopener",
       onclick: (e) => e.stopPropagation(),
-    }, "For more details, view the original source ↗"),
+    }, "This is a condensed summary — read the full guideline ↗"),
     el("div", { class: "relevance-dots-row", onclick: (e) => e.stopPropagation() }, [
       el("span", { class: "relevance-dots-label" }, "BPM Relevance"),
       relevanceDots(relevanceName),

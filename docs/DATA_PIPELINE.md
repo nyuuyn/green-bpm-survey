@@ -11,7 +11,7 @@ assets/                                  images/logos
 
 data/                                    raw data, ratings, and analysis tooling
   guidelines/<source>/
-    guidelines.csv          raw guideline data scraped from the source (ID, Name, Category, Reference, Guideline)
+    guidelines.csv          raw guideline data scraped from the source (ID, Name, Category, Reference, Guideline, Context)
     survey.csv              human interview ratings — currently empty, reserved for the real interview pass
     survey_claude.csv       Claude-generated ratings, no persona framing, same schema as survey.csv
     survey_claude_sustainability.csv  Claude ratings framed as a sustainability/green-IT expert (lay BPM exposure) — test data
@@ -46,6 +46,13 @@ CSVs, the notebook, and the Python scripts never ship to the live site.
 | `lean` | Lean and Environment (EPA Lean & Environment Toolkit; Lean Enterprise Institute "green waste" articles) | 10 | **BPM-native** |
 
 **425 guidelines total.**
+
+`Context` is an optional, hand-written column on `guidelines.csv` (blank for most rows) — a
+sentence or two of extra background for guidelines whose one-line text reads as too thin on its
+own, paraphrased by a human from that guideline's own `Reference` link rather than scraped, since
+the sources are too structurally different (vendor docs, a spec page, a PDF, a blog post, two
+patterns catalogs) for one generic scrape to make sense across all of them. Shown on the survey
+card under the guideline text when present (see `survey.js`); see issue #11.
 
 ## Generating `generated/*.json`
 
