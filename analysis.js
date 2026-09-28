@@ -696,9 +696,8 @@ function buildComparisonPanel(activeList, recordsByRound, pal) {
   );
 
   return el("div", { class: "analysis-card" }, [
-    el("h2", {}, `Comparing ${activeList.length} rounds`),
+    el("h2", {}, `Comparing ${activeList.map((r) => r.label).join(", ")}`),
     downloadRow,
-    el("p", { class: "intro-lead" }, `${activeList.map((r) => r.label).join(", ")}.`),
 
     el("h2", { class: "top-table-heading" }, "Combined charts"),
     el("p", { class: "chart-desc" }, "The same aggregate charts as a single round, with one series per selected round."),

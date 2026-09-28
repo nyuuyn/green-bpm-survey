@@ -3,7 +3,7 @@
 ## Repo structure
 
 ```
-index.html, survey.html, analysis.html   the three static pages (see README's "How it works")
+index.html, survey.html, analysis.html   the three static pages (see docs/ARCHITECTURE.md)
 style.css, common.js, survey.js, analysis.js
 generated/data.json                      guideline text for the survey (generated)
 generated/analysis_<round>.json          per-round rating data for the analysis page (generated)
@@ -109,8 +109,8 @@ this is, plus a "Guidelines collected per source" chart - see below), and a **re
 below it with one **toggle button per round** at its top, followed by whatever those buttons
 select. Select exactly one round to see it on its own, headed "`{round label} results`"
 (relevance distribution, BPM Scope/Lifecycle coverage, generic-vs-specific split, and a top-20
-table), or select two or more to see a **comparison panel** instead, headed "Comparing N rounds" -
-see below. The tabs stay at the top of the results card regardless of which of those is showing,
+table), or select two or more to see a **comparison panel** instead, headed with the names of the
+selected rounds (e.g. "Comparing AI (General), AI (BPM Expert)") - see below. The tabs stay at the top of the results card regardless of which of those is showing,
 since they're a sibling of both, not nested inside either. Charts render via
 [Chart.js](https://www.chartjs.org/) (loaded from a CDN, no build step). The page is reachable
 directly from the landing page, or from the survey's Thank-you screen - taking the survey isn't

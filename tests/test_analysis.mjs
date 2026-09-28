@@ -124,8 +124,8 @@ async function main() {
 
   log("Single-round panels (claude) are hidden while comparing", claudePanel.hidden === true);
   log("Comparison panel is now visible", comparisonPanel.hidden === false);
-  log('Comparison panel has a "Comparing N rounds" heading',
-    comparisonPanel.querySelector("h2")?.textContent === "Comparing 2 rounds",
+  log('Comparison panel heading names the compared rounds',
+    comparisonPanel.querySelector("h2")?.textContent === "Comparing AI (General), AI (Sustainability Expert)",
     comparisonPanel.querySelector("h2")?.textContent);
 
   log("4 merged chart canvases present", MERGED_CHART_IDS.every((id) => !!doc.getElementById(id)));
@@ -161,8 +161,8 @@ async function main() {
   log('Hash becomes "#claude+sustainability+bpm"', window.location.hash === "#claude+sustainability+bpm", window.location.hash);
   log("All three tabs are now pressed",
     [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 3);
-  log('Comparison heading updates to "Comparing 3 rounds"',
-    comparisonPanel.querySelector("h2")?.textContent === "Comparing 3 rounds",
+  log('Comparison heading updates to name all three compared rounds',
+    comparisonPanel.querySelector("h2")?.textContent === "Comparing AI (General), AI (Sustainability Expert), AI (BPM Expert)",
     comparisonPanel.querySelector("h2")?.textContent);
 
   const comparisonCanvasesAt3 = comparisonPanel.querySelectorAll("canvas");
