@@ -87,10 +87,10 @@ def test_round_and_comparison_panels_have_result_headings(page, base_url):
     expect(page.locator('.analysis-card[data-round="claude"] h2').first).to_have_text("AI (General) results")
 
     page.get_by_role("button", name="AI (Sustainability Expert)").click()
-    expect(page.locator("#comparison-panel h2").first).to_have_text("Comparing 2 rounds")
+    expect(page.locator("#comparison-panel h2").first).to_have_text("Comparing AI (General), AI (Sustainability Expert)")
 
     page.get_by_role("button", name="AI (BPM Expert)").click()
-    expect(page.locator("#comparison-panel h2").first).to_have_text("Comparing 3 rounds")
+    expect(page.locator("#comparison-panel h2").first).to_have_text("Comparing AI (General), AI (Sustainability Expert), AI (BPM Expert)")
 
 
 def test_switching_to_a_single_other_round_still_works_like_a_tab(page, base_url):
