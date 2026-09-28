@@ -2,9 +2,9 @@
 
 Single-source-of-truth generator for everything the frontend fetches:
 
-- data.json — guideline text only (id/name/category/reference/guideline/source/
-  sourceLabel), read straight off guidelines.csv. Fetched by survey.js to build
-  the sample respondents rate.
+- data.json — guideline text only (id/name/category/reference/guideline/context/
+  source/sourceLabel), read straight off guidelines.csv. Fetched by survey.js to
+  build the sample respondents rate.
 - analysis_<round>.json (one per round in ROUNDS below) — guidelines.csv
   left-joined with that round's survey_claude*.csv on ID, mirroring
   data/analysis.ipynb's load_source(). Fetched by analysis.js, one file per tab.
@@ -67,6 +67,7 @@ def build_data_json():
             items.append({
                 "id": r["ID"], "name": r["Name"], "category": r.get("Category", ""),
                 "reference": r["Reference"], "guideline": r["Guideline"],
+                "context": r.get("Context", ""),
                 "source": source, "sourceLabel": label,
             })
     return items
