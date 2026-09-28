@@ -822,7 +822,7 @@ function buildPage() {
 
   renderApp(
     el("div", { class: "card analysis-intro" }, [
-      el("h1", {}, "How relevant is this guidance to BPM?"),
+      el("h1", {}, "How relevant are the guidelines to BPM?"),
       el("p", { class: "intro-lead" },
         "The Green BPM Guideline is being distilled through multiple rounds of rating. The three " +
         "AI tabs below are Claude rating the same 425 guidelines under different framings " +
