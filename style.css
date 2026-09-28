@@ -60,10 +60,6 @@ body {
 .crumb-sep { color: var(--border); }
 .crumb-current { font-weight: 700; color: var(--text-muted); }
 
-.topbar-right { display: flex; align-items: center; gap: 14px; }
-.gh-link { display: flex; color: var(--text-muted); }
-.gh-link:hover { color: var(--text); }
-
 .progress-label { color: var(--text-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 
 .progress-bar {
@@ -458,6 +454,11 @@ a.btn-primary, a.btn-secondary {
 }
 
 .footer-credit a { display: flex; align-items: center; line-height: 0; }
+
+.footer-sep { color: var(--border); }
+
+.gh-link { display: flex; color: var(--text-muted); }
+.gh-link:hover { color: var(--text); }
 
 .footer-logo { height: 16px; width: auto; }
 .footer-logo-dark { display: none; }
