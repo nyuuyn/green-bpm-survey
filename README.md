@@ -28,11 +28,16 @@ that will be compared against the existing AI pass. Full pipeline details:
 
 ## 📊 Key finding so far
 
-- 5 general sustainability sources (400 guidelines): **79.2%** score 0–1 on BPM Relevance (not
-  very relevant), only **12.2%** score 3 (highly relevant)
-- 2 BPM-native sources (15 guidelines): almost inverted — **0%** at 0–1, **86.7%** at 3
+- 6 general sustainability sources (413 guidelines): **78.2%** score 0–1 on BPM Relevance (not
+  very relevant), only **12.3%** score 3 (highly relevant)
+- 4 BPM-native sources (35 guidelines): nearly inverted — **2.9%** at 0–1, **74.3%** at 3
 - Takeaway: "relevant to BPM" is a real, distinct signal — not noise — so filtering for it is
   worth doing
+- One of the 6 general sources, the GHG Protocol Corporate Standard, was added specifically as a
+  non-IT control group (every other general source is cloud/web-flavored). It lands in between —
+  **46.2%** at 0–1, mean relevance 1.62 vs. ~1.09 for the five IT-flavored sources — so IT-specificity
+  isn't the only thing driving the low scores, but removing it alone doesn't get anywhere near
+  BPM-native territory either
 
 See [`data/analysis.ipynb`](data/analysis.ipynb) for the full breakdown, or the
 [Analysis page](https://nyuuyn.github.io/green-bpm-survey/analysis.html) for the interactive
