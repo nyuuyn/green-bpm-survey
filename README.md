@@ -38,10 +38,16 @@ that will be compared against the existing AI pass. Full pipeline details:
   **46.2%** at 0–1, mean relevance 1.62 vs. ~1.09 for the five IT-flavored sources — so IT-specificity
   isn't the only thing driving the low scores, but removing it alone doesn't get anywhere near
   BPM-native territory either
+- Neither bucket is uniform once you look source-by-source instead of at the two aggregates:
+  among general sources, GCP is the clear low point (mean relevance **0.85**, only **10.4%** at 3)
+  versus AWS/W3C (~1.3, ~17% at 3) — and GHG Protocol actually ranks *above every other general
+  source individually* (mean **1.62**), not just "in between" on average. Among BPM-native
+  sources, GBPP and ppatterns.app (**83–89%** at 3) clearly outscore Green BPM Book and Lean
+  (**60–70%**) — a ~29-point spread inside a bucket the aggregate makes look monolithic
 
 See [`data/analysis.ipynb`](data/analysis.ipynb) for the full breakdown, or the
-[Analysis page](https://nyuuyn.github.io/green-bpm-survey/analysis.html) for the interactive
-version.
+[Analysis page](https://nyuuyn.github.io/green-bpm-survey/analysis.html) — including its
+per-source comparison block — for the interactive version.
 
 ## 🧭 How it works
 
