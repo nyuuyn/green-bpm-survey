@@ -1,6 +1,8 @@
 # Frontend architecture
 
-Three static pages, no build step, no framework.
+Three static pages, no build step, no framework. The pages live at the repo root; every script and
+stylesheet below lives under `assets/js/` and `assets/css/` respectively (images under
+`assets/img/`) — filenames are given without that prefix here for brevity.
 
 - **`index.html`** — the landing page. Fully static (no JS): explains the project's goal and
   guideline sources, and links to the other two pages. This is the page people should land on

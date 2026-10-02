@@ -37,8 +37,6 @@ jobs:
         run: |
           mkdir _site
           cp index.html survey.html analysis.html _site/
-          cp common.css survey.css analysis.css _site/
-          cp common.js survey-fields.js survey.js palette.js charts.js analysis-panels.js analysis.js _site/
           cp -r generated assets _site/
       - uses: actions/upload-pages-artifact@v3
         with:
