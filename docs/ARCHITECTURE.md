@@ -20,14 +20,24 @@ Three static pages, no build step, no framework.
 
 ## The survey flow
 
-Before rating starts, a one-time **"About you"** screen collects respondent background —
-separately from personal data, and not used to identify anyone:
+Before rating starts, an **"About you"** screen collects respondent background — separately
+from personal data, and not used to identify anyone:
 
 - **BPM experience** (None / studied it / practitioner at a few duration bands)
 - **Sustainability/green-IT experience** — a *separate* axis from BPM experience, since the
   two are independent (a BPM expert can be new to sustainability and vice versa)
 - **Role** (Process Analyst, Developer, Consultant, Researcher, Student, etc., or a free-text
   "Other")
+
+These answers are saved to `localStorage` (`greenBpmSurvey.respondentInfo` in `survey.js`) as
+soon as they're submitted. On a later visit in the same browser — e.g. clicking "Start another
+round" on the Thank-you screen, which just does `location.reload()` — `boot()` finds the saved
+answers and skips "About you" entirely, going straight to a freshly-sampled rating list (each
+round still gets its own `sessionId` and its own sample of guidelines; only the background
+questions are reused). The rating list shows a small summary of the remembered answers with a
+"Not you? Edit your info" link that returns to "About you" prefilled with those same answers
+(rather than blank) in case someone's background changed or was entered wrong - submitting that
+form again overwrites what's stored.
 
 This exists so ratings can later be checked for whether BPM/sustainability background
 actually changes what gets rated as relevant, rather than treating every rating as equally

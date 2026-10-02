@@ -138,6 +138,37 @@ def test_full_submission_payload_shape(page, base_url):
     # here, since complete_survey()'s default fill uses Relevance=3 for every row.
 
 
+def test_another_round_skips_about_you_after_reload(page, base_url):
+    # "Start another round" (and any other reload of survey.html in the same
+    # browser) should reuse the background info from localStorage instead of
+    # asking again - only a real browser reload exercises this, since jsdom
+    # tests don't model navigation/storage persistence across a reload.
+    start_survey(page, base_url)
+    fill_about_you(page, bpm_experience="Practitioner, 5+ years", sustainability_experience="None", role="Student")
+    expect(page.locator(".respondent-summary")).to_contain_text("Student")
+
+    page.reload()
+    expect(page.locator("h1")).to_have_text("Rate each guideline")
+    expect(page.locator(".respondent-summary")).to_contain_text("Student")
+    expect(page.locator(".respondent-summary")).to_contain_text("Practitioner, 5+ years")
+
+
+def test_edit_your_info_link_returns_to_about_you_prefilled(page, base_url):
+    start_survey(page, base_url)
+    check(page, "bpmExperience", "Practitioner, 5+ years")
+    check(page, "sustainabilityExperience", "None")
+    check(page, "role", "Other")
+    page.locator('input[name="roleOther"]').fill("Sustainability Officer")
+    page.get_by_role("button", name="Continue").click()
+    page.wait_for_selector("h1:has-text('Rate each guideline')")
+
+    page.get_by_role("link", name="Not you? Edit your info").click()
+    expect(page.locator("h1")).to_have_text("About you")
+    expect(page.locator('input[name="bpmExperience"][value="Practitioner, 5+ years"]')).to_be_checked()
+    expect(page.locator('input[name="role"][value="Other"]')).to_be_checked()
+    expect(page.locator('input[name="roleOther"]')).to_have_value("Sustainability Officer")
+
+
 def test_download_button_produces_a_real_file(page, base_url):
     """jsdom can't exercise Blob/createObjectURL + a programmatic download click -
     this is the one existing behavior only a real browser can verify."""

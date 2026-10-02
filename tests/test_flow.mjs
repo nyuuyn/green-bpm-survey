@@ -87,6 +87,32 @@ async function main() {
   h1 = doc.querySelector("h1");
   log("Advances to the rating list after respondent info completed", !!h1 && h1.textContent === "Rate each guideline", h1 && h1.textContent);
 
+  // 1c. The rating list shows a summary of what was just entered, the answers get
+  //     persisted (so a later round can skip "About you" entirely), and "Edit your
+  //     info" returns to About You prefilled with those same answers rather than blank.
+  const summaryEl = doc.querySelector(".respondent-summary");
+  log("Respondent summary is shown on the rating screen", !!summaryEl, summaryEl && summaryEl.textContent);
+  log("Respondent summary includes the entered role", !!summaryEl && summaryEl.textContent.includes("Sustainability Officer"));
+
+  const storedRespondent = JSON.parse(window.localStorage.getItem("greenBpmSurvey.respondentInfo") || "null");
+  log("Respondent info was persisted to localStorage", !!storedRespondent
+    && storedRespondent["BPM Experience"] === "Practitioner, 5+ years"
+    && storedRespondent.Role === "Sustainability Officer",
+    JSON.stringify(storedRespondent));
+
+  doc.querySelector(".respondent-edit-link").dispatchEvent(new window.Event("click", { bubbles: true, cancelable: true }));
+  await sleep(20);
+  h1 = doc.querySelector("h1");
+  log('"Edit your info" link returns to About You', !!h1 && h1.textContent === "About you", h1 && h1.textContent);
+  log("Edit screen prefills the previously selected BPM experience", isChecked("bpmExperience", "Practitioner, 5+ years"));
+  log("Edit screen prefills Role=Other with the previously entered custom text", isChecked("role", "Other")
+    && doc.querySelector('input[name="roleOther"]').value === "Sustainability Officer");
+
+  submit(); // unchanged - just confirming the prefilled form is itself valid
+  await sleep(20);
+  h1 = doc.querySelector("h1");
+  log("Re-submitting the edited form returns to the rating list", !!h1 && h1.textContent === "Rate each guideline", h1 && h1.textContent);
+
   const rows = doc.querySelectorAll(".rating-row");
   log("All 25 guidelines rendered as rows", rows.length === 25, `got ${rows.length}`);
   log("Progress starts at 0 / 25", progressLabel() === "0 / 25", progressLabel());
