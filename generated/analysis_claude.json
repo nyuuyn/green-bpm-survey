@@ -5345,6 +5345,195 @@
 ]
 },
 {
+"id": "GHGP.ORG.1",
+"name": "Link emissions data to specific business processes, not just the aggregate corporate total",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "GHGP.OPB.1",
+"name": "Describe the value chain before picking which scope 3 categories to report",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GHGP.OPB.2",
+"name": "Put activity-data reporting into the outsourcing contract itself",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "GHGP.TRK.1",
+"name": "Recalculate the base year for structural change, never for organic growth",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 0,
+"scope": [],
+"generic": null,
+"lifecycle": []
+},
+{
+"id": "GHGP.CALC.1",
+"name": "Work emissions out in five explicit steps, not one estimate",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Model"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GHGP.CALC.2",
+"name": "Classify every direct source into one of four types before calculating",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Worker/Task"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GHGP.CALC.3",
+"name": "Choose centralized vs. decentralized data collection based on process complexity",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Organizational/Governance",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution"
+]
+},
+{
+"id": "GHGP.QUAL.1",
+"name": "Widen existing operational systems to cover GHG data, don't build a parallel one",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Execution"
+]
+},
+{
+"id": "GHGP.QUAL.2",
+"name": "Form a cross-functional team to own the inventory",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GHGP.QUAL.3",
+"name": "Institutionalize a feedback loop from review findings back to the inventory owner",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring",
+"Optimization"
+]
+},
+{
+"id": "GHGP.REDUCT.1",
+"name": "Break a year-over-year emissions change down by cause",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Analysis"
+]
+},
+{
+"id": "GHGP.TARGET.1",
+"name": "Secure senior management commitment before rolling out a GHG target",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 1,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GHGP.TARGET.2",
+"name": "Match the target's metric to the level of decision-making that can act on it",
+"source": "ghgprotocol",
+"bpmNative": false,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Design",
+"Monitoring"
+]
+},
+{
 "id": "GBPP.BASIC.1",
 "name": "Green Compensation",
 "source": "gbpp",
