@@ -59,7 +59,9 @@ async function main() {
 
   // Tab bar: one toggle button per round in ANALYSIS_ROUNDS - 3 today (general/
   // sustainability/bpm personas), "AI (General)" active by default with no hash present.
-  const tabs = doc.querySelectorAll(".tab");
+  // Scoped to [data-round] since the page now also has a second tab bar for
+  // sources (see the "Source block" section below) using the same .tab class.
+  const tabs = doc.querySelectorAll(".tab[data-round]");
   log("One tab per survey round (3 today)", tabs.length === 3, `got ${tabs.length}`);
   log('"AI (General)" tab is active by default', doc.querySelector(".tab.active")?.textContent === "AI (General)");
   log("Exactly one tab is pressed by default", [...tabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 1);
@@ -82,11 +84,16 @@ async function main() {
   log("Intro card's per-source chart is present, outside any round panel",
     !!doc.getElementById("chart-per-source") && !doc.getElementById("chart-per-source").closest(".analysis-card"));
 
+  // The page also mounts the source block's default single-source panel
+  // (AWS, 5 canvases) alongside the intro chart and the active round's 8 -
+  // see the "Source block" section below for its own dedicated assertions.
   const claudeChartIds = chartIdsFor("claude");
+  const SOURCE_SINGLE_COUNT = 5;
   const canvases = doc.querySelectorAll("canvas");
-  log("9 canvases in the document (1 intro + 8 for the active round)", canvases.length === 1 + claudeChartIds.length, `got ${canvases.length}`);
-  log("9 Chart instances mounted (1 intro + 8 for the active round)", mountedCharts.length === 1 + claudeChartIds.length,
-    `got ${mountedCharts.length}`);
+  log("14 canvases in the document (1 intro + 8 for the active round + 5 for the default source)",
+    canvases.length === 1 + claudeChartIds.length + SOURCE_SINGLE_COUNT, `got ${canvases.length}`);
+  log("14 Chart instances mounted (1 intro + 8 for the active round + 5 for the default source)",
+    mountedCharts.length === 1 + claudeChartIds.length + SOURCE_SINGLE_COUNT, `got ${mountedCharts.length}`);
   log("Every expected canvas id is present, suffixed by round", claudeChartIds.every((id) => !!doc.getElementById(id)));
 
   const claudePanel = doc.querySelector('.analysis-card[data-round="claude"]');
@@ -95,10 +102,11 @@ async function main() {
   const comparisonPanel = doc.getElementById("comparison-panel");
   log("Comparison panel exists and starts hidden", !!comparisonPanel && comparisonPanel.hidden === true);
 
-  log("4 chart legends present", doc.querySelectorAll(".chart-legend").length === 4,
+  // 4 in the claude round panel + 1 in the default source panel (generic-split).
+  log("5 chart legends present", doc.querySelectorAll(".chart-legend").length === 5,
     `got ${doc.querySelectorAll(".chart-legend").length}`);
 
-  const rows = doc.querySelectorAll(".data-table tbody tr");
+  const rows = claudePanel.querySelectorAll(".data-table tbody tr");
   log("Top-20 table has exactly 20 rows", rows.length === 20, `got ${rows.length}`);
 
   const brandLink = doc.querySelector("a.brand");
@@ -191,6 +199,103 @@ async function main() {
   await sleep(50);
   log("Clicking the only active tab again is a no-op (stays selected)",
     window.location.hash === "#claude" && claudeTab.classList.contains("active"));
+
+  // --- Source block: a second, independent tab bar below the round results,
+  // scoped to whichever single round is active above (not part of the hash -
+  // see docs/DATA_PIPELINE.md). Default: "AWS" (first in ANALYSIS_SOURCE_ORDER). ---
+  const sourceTabs = doc.querySelectorAll(".tab[data-source]");
+  log("One tab per guideline source (10 today)", sourceTabs.length === 10, `got ${sourceTabs.length}`);
+
+  const awsTab = [...sourceTabs].find((t) => t.textContent === "AWS");
+  const azureTab = [...sourceTabs].find((t) => t.textContent === "Azure");
+  log('"AWS" source tab is active by default', awsTab?.classList.contains("active"));
+  log("Exactly one source tab is pressed by default",
+    [...sourceTabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 1);
+
+  const sourceResult = doc.getElementById("source-result");
+  log('Source result panel heading is "AWS results" by default',
+    sourceResult.querySelector("h2")?.textContent === "AWS results", sourceResult.querySelector("h2")?.textContent);
+
+  const SOURCE_CHART_NAMES = ["relevance-dist", "scope-counts", "lifecycle", "mean-by-scope", "generic-split"];
+  const sourceChartIdsFor = (sourceId) => SOURCE_CHART_NAMES.map((n) => `src-chart-${n}-${sourceId}`);
+  log("All 5 single-source canvases present for AWS", sourceChartIdsFor("aws").every((id) => !!doc.getElementById(id)));
+
+  const sourceNote = doc.getElementById("source-note");
+  log("Source note exists and starts hidden (single round active)", !!sourceNote && sourceNote.hidden === true);
+  log("Source result panel starts visible", sourceResult.hidden === false);
+
+  // --- Selecting a 2nd source switches to the source comparison panel
+  // (merged charts with one series per source, no heatmap/disagreement table -
+  // sources partition the guidelines, so there's no per-guideline "agreement" to show). ---
+  azureTab.click();
+  await sleep(300);
+
+  log("AWS and Azure source tabs are both pressed",
+    [...sourceTabs].filter((t) => t.getAttribute("aria-pressed") === "true").length === 2);
+  log('Source comparison heading names the compared sources',
+    sourceResult.querySelector("h2")?.textContent === "Comparing AWS, Azure", sourceResult.querySelector("h2")?.textContent);
+
+  const SOURCE_MERGED_IDS = [
+    "cmp-src-chart-relevance-dist", "cmp-src-chart-scope-counts", "cmp-src-chart-lifecycle",
+    "cmp-src-chart-mean-by-scope", "cmp-src-chart-generic-split",
+  ];
+  log("5 merged source-comparison canvases present", SOURCE_MERGED_IDS.every((id) => !!doc.getElementById(id)));
+  log("No heatmap in the source comparison panel (sources partition guidelines, not re-rate them)",
+    sourceResult.querySelectorAll(".heatmap-table").length === 0);
+
+  const sourceCompRows = sourceResult.querySelectorAll(".data-table tbody tr");
+  log("Top-rated-among-selected-sources table has at most 15 rows",
+    sourceCompRows.length > 0 && sourceCompRows.length <= 15, `got ${sourceCompRows.length}`);
+
+  // --- Deselecting back to one source returns to the single-source panel. ---
+  azureTab.click();
+  await sleep(300);
+  log('Source result panel returns to "AWS results"', sourceResult.querySelector("h2")?.textContent === "AWS results");
+
+  // --- The last remaining active source tab can't be deselected down to zero. ---
+  awsTab.click();
+  await sleep(50);
+  log("Clicking the only active source tab again is a no-op (stays selected)", awsTab.classList.contains("active"));
+
+  // --- Selecting a 2nd round does NOT hide or empty the source block - it
+  // keeps showing data for whichever selected round comes first in
+  // ANALYSIS_ROUNDS order, with a note naming it. (Regression test: this used
+  // to hide the block entirely, making its charts disappear - see the "fix
+  // the disappearing source-block charts" bug report.) ---
+  sustainabilityTab.click();
+  await sleep(300); // 2 rounds active: claude, sustainability
+  log("Source note becomes visible once 2+ rounds are active", sourceNote.hidden === false);
+  log('Source note names the round being shown and how many are selected',
+    sourceNote.textContent === 'Showing sources for "AI (General)" - the first of your 2 selected rounds above.',
+    sourceNote.textContent);
+  log("Source result panel stays visible while 2+ rounds are active (does not disappear)", sourceResult.hidden === false);
+  log('Source result panel still shows "AWS results" (claude is still the first active round)',
+    sourceResult.querySelector("h2")?.textContent === "AWS results", sourceResult.querySelector("h2")?.textContent);
+  log("Source block's charts are still mounted while comparing rounds",
+    sourceChartIdsFor("aws").every((id) => !!doc.getElementById(id)));
+
+  // --- Deselecting the round the source block was showing (claude), while a
+  // 2nd round (bpm) is also still active, switches it to the next-first
+  // active round (sustainability) instead of disappearing. ---
+  bpmTab.click();
+  await sleep(300); // 3 rounds active: claude, sustainability, bpm
+  log('Source note still names "AI (General)" as first of 3 selected rounds',
+    sourceNote.textContent === 'Showing sources for "AI (General)" - the first of your 3 selected rounds above.',
+    sourceNote.textContent);
+
+  claudeTab.click();
+  await sleep(300); // claude deselected -> sustainability, bpm remain (2 active)
+  log('Source note switches to "AI (Sustainability Expert)" once claude (the prior first) is deselected',
+    sourceNote.textContent === 'Showing sources for "AI (Sustainability Expert)" - the first of your 2 selected rounds above.',
+    sourceNote.textContent);
+  log("Source result panel is still visible (not hidden) after switching representative round",
+    sourceResult.hidden === false);
+
+  // --- Returning to a single round hides the note again (no ambiguity left to explain). ---
+  sustainabilityTab.click();
+  await sleep(300); // sustainability deselected -> bpm remains (1 round)
+  log("Source note hides again once back to a single round", sourceNote.hidden === true);
+  log("Source result panel is visible", sourceResult.hidden === false);
 
   console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);
   if (failures > 0) process.exitCode = 1;

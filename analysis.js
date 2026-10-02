@@ -57,9 +57,10 @@ function isDarkMode() {
 // so the analysis page reads as one system with the rest of the site. Two-way
 // splits (native/general, generic/specific) use a strong vs. muted step of that
 // same green rather than a second hue - each chart's legend/labels carry the
-// identity, so a shared hue doesn't cost distinguishability. The comparison
-// panel's per-round series reuse relevanceSteps too (see roundColor below),
-// for the same reason.
+// identity, so a shared hue doesn't cost distinguishability. The round- and
+// source-comparison panels' per-item series stay in that same green family
+// too, via a generated ramp (see greenRamp, roundColor, sourceColor below)
+// rather than relevanceSteps, since both lists can grow past its 4 steps.
 function chartPalette() {
   const dark = isDarkMode();
   return {
@@ -78,14 +79,68 @@ function chartPalette() {
   };
 }
 
+function hslToHex(h, s, l) {
+  s /= 100;
+  l /= 100;
+  const k = (n) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  const toHex = (x) => Math.round(255 * x).toString(16).padStart(2, "0");
+  return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+}
+
+// A sequential multi-hue ramp (hue sweeps a narrow forest-green-to-teal band
+// together with lightness, rather than lightness alone) sized to `count`.
+// Used anywhere the page needs one color per item from an open-ended,
+// selectable list (rounds, sources) - pal.relevanceSteps only has 4 fixed
+// steps, built for the 0-3 relevance scale, so cycling through it (as both
+// roundColor and sourceColor used to) collides once the list is selected
+// past 4 items. Varying only lightness for many steps isn't enough either -
+// adjacent steps become too close to tell apart - so this covaries hue too,
+// the same trick ColorBrewer's multi-hue sequential schemes use for larger
+// category counts. The hue stays within green-to-teal so it still reads as
+// "the site's own green family," just not a single flat hue.
+function greenRamp(dark, count) {
+  const hueFrom = 150, hueTo = 186;
+  const sat = dark ? 50 : 48;
+  const lightFrom = dark ? 30 : 76; // pale/dim end
+  const lightTo = dark ? 74 : 26; // saturated end
+  if (count <= 1) return [hslToHex((hueFrom + hueTo) / 2, sat, (lightFrom + lightTo) / 2)];
+  return Array.from({ length: count }, (_, i) => {
+    const t = i / (count - 1);
+    return hslToHex(hueFrom + (hueTo - hueFrom) * t, sat, lightFrom + (lightTo - lightFrom) * t);
+  });
+}
+
 // Color for one round's series in a merged multi-round chart, or one round's
-// heatmap intensity - the darkest/most-saturated relevanceSteps entry first,
-// so the round selected first (canonical ANALYSIS_ROUNDS order) reads as the
-// most prominent. Keeps the same green family rather than adding new hues.
-function roundColor(pal, round) {
-  const steps = [...pal.relevanceSteps].reverse();
-  const globalIndex = ANALYSIS_ROUNDS.findIndex((r) => r.id === round.id);
-  return steps[globalIndex % steps.length];
+// heatmap intensity - indexed by position in canonical ANALYSIS_ROUNDS order,
+// so a given round keeps a stable color no matter which others are selected
+// alongside it. Only 3 rounds exist today, well under the 4-step
+// relevanceSteps array this used to cycle through, but the roadmap already
+// plans a 4th (internal expert survey) and 5th (public survey) round, which
+// would start colliding the same way sourceColor used to for 10 sources -
+// using the generated ramp here too avoids hitting that again later.
+function roundColor(round) {
+  const ramp = greenRamp(isDarkMode(), ANALYSIS_ROUNDS.length);
+  return ramp[ANALYSIS_ROUNDS.findIndex((r) => r.id === round.id)];
+}
+
+// Indexed by position in ANALYSIS_SOURCE_ORDER so a given source keeps a
+// stable color regardless of which other sources are selected alongside it.
+function sourceColor(sourceId) {
+  const ramp = greenRamp(isDarkMode(), ANALYSIS_SOURCE_ORDER.length);
+  return ramp[ANALYSIS_SOURCE_ORDER.indexOf(sourceId)];
+}
+
+// Black or white, whichever reads better on `hex` - greenRamp spans pale to
+// dark, so a single fixed contrast color (like pal.accent-contrast) doesn't
+// work across the whole ramp. Used to pick each active round/source tab's
+// text color to match its own ramp swatch (see --tab-accent in style.css).
+function readableTextOn(hex) {
+  const [r, g, b] = hexToRgb(hex).map((c) => c / 255);
+  const toLinear = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  const luminance = 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+  return luminance > 0.4 ? "#0b0b0b" : "#ffffff";
 }
 
 function baseScaleOptions(pal) {
@@ -170,6 +225,18 @@ function genericShareBySource(records) {
     no.push((rated.filter((r) => r.generic === "No").length / total) * 100);
   });
   return { yes, no };
+}
+
+// Single-group version of genericShareBySource - used by the source block,
+// where each "group" is already one specific source (or, in the comparison
+// panel, one dataset per selected source) rather than all 10 at once.
+function genericSplit(records) {
+  const rated = records.filter((r) => r.generic);
+  const total = rated.length || 1;
+  return {
+    yes: (rated.filter((r) => r.generic === "Yes").length / total) * 100,
+    no: (rated.filter((r) => r.generic === "No").length / total) * 100,
+  };
 }
 
 function lifecycleCounts(records) {
@@ -613,15 +680,26 @@ function buildMergedGrid(activeList) {
   ]);
 }
 
-function mountMergedCharts(activeList, recordsByRound, pal) {
+// Shared by the round-comparison panel and the source block's comparison
+// panel: both need "the same aggregate charts as a single [round|source],
+// with one series per selected [round|source]" - this takes a generic list
+// of { id, label } targets plus a recordsFor/colorFor lookup instead of
+// assuming rounds, so neither caller needs its own copy of the four chart
+// configs. idPrefix keeps each caller's canvas ids distinct (so both panels
+// can coexist in the DOM, hidden or not, without id collisions).
+// includeGeneric adds a fifth chart (Generic vs. BPM-specific split) - only
+// the source panel uses this, since that split is exactly the kind of
+// "compare these groups side by side" view the round panel already shows
+// per-round elsewhere (mountGenericShareChart, by source).
+function mountMergedBarCharts(targets, recordsFor, colorFor, idPrefix, pal, includeGeneric) {
   const legend = { display: true, labels: { color: pal.inkSecondary, boxWidth: 12, font: { size: 11.5 } } };
   const tooltip = baseTooltip(pal);
-  const datasetsFor = (getter) => activeList.map((round) => ({
-    label: round.label, data: getter(recordsByRound.get(round.id)), backgroundColor: roundColor(pal, round), borderRadius: 4,
+  const datasetsFor = (getter) => targets.map((t) => ({
+    label: t.label, data: getter(recordsFor(t.id)), backgroundColor: colorFor(t), borderRadius: 4,
   }));
 
-  return [
-    mountChart("cmp-chart-relevance-dist", {
+  const charts = [
+    mountChart(`${idPrefix}-relevance-dist`, {
       type: "bar",
       data: { labels: RELEVANCE_OPTIONS.map((o) => o.label), datasets: datasetsFor(relevanceDistribution) },
       options: {
@@ -630,7 +708,7 @@ function mountMergedCharts(activeList, recordsByRound, pal) {
         scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
       },
     }),
-    mountChart("cmp-chart-scope-counts", {
+    mountChart(`${idPrefix}-scope-counts`, {
       type: "bar",
       data: { labels: SCOPE_OPTIONS, datasets: datasetsFor(scopeCounts) },
       options: {
@@ -640,7 +718,7 @@ function mountMergedCharts(activeList, recordsByRound, pal) {
         scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
       },
     }),
-    mountChart("cmp-chart-lifecycle", {
+    mountChart(`${idPrefix}-lifecycle`, {
       type: "bar",
       data: { labels: [...LIFECYCLE_OPTIONS, "Not Applicable"], datasets: datasetsFor((records) => lifecycleCounts(records).counts) },
       options: {
@@ -650,7 +728,7 @@ function mountMergedCharts(activeList, recordsByRound, pal) {
         scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
       },
     }),
-    mountChart("cmp-chart-mean-by-scope", {
+    mountChart(`${idPrefix}-mean-by-scope`, {
       type: "bar",
       data: { labels: SCOPE_OPTIONS, datasets: datasetsFor(meanRelevanceByScope) },
       options: {
@@ -661,20 +739,72 @@ function mountMergedCharts(activeList, recordsByRound, pal) {
       },
     }),
   ];
+
+  if (includeGeneric) {
+    charts.push(mountChart(`${idPrefix}-generic-split`, {
+      type: "bar",
+      data: {
+        labels: ["Generic practice", "BPM-specific"],
+        datasets: datasetsFor((records) => { const g = genericSplit(records); return [g.yes, g.no]; }),
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend, tooltip: { ...tooltip, callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}%` } } },
+        scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 } },
+      },
+    }));
+  }
+
+  return charts;
 }
 
-function buildSmallMultiples(activeList) {
-  const section = (title, description, kind) => el("div", { class: "comparison-section" }, [
+function mountMergedCharts(activeList, recordsByRound, pal) {
+  return mountMergedBarCharts(
+    activeList,
+    (id) => recordsByRound.get(id),
+    (t) => roundColor(t),
+    "cmp-chart",
+    pal,
+    false
+  );
+}
+
+function buildSmallMultiples(activeList, pal) {
+  // One legend per section (not repeated per round's small chart) - same
+  // colors/meaning across every chart in the section, so a single legend row
+  // under the section description covers all of them.
+  const section = (title, description, kind, legend) => el("div", { class: "comparison-section" }, [
     el("h2", { class: "top-table-heading" }, title),
     el("p", { class: "chart-desc" }, description),
+    el("div", { class: "chart-legend" }, legend),
     el("div", { class: "analysis-grid" }, activeList.map((round) => chartCard(round.label, null, `cmp-chart-${kind}-${round.id}`))),
   ]);
 
   return el("div", {}, [
-    section("Share rated highly relevant, by source", "Percent of each source's guidelines scoring 3 (highly relevant) - one chart per selected round.", "high-relevance"),
-    section("Relevance mix per source", "Full 0–3 breakdown per source, normalized to 100% - one chart per selected round.", "relevance-mix"),
-    section("BPM Scope emphasis — BPM-native vs. general sources", "Percent of each group's rated guidelines touching each layer - one chart per selected round.", "scope-native"),
-    section("Generic best practice vs. BPM-specific, by source", "Among rated guidelines: would the same advice apply outside BPM, or is the reasoning process-specific? One chart per selected round.", "generic-share"),
+    section(
+      "Share rated highly relevant, by source",
+      "Percent of each source's guidelines scoring 3 (highly relevant) - one chart per selected round.",
+      "high-relevance",
+      [legendDot(pal.muted, "General source"), legendDot(pal.strong, "BPM-native source")]
+    ),
+    section(
+      "Relevance mix per source",
+      "Full 0–3 breakdown per source, normalized to 100% - one chart per selected round.",
+      "relevance-mix",
+      RELEVANCE_OPTIONS.map((o, i) => legendDot(pal.relevanceSteps[i], o.label))
+    ),
+    section(
+      "BPM Scope emphasis — BPM-native vs. general sources",
+      "Percent of each group's rated guidelines touching each layer - one chart per selected round.",
+      "scope-native",
+      [legendDot(pal.muted, "General source"), legendDot(pal.strong, "BPM-native source")]
+    ),
+    section(
+      "Generic best practice vs. BPM-specific, by source",
+      "Among rated guidelines: would the same advice apply outside BPM, or is the reasoning process-specific? One chart per selected round.",
+      "generic-share",
+      [legendDot(pal.muted, "Generic practice"), legendDot(pal.strong, "BPM-specific")]
+    ),
   ]);
 }
 
@@ -703,10 +833,175 @@ function buildComparisonPanel(activeList, recordsByRound, pal) {
     el("p", { class: "chart-desc" }, "The same aggregate charts as a single round, with one series per selected round."),
     buildMergedGrid(activeList),
 
-    buildSmallMultiples(activeList),
+    buildSmallMultiples(activeList, pal),
     buildHeatmapSection(activeList, recordsByRound, pal),
     spreadTableCard(activeList, recordsByRound),
   ]);
+}
+
+/* ---- Source block ----
+ *
+ * Drills into specific sources, scoped to whichever single round is active
+ * above (see currentRoundRecordsIfSingle). Unlike the round comparison
+ * above, sources partition the 448 guidelines rather than re-rating the same
+ * set, so there's no guideline-level "did these two sources agree" question
+ * to ask - no heatmap, no disagreement table. Instead: a single-source panel
+ * (reusing the same per-record aggregations as a round panel, minus the
+ * charts that are inherently cross-source) and a comparison panel that
+ * reuses mountMergedBarCharts with one series per selected source, plus a
+ * guideline-level top-rated table restricted to the selected sources.
+ */
+
+const SOURCE_TOP_N_SINGLE = 10;
+const SOURCE_TOP_N_COMPARISON = 15;
+
+function topGuidelinesTable(rows, { includeSourceColumn }) {
+  const headers = [...(includeSourceColumn ? ["Source"] : []), "Guideline", "Relevance", "Scope", "Generic"];
+  return el("div", { class: "table-wrap" }, [
+    el("table", { class: "data-table" }, [
+      el("thead", {}, el("tr", {}, headers.map((h) => el("th", {}, h)))),
+      el("tbody", {}, rows.map((r) => el("tr", {}, [
+        ...(includeSourceColumn ? [el("td", {}, SOURCE_SHORT_LABELS[r.source] || r.source)] : []),
+        el("td", {}, r.name),
+        el("td", {}, String(r.relevance)),
+        el("td", {}, r.scope.join(", ")),
+        el("td", {}, r.generic || ""),
+      ]))),
+    ]),
+  ]);
+}
+
+function buildSourcePanel(sourceId, records) {
+  const pal = chartPalette();
+  const id = (name) => `src-chart-${name}-${sourceId}`;
+  const totalRated = ratedRecords(records).length;
+  const top = records.filter((r) => r.relevance !== null && r.relevance !== undefined)
+    .slice().sort((a, b) => b.relevance - a.relevance).slice(0, SOURCE_TOP_N_SINGLE);
+
+  return el("div", { class: "analysis-card" }, [
+    el("h2", {}, `${SOURCE_SHORT_LABELS[sourceId] || sourceId} results`),
+    el("p", { class: "intro-lead" }, `${totalRated} of ${records.length} guidelines from this source have a rating in the active round.`),
+
+    el("div", { class: "analysis-grid" }, [
+      chartCard("BPM Relevance", "0 = not relevant to BPM at all, 3 = highly relevant.", id("relevance-dist")),
+      chartCard("Which BPM layer do these guidelines touch?", "Count of guidelines acting on each layer (a guideline can touch more than one).", id("scope-counts")),
+      chartCard("BPM Lifecycle phases touched", "Phase mentions across this source's guidelines.", id("lifecycle")),
+      chartCard("Average relevance by BPM layer", "Mean BPM Relevance (0–3) among this source's guidelines that touch each layer.", id("mean-by-scope")),
+      chartCard(
+        "Generic best practice vs. BPM-specific",
+        "Among rated guidelines from this source: would the same advice apply outside BPM, or is the reasoning process-specific?",
+        id("generic-split"),
+        [el("div", { class: "chart-legend" }, [legendDot(pal.muted, "Generic practice"), legendDot(pal.strong, "BPM-specific")])]
+      ),
+    ]),
+
+    el("h2", { class: "top-table-heading" }, "Top-rated guidelines"),
+    el("p", { class: "chart-desc" }, "The highest-scoring guidelines in this source, in the active round."),
+    topGuidelinesTable(top, { includeSourceColumn: false }),
+  ]);
+}
+
+function mountSourceCharts(sourceId, records, pal) {
+  const id = (name) => `src-chart-${name}-${sourceId}`;
+  const legend = { display: false };
+  const tooltip = baseTooltip(pal);
+
+  const relevanceDist = mountChart(id("relevance-dist"), {
+    type: "bar",
+    data: { labels: RELEVANCE_OPTIONS.map((o) => o.label), datasets: [{ data: relevanceDistribution(records), backgroundColor: pal.relevanceSteps, borderRadius: 4 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend, tooltip },
+      scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
+    },
+  });
+
+  const scope = mountChart(id("scope-counts"), {
+    type: "bar",
+    data: { labels: SCOPE_OPTIONS, datasets: [{ data: scopeCounts(records), backgroundColor: pal.single, borderRadius: 4 }] },
+    options: {
+      indexAxis: "y",
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend, tooltip },
+      scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
+    },
+  });
+
+  const lc = lifecycleCounts(records);
+  const lifecycle = mountChart(id("lifecycle"), {
+    type: "bar",
+    data: { labels: lc.phases, datasets: [{ data: lc.counts, backgroundColor: pal.single, borderRadius: 4 }] },
+    options: {
+      indexAxis: "y",
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend, tooltip },
+      scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
+    },
+  });
+
+  const meanByScope = mountChart(id("mean-by-scope"), {
+    type: "bar",
+    data: { labels: SCOPE_OPTIONS, datasets: [{ data: meanRelevanceByScope(records), backgroundColor: pal.single, borderRadius: 4 }] },
+    options: {
+      indexAxis: "y",
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend, tooltip },
+      scales: { x: { ...baseScaleOptions(pal), beginAtZero: true, max: 3 }, y: baseScaleOptions(pal) },
+    },
+  });
+
+  const split = genericSplit(records);
+  const genericChart = mountChart(id("generic-split"), {
+    type: "bar",
+    data: { labels: ["Generic practice", "BPM-specific"], datasets: [{ data: [split.yes, split.no], backgroundColor: [pal.muted, pal.strong], borderRadius: 4 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend, tooltip: { ...tooltip, callbacks: { label: (ctx) => `${ctx.parsed.y.toFixed(0)}%` } } },
+      scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 } },
+    },
+  });
+
+  return [relevanceDist, scope, lifecycle, meanByScope, genericChart];
+}
+
+function buildSourceMergedGrid() {
+  return el("div", { class: "analysis-grid" }, [
+    chartCard("BPM Relevance", "0 = not relevant to BPM at all, 3 = highly relevant, compared across the selected sources.", "cmp-src-chart-relevance-dist"),
+    chartCard("Which BPM layer do these guidelines touch?", "Count of guidelines acting on each layer, compared across the selected sources.", "cmp-src-chart-scope-counts"),
+    chartCard("BPM Lifecycle phases touched", "Phase mentions, compared across the selected sources.", "cmp-src-chart-lifecycle"),
+    chartCard("Average relevance by BPM layer", "Mean BPM Relevance (0–3) among guidelines that touch each layer, compared across the selected sources.", "cmp-src-chart-mean-by-scope"),
+    chartCard("Generic best practice vs. BPM-specific", "Among rated guidelines: would the same advice apply outside BPM, or is the reasoning process-specific - compared across the selected sources.", "cmp-src-chart-generic-split"),
+  ]);
+}
+
+function topTableForSources(activeSourceIds, records) {
+  const idSet = new Set(activeSourceIds);
+  const rows = records
+    .filter((r) => idSet.has(r.source) && r.relevance !== null && r.relevance !== undefined)
+    .slice().sort((a, b) => b.relevance - a.relevance).slice(0, SOURCE_TOP_N_COMPARISON);
+
+  return el("div", { class: "comparison-section" }, [
+    el("h2", { class: "top-table-heading" }, "Top-rated guidelines among selected sources"),
+    el("p", { class: "chart-desc" }, `The ${SOURCE_TOP_N_COMPARISON} highest-scoring guidelines among the selected sources, in the active round.`),
+    topGuidelinesTable(rows, { includeSourceColumn: true }),
+  ]);
+}
+
+function buildSourceComparisonPanel(activeSourceIds, records) {
+  const labels = activeSourceIds.map((id) => SOURCE_SHORT_LABELS[id] || id);
+  return el("div", { class: "analysis-card" }, [
+    el("h2", {}, `Comparing ${labels.join(", ")}`),
+    el("h2", { class: "top-table-heading" }, "Combined charts"),
+    el("p", { class: "chart-desc" }, "The same aggregate charts as a single source, with one series per selected source."),
+    buildSourceMergedGrid(),
+    topTableForSources(activeSourceIds, records),
+  ]);
+}
+
+function mountSourceComparisonCharts(activeSourceIds, records, pal) {
+  const targets = activeSourceIds.map((id) => ({ id, label: SOURCE_SHORT_LABELS[id] || id }));
+  const recordsFor = (id) => records.filter((r) => r.source === id);
+  return mountMergedBarCharts(targets, recordsFor, (t) => sourceColor(t.id), "cmp-src-chart", pal, true);
 }
 
 /* ---- Page: tab bar, single-round panels, and the multi-round comparison ----
@@ -722,6 +1017,13 @@ let comparisonCharts = [];
 let lastComparisonKey = null;
 let activeRounds = new Set();
 let tabsEl, panelsEl, comparisonEl;
+
+// Source block state - independent of the round hash (see docs/DATA_PIPELINE.md),
+// always scoped to whichever single round is active above.
+let activeSources = new Set([ANALYSIS_SOURCE_ORDER[0]]);
+let sourceCharts = [];
+let lastSourceKey = null;
+let sourceTabsEl, sourceNoteEl, sourceResultEl;
 
 async function ensureRoundLoaded(round) {
   if (!recordsByRound.has(round.id)) {
@@ -770,9 +1072,16 @@ async function renderComparison(activeList) {
 
 async function render() {
   [...tabsEl.children].forEach((tab) => {
-    const active = activeRounds.has(tab.dataset.round);
+    const round = ANALYSIS_ROUNDS.find((r) => r.id === tab.dataset.round);
+    const active = activeRounds.has(round.id);
     tab.classList.toggle("active", active);
     tab.setAttribute("aria-pressed", String(active));
+    // Pressed state uses the same per-round color as its chart legend/series
+    // (roundColor) instead of a flat accent, so the button tells you which
+    // series is "yours" at a glance.
+    const color = roundColor(round);
+    tab.style.setProperty("--tab-accent", color);
+    tab.style.setProperty("--tab-accent-contrast", readableTextOn(color));
   });
 
   if (activeRounds.size === 1) {
@@ -787,6 +1096,8 @@ async function render() {
     const activeList = ANALYSIS_ROUNDS.filter((r) => activeRounds.has(r.id));
     await renderComparison(activeList);
   }
+
+  await renderSourceBlock();
 }
 
 function toggleRound(id) {
@@ -798,6 +1109,69 @@ function toggleRound(id) {
   }
   location.hash = [...activeRounds].join("+");
   render();
+}
+
+// The source block always shows data for exactly one round - picking the
+// first currently-active round in canonical ANALYSIS_ROUNDS order, so it's
+// deterministic regardless of click order - rather than trying to support
+// both axes of comparison (round x source) at once. See docs/DATA_PIPELINE.md.
+// It never hides: selecting more rounds above just keeps it on whichever of
+// them comes first, with a note explaining that.
+function activeRoundForSourceBlock() {
+  return ANALYSIS_ROUNDS.find((r) => activeRounds.has(r.id));
+}
+
+async function renderSourceBlock() {
+  [...sourceTabsEl.children].forEach((tab) => {
+    const active = activeSources.has(tab.dataset.source);
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-pressed", String(active));
+    // Pressed state uses the same per-source color as its chart legend/series
+    // (sourceColor) instead of a flat accent - see the matching round-tab logic in render().
+    const color = sourceColor(tab.dataset.source);
+    tab.style.setProperty("--tab-accent", color);
+    tab.style.setProperty("--tab-accent-contrast", readableTextOn(color));
+  });
+
+  const round = activeRoundForSourceBlock();
+  const records = recordsByRound.get(round.id);
+  if (!records) return; // not loaded yet - render() awaits this before calling in
+
+  sourceResultEl.hidden = false;
+  if (activeRounds.size > 1) {
+    sourceNoteEl.hidden = false;
+    sourceNoteEl.textContent = `Showing sources for "${round.label}" - the first of your ${activeRounds.size} selected rounds above.`;
+  } else {
+    sourceNoteEl.hidden = true;
+  }
+
+  const sourceIds = [...activeSources];
+  const key = `${round.id}|${sourceIds.slice().sort().join(",")}`;
+  if (key === lastSourceKey) return;
+  lastSourceKey = key;
+
+  sourceCharts.forEach((c) => c.destroy());
+  const pal = chartPalette();
+
+  if (sourceIds.length === 1) {
+    const sourceId = sourceIds[0];
+    const filtered = records.filter((r) => r.source === sourceId);
+    sourceResultEl.replaceChildren(buildSourcePanel(sourceId, filtered));
+    sourceCharts = mountSourceCharts(sourceId, filtered, pal);
+  } else {
+    sourceResultEl.replaceChildren(buildSourceComparisonPanel(sourceIds, records));
+    sourceCharts = mountSourceComparisonCharts(sourceIds, records, pal);
+  }
+}
+
+function toggleSource(id) {
+  if (activeSources.has(id)) {
+    if (activeSources.size === 1) return; // always keep at least one source selected
+    activeSources.delete(id);
+  } else {
+    activeSources.add(id);
+  }
+  renderSourceBlock();
 }
 
 function buildPage() {
@@ -819,6 +1193,17 @@ function buildPage() {
   );
 
   comparisonEl = el("div", { id: "comparison-panel", class: "analysis-card", hidden: true });
+
+  sourceTabsEl = el("div", { class: "tabs", role: "group", "aria-label": "Guideline sources to analyze - select one, or two or more to compare" },
+    ANALYSIS_SOURCE_ORDER.map((sourceId) =>
+      el("button", {
+        class: "tab", type: "button", "data-source": sourceId, "aria-pressed": "false",
+        onclick: () => toggleSource(sourceId),
+      }, SOURCE_SHORT_LABELS[sourceId])
+    )
+  );
+  sourceNoteEl = el("p", { id: "source-note", class: "intro-lead", hidden: true }, "");
+  sourceResultEl = el("div", { id: "source-result", class: "analysis-card" });
 
   renderApp(
     el("div", { class: "card analysis-intro" }, [
@@ -842,6 +1227,16 @@ function buildPage() {
       tabsEl,
       panelsEl,
       comparisonEl,
+    ]),
+    el("div", { class: "card" }, [
+      el("h2", {}, "How do the guideline sources compare?"),
+      el("p", { class: "intro-lead" },
+        "Always scoped to one round - if multiple are selected above, this shows the first of " +
+        "them. Select one source to see it on its own, or select two or more to compare them " +
+        "directly."),
+      sourceTabsEl,
+      sourceNoteEl,
+      sourceResultEl,
     ])
   );
 

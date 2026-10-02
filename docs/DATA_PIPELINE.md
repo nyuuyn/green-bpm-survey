@@ -177,3 +177,47 @@ rounds or doesn't:
 Round colors in the merged charts and heatmap intensity both reuse the palette's existing
 `relevanceSteps` (see `roundColor()` in `analysis.js`) rather than introducing new hues, keeping
 the same "one green family" design language as the single-round charts.
+
+### Source block
+
+Below the round results card is a second, independent card - "How do the guideline sources
+compare?" - with its own tab bar, one button per source (`ANALYSIS_SOURCE_ORDER`). It exists
+because every per-source chart in the round panel above (`mountHighRelevanceChart`,
+`mountRelevanceMixChart`, `mountScopeNativeChart`, `mountGenericShareChart`) shows all 10 sources
+at once; this block lets you pick a specific source, or a few, and see them with the same depth a
+round gets - a dedicated single-source panel, or a focused multi-source comparison panel.
+
+**Always scoped to one round.** The source block reads from exactly one round's records -
+whichever is first, in canonical `ANALYSIS_ROUNDS` order, among the round(s) currently selected
+above (`activeRoundForSourceBlock()` in `analysis.js`). Selecting 2+ rounds up top (entering
+round-comparison mode) does *not* hide the source block or empty it out - it keeps showing
+whichever of the selected rounds comes first, with a note naming which one and how many are
+selected, rather than trying to support both axes of comparison (round x source) at once - that
+combination wasn't judged worth the added complexity for what it'd show. Source-tab selection is
+plain in-memory state (`activeSources` in `analysis.js`), not folded into `location.hash` like the
+round selection is - it isn't deep-linkable, trading that away for zero risk to the round-hash
+contract described above.
+
+**Why there's no heatmap or disagreement table here.** The round comparison's heatmap and
+disagreement table both work because every round re-rates the *same* 448 guidelines, so
+"did round A and round B score this guideline the same way" is a meaningful question. Sources
+don't have that property - every guideline belongs to exactly one source, so there's no second
+rating of the same guideline to compare against. The source comparison panel instead reuses
+`mountMergedBarCharts` (factored out of the round panel's old `mountMergedCharts` so both callers
+share one implementation) for five grouped-bar charts - relevance distribution, scope counts,
+lifecycle counts, mean relevance by scope, and generic/BPM-specific split, one series per selected
+source - plus a guideline-level "top-rated guidelines among selected sources" table, which is the
+closest valid analogue: not "where do these sources disagree" (meaningless for a partition), but
+"which specific guidelines rank highest among just the sources I'm looking at."
+
+The single-source panel (exactly one source selected) is the same idea minus the three charts
+that are inherently cross-source (share-highly-relevant-by-source, relevance-mix-by-source,
+scope-by-native) - those collapse to a single trivial data point for one source, since that
+information already lives in the round panel above. It adds one small chart of its own (generic
+vs. BPM-specific split, for just this source) and a top-10 guidelines table.
+
+`data/analysis.ipynb` has a matching, much lighter-weight version of the same idea: a
+"Comparing specific sources side-by-side" section near the other per-source cells, where editing
+a `COMPARE_SOURCES` list and re-running the cell filters the already-merged dataframe down to just
+those sources and reuses the existing relevance-distribution plotting code - no new data-loading
+logic, since source filtering is a `pandas` filter either way.

@@ -34,15 +34,27 @@ def _open_analysis_page(page, base_url):
 
 
 def _active_panel(page):
-    return page.locator(".analysis-card:not([hidden])")
+    # Scoped to .round-panels so this doesn't also match the source block's
+    # #source-result panel below, which carries the same .analysis-card class
+    # and is visible by default too (see test_source_block_*.py-style tests
+    # further down this file).
+    return page.locator(".round-panels .analysis-card:not([hidden])")
+
+
+SOURCE_CHART_NAMES = ["relevance-dist", "scope-counts", "lifecycle", "mean-by-scope", "generic-split"]
+
+
+def _source_chart_ids(source_id):
+    return [f"src-chart-{name}-{source_id}" for name in SOURCE_CHART_NAMES]
 
 
 def test_analysis_page_renders_all_charts_with_real_content(page, base_url):
     _open_analysis_page(page, base_url)
 
     chart_ids = _chart_ids("claude")
-    expect(page.locator("canvas")).to_have_count(len(chart_ids) + 1)  # +1 for the intro's per-source chart
-    for chart_id in ["chart-per-source", *chart_ids]:
+    source_chart_ids = _source_chart_ids("aws")  # the source block's default single-source panel
+    expect(page.locator("canvas")).to_have_count(len(chart_ids) + len(source_chart_ids) + 1)  # +1 intro
+    for chart_id in ["chart-per-source", *chart_ids, *source_chart_ids]:
         expect(page.locator(f"#{chart_id}")).to_be_visible()
         assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
 
@@ -63,9 +75,11 @@ def test_intro_per_source_chart_is_static_and_shared_across_rounds(page, base_ur
 
 
 def test_analysis_page_has_three_tabs_with_general_active_by_default(page, base_url):
+    # Scoped to [data-round] since the page also has a second tab bar for the
+    # source block (10 buttons, "AWS" active by default) using the same .tab class.
     _open_analysis_page(page, base_url)
-    expect(page.locator(".tab")).to_have_count(3)
-    expect(page.locator(".tab.active")).to_have_text("AI (General)")
+    expect(page.locator(".tab[data-round]")).to_have_count(3)
+    expect(page.locator(".tab[data-round].active")).to_have_text("AI (General)")
 
 
 def test_round_selector_lives_at_the_top_of_the_results_card(page, base_url):
@@ -75,7 +89,7 @@ def test_round_selector_lives_at_the_top_of_the_results_card(page, base_url):
     _open_analysis_page(page, base_url)
     expect(page.locator(".analysis-intro .tabs")).to_have_count(0)
 
-    results_card = page.locator(".card", has=page.locator(".tabs"))
+    results_card = page.locator(".card", has=page.locator(".round-panels"))
     expect(results_card).not_to_have_class("analysis-intro")
     expect(results_card.locator(".tabs .tab")).to_have_count(3)
     expect(results_card.locator(".round-panels")).to_have_count(1)
@@ -102,7 +116,7 @@ def test_switching_to_a_single_other_round_still_works_like_a_tab(page, base_url
     page.get_by_role("button", name="AI (General)").click()  # deselect claude -> back to 1 active
 
     expect(page).to_have_url(f"{base_url}/analysis.html#sustainability")
-    expect(page.locator(".tab.active")).to_have_text("AI (Sustainability Expert)")
+    expect(page.locator(".tab[data-round].active")).to_have_text("AI (Sustainability Expert)")
     expect(page.locator("#comparison-panel")).to_be_hidden()
 
     for chart_id in _chart_ids("sustainability"):
@@ -219,3 +233,83 @@ def test_completion_screen_link_navigates_to_analysis_page(page, base_url):
     page.get_by_role("link", name="See the guideline analysis").click()
     expect(page).to_have_url(f"{base_url}/analysis.html")
     expect(page.locator("h1")).to_contain_text("relevant")
+
+
+# --- Source block: a second, independent tab bar below the round results,
+# scoped to whichever single round is active above rather than the URL hash
+# (see docs/DATA_PIPELINE.md). Sources partition the 448 guidelines rather
+# than re-rating them, so its comparison panel has no heatmap/disagreement
+# table - just the merged charts and a guideline-level top-rated table. ---
+
+def test_source_block_default_single_source_panel_renders_real_content(page, base_url):
+    _open_analysis_page(page, base_url)
+
+    source_tabs = page.locator(".tab[data-source]")
+    expect(source_tabs).to_have_count(10)
+    expect(page.locator(".tab[data-source].active")).to_have_text("AWS")
+
+    source_panel = page.locator("#source-result")
+    expect(source_panel.locator("h2").first).to_have_text("AWS results")
+    for chart_id in _source_chart_ids("aws"):
+        expect(source_panel.locator(f"#{chart_id}")).to_be_visible()
+        assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
+
+
+def test_source_block_comparison_panel_on_selecting_a_second_source(page, base_url):
+    _open_analysis_page(page, base_url)
+    page.get_by_role("button", name="Azure", exact=True).click()
+
+    source_panel = page.locator("#source-result")
+    expect(source_panel.locator("h2").first).to_have_text("Comparing AWS, Azure")
+
+    merged_ids = [
+        "cmp-src-chart-relevance-dist", "cmp-src-chart-scope-counts", "cmp-src-chart-lifecycle",
+        "cmp-src-chart-mean-by-scope", "cmp-src-chart-generic-split",
+    ]
+    for chart_id in merged_ids:
+        expect(source_panel.locator(f"#{chart_id}")).to_be_visible()
+        assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
+
+    expect(source_panel.locator(".heatmap-table")).to_have_count(0)
+    rows = source_panel.locator(".data-table tbody tr")
+    count = rows.count()
+    assert 0 < count <= 15, f"expected 1-15 top-rated rows, got {count}"
+
+
+def test_source_block_stays_visible_while_comparing_two_or_more_rounds(page, base_url):
+    """Regression test: selecting 2+ rounds above used to hide the source
+    block entirely (its charts disappeared). It should instead keep showing
+    data for whichever selected round comes first in ANALYSIS_ROUNDS order,
+    with a note naming it."""
+    _open_analysis_page(page, base_url)
+    source_panel = page.locator("#source-result")
+    source_note = page.locator("#source-note")
+    expect(source_panel).to_be_visible()
+    expect(source_note).to_be_hidden()
+    for chart_id in _source_chart_ids("aws"):
+        assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
+
+    page.get_by_role("button", name="AI (Sustainability Expert)").click()  # 2 rounds active now
+    expect(source_panel).to_be_visible()
+    expect(source_panel.locator("h2").first).to_have_text("AWS results")
+    for chart_id in _source_chart_ids("aws"):
+        expect(source_panel.locator(f"#{chart_id}")).to_be_visible()
+        assert canvas_has_content(page, chart_id), f"{chart_id} rendered no visible pixels"
+    expect(source_note).to_be_visible()
+    expect(source_note).to_have_text('Showing sources for "AI (General)" - the first of your 2 selected rounds above.')
+
+    page.get_by_role("button", name="AI (BPM Expert)").click()  # 3 rounds active now
+    expect(source_panel).to_be_visible()
+    expect(source_note).to_have_text('Showing sources for "AI (General)" - the first of your 3 selected rounds above.')
+
+    # Deselecting the round the block was showing (claude), while another
+    # (bpm) stays active alongside sustainability, switches it to the next
+    # one in canonical order (sustainability) rather than disappearing.
+    page.get_by_role("button", name="AI (General)").click()
+    expect(source_panel).to_be_visible()
+    expect(source_note).to_have_text('Showing sources for "AI (Sustainability Expert)" - the first of your 2 selected rounds above.')
+
+    page.get_by_role("button", name="AI (Sustainability Expert)").click()  # back to 1 round (bpm)
+    expect(source_panel).to_be_visible()
+    expect(source_panel.locator("h2").first).to_have_text("AWS results")
+    expect(source_note).to_be_hidden()
