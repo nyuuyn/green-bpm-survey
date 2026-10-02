@@ -439,6 +439,14 @@ a.btn-primary, a.btn-secondary {
   margin-bottom: 18px;
 }
 
+.respondent-summary {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: -6px 0 18px;
+}
+.respondent-edit-link { color: var(--accent); text-decoration: none; }
+.respondent-edit-link:hover { text-decoration: underline; }
+
 .footer {
   color: var(--text-muted);
   font-size: 11.5px;

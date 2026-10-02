@@ -34,6 +34,28 @@ const ROLE_OPTIONS = [
   "Prefer not to say",
 ];
 
+// Remembers the "About you" answers across rounds in the same browser, so
+// "Start another round" doesn't make someone re-enter their background every
+// time - only the sampled guidelines and sessionId are fresh per round.
+const RESPONDENT_STORAGE_KEY = "greenBpmSurvey.respondentInfo";
+
+function loadStoredRespondent() {
+  try {
+    const raw = localStorage.getItem(RESPONDENT_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null; // private browsing / storage disabled - just ask again
+  }
+}
+
+function storeRespondent(respondent) {
+  try {
+    localStorage.setItem(RESPONDENT_STORAGE_KEY, JSON.stringify(respondent));
+  } catch {
+    // storage unavailable - next round will simply ask again
+  }
+}
+
 /* ---------- State ---------- */
 
 const state = {
@@ -106,6 +128,19 @@ function renderRespondentInfo() {
     roleOtherWrap,
   ]);
 
+  // Editing a previous round's answers (or returning with stored info) - prefill
+  // rather than starting blank.
+  if (state.respondent) {
+    checkMatchingRadio(bpmFieldset, state.respondent["BPM Experience"]);
+    checkMatchingRadio(sustainabilityFieldset, state.respondent["Sustainability Experience"]);
+    const matchedRole = checkMatchingRadio(roleGroup, state.respondent.Role);
+    if (!matchedRole && state.respondent.Role) {
+      checkMatchingRadio(roleGroup, "Other");
+      roleOtherWrap.hidden = false;
+      roleOtherWrap.querySelector("input").value = state.respondent.Role;
+    }
+  }
+
   const allFieldsets = [bpmFieldset, sustainabilityFieldset, roleFieldset];
   const fieldsetByName = {
     bpmExperience: bpmFieldset,
@@ -130,6 +165,7 @@ function renderRespondentInfo() {
       }
       errorEl.hidden = true;
       state.respondent = data.respondent;
+      storeRespondent(data.respondent);
       renderRatingList();
     },
   });
@@ -177,6 +213,24 @@ function collectRespondentInfo(form) {
       Role: role === "Other" ? roleOther : role,
     },
   };
+}
+
+// Shown above the rating list whenever "About you" was skipped or answered
+// this round, so the remembered background stays visible (and correctable)
+// rather than silently applying in the background.
+function respondentSummary() {
+  const r = state.respondent;
+  return el("p", { class: "respondent-summary" }, [
+    `Role: ${r.Role} · BPM experience: ${r["BPM Experience"]} · Sustainability experience: ${r["Sustainability Experience"]}. `,
+    el("a", {
+      href: "#",
+      class: "respondent-edit-link",
+      onclick: (e) => {
+        e.preventDefault();
+        renderRespondentInfo();
+      },
+    }, "Not you? Edit your info"),
+  ]);
 }
 
 function renderRatingList() {
@@ -227,6 +281,7 @@ function renderRatingList() {
       el("p", { class: "intro-lead" },
         "Click a guideline to rate it — picking a relevance score opens the rest of its fields. " +
         "You can jump between guidelines in any order and come back to finish later."),
+      respondentSummary(),
       form,
     ])
   );
@@ -317,6 +372,19 @@ function handleFinish(form, rows, errorEl) {
 }
 
 /* ---------- Form field builders ---------- */
+
+// Checks the radio in `container` whose value matches, for prefilling a
+// previously-answered "About you" form. Returns whether a match was found.
+function checkMatchingRadio(container, value) {
+  if (!value) return false;
+  for (const input of container.querySelectorAll('input[type="radio"]')) {
+    if (input.value === value) {
+      input.checked = true;
+      return true;
+    }
+  }
+  return false;
+}
 
 function radioGroup(name, options, { vertical = false } = {}) {
   return el("div", { class: `option-row${vertical ? " vertical" : ""}` },
@@ -522,7 +590,16 @@ async function boot() {
   const res = await fetch("generated/data.json");
   const all = await res.json();
   state.items = shuffle(all).slice(0, Math.min(SAMPLE_SIZE, all.length));
-  renderRespondentInfo();
+
+  const stored = loadStoredRespondent();
+  if (stored) {
+    // Returning for another round in this browser - skip straight to rating
+    // with the remembered background instead of asking again.
+    state.respondent = stored;
+    renderRatingList();
+  } else {
+    renderRespondentInfo();
+  }
 }
 
 boot();
