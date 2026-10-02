@@ -15,11 +15,16 @@ const { window } = dom;
 window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 
 // A "use strict" eval() gets its own isolated top-level scope per call, even on
-// the same window - so common.js and survey.js must be eval'd together in one
-// call for survey.js to see common.js's declarations (el, renderApp, ...).
-// A real browser doesn't have this quirk (classic <script> tags share one
-// global scope), which is exactly what the Playwright suite exercises instead.
-dom.window.eval([fs.readFileSync("common.js", "utf-8"), fs.readFileSync("survey.js", "utf-8")].join("\n"));
+// the same window - so common.js, survey-fields.js, and survey.js must be
+// eval'd together in one call for survey.js to see their declarations (el,
+// renderApp, radioGroup, ...). A real browser doesn't have this quirk
+// (classic <script> tags share one global scope), which is exactly what the
+// Playwright suite exercises instead.
+dom.window.eval([
+  fs.readFileSync("common.js", "utf-8"),
+  fs.readFileSync("survey-fields.js", "utf-8"),
+  fs.readFileSync("survey.js", "utf-8"),
+].join("\n"));
 
 let failures = 0;
 function log(label, ok, extra = "") {
