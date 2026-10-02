@@ -5,8 +5,8 @@
 ```
 index.html, survey.html, analysis.html   the three static pages (see docs/ARCHITECTURE.md)
 assets/css/   common.css, survey.css, analysis.css - common.css is shared, the other two are page-specific
-assets/js/    common.js, survey.js, survey-fields.js, analysis.js, analysis-panels.js, charts.js,
-              palette.js - see docs/ARCHITECTURE.md
+assets/js/    common.js (shared), vendor/ (Preact+htm, vendored), survey/ (survey page),
+              analysis/ (analysis page) - see docs/ARCHITECTURE.md for the full file list
 assets/img/   images/logos
 generated/data.json                      guideline text for the survey (generated)
 generated/analysis_<round>.json          per-round rating data for the analysis page (generated)
@@ -201,11 +201,15 @@ round selection is - it isn't deep-linkable, trading that away for zero risk to 
 contract described above.
 
 `palette.js` holds the color system; `charts.js` builds every Chart.js mount/config from it
-(anything that only exists to feed a chart); `analysis-panels.js` builds the non-chart DOM (panel
-scaffolding, tables) around those charts; `analysis.js` is the page controller - fetching/caching
-round data, tab state, and hash routing - deciding which panel to build/mount and when. All four
-call into each other as plain globals, the same way they all call into `common.js`'s
-`el()`/`renderApp()`/`fetchJSON()` (classic `<script>` tags, no build step, no modules).
+(anything that only exists to feed a chart) plus the record-aggregation functions that feed those
+configs; `chart-dom.js` builds the chart-adjacent markup (the card each chart sits in, legends,
+the heatmap table) that those mounts attach to by canvas id; `round-panel.js`/
+`comparison-panel.js`/`source-panel.js` each build one panel's full non-chart DOM (scaffolding,
+tables) as a Preact/htm component; `analysis.js` is the page controller - fetching/caching round
+data, tab state, and hash routing - deciding which panel to build/mount and when. All of them call
+into each other as plain globals, the same way they all call into `common.js`'s `html`/
+`preactRender` (classic `<script>` tags, no build step, no modules - see docs/ARCHITECTURE.md for
+the Preact+htm setup and the full file list).
 
 **Why there's no heatmap or disagreement table here.** The round comparison's heatmap and
 disagreement table both work because every round re-rates the *same* 448 guidelines, so
