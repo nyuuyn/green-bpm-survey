@@ -5,18 +5,28 @@ Three static pages, no build step, no framework.
 - **`index.html`** — the landing page. Fully static (no JS): explains the project's goal and
   guideline sources, and links to the other two pages. This is the page people should land on
   first (shared links, GitHub Pages root).
-- **`survey.html`** + **`survey.js`** — the rating flow. `generated/data.json` (425 guidelines:
-  `id`, `name`, `category`, `reference`, `guideline`, `source`, `sourceLabel`) is fetched on load,
-  `SAMPLE_SIZE` (25) of them are sampled, and rating starts immediately - no separate
-  intro/Start step, since that content lives on the landing page instead.
-- **`analysis.html`** + **`analysis.js`** — the charts, one toggle button per rating round.
-  Select a single round to see its own charts, or select two or more to compare them directly
-  (merged charts, per-round small multiples, a relevance-agreement heatmap, and a table of the
-  guidelines the selected rounds disagree on most). Independently reachable - doesn't require
-  taking the survey first. Details: [`DATA_PIPELINE.md`](DATA_PIPELINE.md#analysis-page).
-- **`common.js`** — the handful of things `survey.js` and `analysis.js` both need
+- **`survey.html`** + **`survey.js`** + **`survey-fields.js`** — the rating flow.
+  `generated/data.json` (425 guidelines: `id`, `name`, `category`, `reference`, `guideline`,
+  `source`, `sourceLabel`) is fetched on load, `SAMPLE_SIZE` (25) of them are sampled, and rating
+  starts immediately - no separate intro/Start step, since that content lives on the landing page
+  instead. `survey.js` owns the screens (state machine, validation, submission); `survey-fields.js`
+  is the reusable form-field widgets (`radioGroup`, `checkboxGroup`, the per-row Scope/Generic/
+  Lifecycle/Justification fieldsets) those screens are built from.
+- **`analysis.html`** + **`analysis.js`** + **`analysis-panels.js`** + **`charts.js`** +
+  **`palette.js`** — the charts, one toggle button per rating round. Select a single round to see
+  its own charts, or select two or more to compare them directly (merged charts, per-round small
+  multiples, a relevance-agreement heatmap, and a table of the guidelines the selected rounds
+  disagree on most). Independently reachable - doesn't require taking the survey first. `analysis.js`
+  is the page controller (fetching/caching round data, tab state, routing); `analysis-panels.js`
+  builds the non-chart DOM for each panel/table; `charts.js` builds every Chart.js mount/config;
+  `palette.js` is the color system both of those draw from. Details:
+  [`DATA_PIPELINE.md`](DATA_PIPELINE.md#analysis-page).
+- **`common.js`** — the handful of things the survey and analysis scripts all need
   (`RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_OPTIONS`, the tiny `el()` DOM builder,
-  `renderApp()`), loaded before either page script.
+  `renderApp()`, the `fetchJSON()` fetch-then-parse helper), loaded before the other page scripts.
+- **`common.css`** + **`survey.css`** + **`analysis.css`** — `common.css` is the shared site shell
+  (variables, layout, buttons, footer, landing-page content) loaded by every page; `survey.css`
+  and `analysis.css` hold the rest, each loaded only by its own page.
 
 ## The survey flow
 

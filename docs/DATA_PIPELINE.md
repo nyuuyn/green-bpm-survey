@@ -4,7 +4,9 @@
 
 ```
 index.html, survey.html, analysis.html   the three static pages (see docs/ARCHITECTURE.md)
-style.css, common.js, survey.js, analysis.js
+common.css, survey.css, analysis.css     styles - common.css is shared, the other two are page-specific
+common.js, survey.js, survey-fields.js, analysis.js, analysis-panels.js, charts.js, palette.js
+                                          scripts - see docs/ARCHITECTURE.md
 generated/data.json                      guideline text for the survey (generated)
 generated/analysis_<round>.json          per-round rating data for the analysis page (generated)
 assets/                                  images/logos
@@ -131,7 +133,7 @@ required to see it. This reuses `RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_O
 `common.js` so the rating form and the analysis page can't drift apart.
 
 The intro card's "Guidelines collected per source" chart is fetched from `generated/data.json`
-directly rather than any round's file (`mountIntroSourceChart` in `analysis.js`). It isn't part
+directly rather than any round's file (`mountIntroSourceChart` in `charts.js`). It isn't part
 of the results card at all, because it's a fact about the guideline corpus, not about anyone's
 ratings - every round rates the same 425 guidelines, so a per-round or per-comparison copy of
 this chart would always show identical numbers.
@@ -175,7 +177,7 @@ rounds or doesn't:
    guidelines where rounds disagree most.
 
 Round colors in the merged charts and heatmap intensity both reuse the palette's existing
-`relevanceSteps` (see `roundColor()` in `analysis.js`) rather than introducing new hues, keeping
+`relevanceSteps` (see `roundColor()` in `palette.js`) rather than introducing new hues, keeping
 the same "one green family" design language as the single-round charts.
 
 ### Source block
@@ -183,7 +185,7 @@ the same "one green family" design language as the single-round charts.
 Below the round results card is a second, independent card - "How do the guideline sources
 compare?" - with its own tab bar, one button per source (`ANALYSIS_SOURCE_ORDER`). It exists
 because every per-source chart in the round panel above (`mountHighRelevanceChart`,
-`mountRelevanceMixChart`, `mountScopeNativeChart`, `mountGenericShareChart`) shows all 10 sources
+`mountRelevanceMixChart`, `mountScopeNativeChart`, `mountGenericShareChart`, all in `charts.js`) shows all 10 sources
 at once; this block lets you pick a specific source, or a few, and see them with the same depth a
 round gets - a dedicated single-source panel, or a focused multi-source comparison panel.
 
@@ -198,15 +200,23 @@ plain in-memory state (`activeSources` in `analysis.js`), not folded into `locat
 round selection is - it isn't deep-linkable, trading that away for zero risk to the round-hash
 contract described above.
 
+`palette.js` holds the color system; `charts.js` builds every Chart.js mount/config from it
+(anything that only exists to feed a chart); `analysis-panels.js` builds the non-chart DOM (panel
+scaffolding, tables) around those charts; `analysis.js` is the page controller - fetching/caching
+round data, tab state, and hash routing - deciding which panel to build/mount and when. All four
+call into each other as plain globals, the same way they all call into `common.js`'s
+`el()`/`renderApp()`/`fetchJSON()` (classic `<script>` tags, no build step, no modules).
+
 **Why there's no heatmap or disagreement table here.** The round comparison's heatmap and
 disagreement table both work because every round re-rates the *same* 448 guidelines, so
 "did round A and round B score this guideline the same way" is a meaningful question. Sources
 don't have that property - every guideline belongs to exactly one source, so there's no second
 rating of the same guideline to compare against. The source comparison panel instead reuses
-`mountMergedBarCharts` (factored out of the round panel's old `mountMergedCharts` so both callers
-share one implementation) for five grouped-bar charts - relevance distribution, scope counts,
-lifecycle counts, mean relevance by scope, and generic/BPM-specific split, one series per selected
-source - plus a guideline-level "top-rated guidelines among selected sources" table, which is the
+`mountMergedBarCharts` (in `charts.js`, factored out of the round panel's old `mountMergedCharts`
+so both callers share one implementation) for five grouped-bar charts - relevance distribution,
+scope counts, lifecycle counts, mean relevance by scope, and generic/BPM-specific split - one
+series per selected source - plus a guideline-level "top-rated guidelines among selected sources"
+table, which is the
 closest valid analogue: not "where do these sources disagree" (meaningless for a partition), but
 "which specific guidelines rank highest among just the sources I'm looking at."
 

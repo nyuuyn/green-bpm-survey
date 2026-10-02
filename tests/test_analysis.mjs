@@ -29,7 +29,13 @@ window.Chart = class {
 };
 
 // See test_flow.mjs for why these must be eval'd together in one call.
-dom.window.eval([fs.readFileSync("common.js", "utf-8"), fs.readFileSync("analysis.js", "utf-8")].join("\n"));
+dom.window.eval([
+  fs.readFileSync("common.js", "utf-8"),
+  fs.readFileSync("palette.js", "utf-8"),
+  fs.readFileSync("charts.js", "utf-8"),
+  fs.readFileSync("analysis-panels.js", "utf-8"),
+  fs.readFileSync("analysis.js", "utf-8"),
+].join("\n"));
 
 let failures = 0;
 function log(label, ok, extra = "") {

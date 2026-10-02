@@ -52,3 +52,8 @@ function renderApp(...children) {
   app.replaceChildren(...children);
   window.scrollTo(0, 0);
 }
+
+async function fetchJSON(url) {
+  const res = await fetch(url);
+  return res.json();
+}
