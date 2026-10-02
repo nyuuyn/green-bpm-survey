@@ -4000,6 +4000,136 @@
 "sourceLabel": "W3C Web Sustainability Guidelines"
 },
 {
+"id": "GHGP.ORG.1",
+"name": "Link emissions data to specific business processes, not just the aggregate corporate total",
+"category": "Organizational Boundaries",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "When designing a GHG accounting system, record emissions data at a disaggregated level - tied to specific operations, sites, business processes, and owners - rather than only at the aggregated corporate level, so the same underlying data can be re-sliced for whichever reporting requirement comes up later.",
+"context": "The Standard's own definition of GHG accounting explicitly names \"linking the data to specific operations, sites, geographic locations, business processes, and owners\" as the thing that distinguishes accounting from reporting - the raw data has to carry that granularity or it can't be recombined later.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.OPB.1",
+"name": "Describe the value chain before picking which scope 3 categories to report",
+"category": "Operational Boundaries",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Before deciding which scope 3 (value-chain) emission categories to report, first write out a general description of the full value chain and its associated emission sources, using the standard scope 3 category list purely as a checklist, rather than jumping straight to picking categories.",
+"context": "The Standard frames this as step one of its scope 3 approach specifically because companies otherwise default to whichever categories are easiest to measure rather than the ones that are actually large or risk-relevant for their business.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.OPB.2",
+"name": "Put activity-data reporting into the outsourcing contract itself",
+"category": "Operational Boundaries",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "When an activity is outsourced to a partner (e.g. contracted transportation), write a data-reporting requirement - vehicles used, distance traveled, fuel efficiency - into the subcontract itself, so the outsourced activity's emissions are measurable and individual partners can be benchmarked against each other, rather than treating outsourced work as a black box.",
+"context": "DHL Express Nordic's case study is built on exactly this: data entry became an element of the subcontract payment scheme after the company found 98% of its Swedish emissions came from outsourced transport partners it otherwise had no visibility into.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.TRK.1",
+"name": "Recalculate the base year for structural change, never for organic growth",
+"category": "Tracking Emissions Over Time",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Recalculate historical base-year emissions when the company's structure changes - an acquisition, divestment, or an outsourcing/insourcing shift between scopes - so year-over-year comparisons stay apples-to-apples, but never recalculate the base year just because output grew or shrank organically; a real change in production should show up as a real change in the trend, not get normalized away.",
+"context": "The Standard treats these as opposite cases for a specific reason: a structural change merely transfers existing emissions from one company's inventory to another with no change to the atmosphere, while organic growth or decline is an actual change in emissions and needs to be visible as one.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.CALC.1",
+"name": "Work emissions out in five explicit steps, not one estimate",
+"category": "Identifying & Calculating Emissions",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Calculate a company's emissions in five explicit steps - identify sources by category, select a calculation approach, collect activity data and emission factors, apply the calculation, then roll the results up to the corporate level - rather than estimating a total figure directly.",
+"context": "This five-step structure is the Standard's own organizing method for its calculation chapter, and each step has its own distinct failure mode (wrong category, wrong approach, bad data, wrong tool, inconsistent roll-up) that collapsing the steps together would hide.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.CALC.2",
+"name": "Classify every direct source into one of four types before calculating",
+"category": "Identifying & Calculating Emissions",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Classify every direct emissions source at a facility into one of four types - stationary combustion, mobile combustion, process emissions, or fugitive emissions - before calculating anything, since each type needs its own calculation methodology, and even office-based operations often turn up non-obvious sources once checked this way.",
+"context": "United Technologies Corporation's case study is the Standard's own cautionary example: the team initially considered excluding jet fuel used for engine testing as too small to matter, then found it accounted for 9-13% of the corporation's total annual energy use once actually measured.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.CALC.3",
+"name": "Choose centralized vs. decentralized data collection based on process complexity",
+"category": "Identifying & Calculating Emissions",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Decide whether individual facilities report raw activity/fuel-use data for corporate to calculate (centralized) or calculate their own emissions locally and report finished numbers up (decentralized) based on how complex and uniform the underlying processes are across sites - not as a one-size-fits-all default - and consider mixing both within the same company by facility type.",
+"context": "The Standard contrasts United Technologies (centralized, since its emissions calculations are standard across facilities) with BP (decentralized with corporate audits, since process emissions requiring facility-level technical knowledge make up a meaningful share of its total) as the two ends of this choice.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.QUAL.1",
+"name": "Widen existing operational systems to cover GHG data, don't build a parallel one",
+"category": "Managing Inventory Quality",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Widen the scope of the operational management, quality-assurance, and reporting systems a company already has to also cover GHG data, instead of building a separate, parallel GHG-only reporting function - and base the emissions data system on the same infrastructure used for financial reporting where possible.",
+"context": "This is the single most repeated lesson across the Standard's case studies: KPMG found it more efficient to widen existing embedded management and assurance processes than build a new function, and Interface Inc. built its EcoMetrics system to mirror its corporate financial data reporting specifically so emissions data would be held to the same documentation standard financial data already is.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.QUAL.2",
+"name": "Form a cross-functional team to own the inventory",
+"category": "Managing Inventory Quality",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Form a cross-functional team spanning operations, engineering, and finance/accounting staff to build and own the GHG inventory, rather than assigning it to a single environmental or sustainability function in isolation, since boundary-setting, emission-factor, and acquisition/divestiture questions need input no single team has alone.",
+"context": "Ford Motor Company's case study describes forming exactly this kind of internal cross-functional team after realizing the same boundary and emission-factor questions kept recurring meeting after meeting with no function able to answer them definitively on its own; the Standard's quality-management chapter makes the same team a formal first step of its own seven-step implementation process.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.QUAL.3",
+"name": "Institutionalize a feedback loop from review findings back to the inventory owner",
+"category": "Managing Inventory Quality",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Build a formal feedback loop that routes the findings of every internal and external inventory review back to whoever owns inventory quality, so errors get corrected and the inventory program measurably improves release over release, instead of treating each year's inventory as a one-off exercise disconnected from the last.",
+"context": "This is explicitly the sixth of the Standard's seven steps for implementing a quality management system - placed deliberately after the review step and before final reporting, so review findings have a defined place to land rather than simply being filed away.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.REDUCT.1",
+"name": "Break a year-over-year emissions change down by cause",
+"category": "Accounting for GHG Reductions",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "When reporting a year-over-year change in emissions, break it down by cause - acquisitions/divestments, closures, real efficiency improvements, changes in production level, changes in estimation methodology - using a standard categorization, rather than reporting a single net change number that hides which part of the change was a genuine reduction.",
+"context": "BP's \"accounting movement format\" is the Standard's cited example of this: without the breakdown, a company could look like it improved only because it divested a high-emitting facility, or look like it got worse only because production grew, with no way for a reader to tell real performance from structural noise.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.TARGET.1",
+"name": "Secure senior management commitment before rolling out a GHG target",
+"category": "Setting a GHG Target",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Secure senior management commitment and build the accountability and incentive structures to back a GHG reduction target before rolling it out, since hitting the target requires changes in day-to-day decision-making throughout the organization that won't happen on good intentions alone.",
+"context": "The Standard lists this as literally step one of ten in setting a target, ahead of any technical decision about target type or boundary, on the grounds that a target without board/CEO-level buy-in and dedicated resources is unlikely to survive contact with the rest of the organization's incentives.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
+"id": "GHGP.TARGET.2",
+"name": "Match the target's metric to the level of decision-making that can act on it",
+"category": "Setting a GHG Target",
+"reference": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+"guideline": "Set the GHG target's unit of measurement to match the level of decision-making that can actually act on it - an absolute target at the corporate level, but intensity or efficiency targets cascaded down to the business and facility level - since day-to-day plant operators and technicians can only control efficiency, not the total quantity of product the corporation decides to make.",
+"context": "Royal Dutch/Shell's case study models this directly: absolute emissions at a plant are a function of production quantity (a corporate-level growth decision), best-process energy use (a business-level design decision), and plant efficiency (a day-to-day operator decision) - only the last of which a plant-level target can actually move.",
+"source": "ghgprotocol",
+"sourceLabel": "GHG Protocol Corporate Standard (WRI/WBCSD)"
+},
+{
 "id": "GBPP.BASIC.1",
 "name": "Green Compensation",
 "category": "Basic",

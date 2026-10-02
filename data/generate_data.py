@@ -31,6 +31,7 @@ SOURCES = {
     "gcp": "Google Cloud Well-Architected - Sustainability",
     "gsf": "Green Software Foundation Patterns Catalog",
     "w3c": "W3C Web Sustainability Guidelines",
+    "ghgprotocol": "GHG Protocol Corporate Standard (WRI/WBCSD)",
     "gbpp": "Green Business Process Patterns (Nowak et al., 2011)",
     "ppatterns": "process-pattern.app",
     "lean": "Lean and Environment (EPA Toolkit / Lean Enterprise Institute)",

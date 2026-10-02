@@ -41,14 +41,17 @@ CSVs, the notebook, and the Python scripts never ship to the live site.
 | `gcp` | Google Cloud Well-Architected Framework — Sustainability pillar | 106 | General cloud |
 | `gsf` | Green Software Foundation Patterns Catalog | 59 | General cloud/web |
 | `w3c` | W3C Web Sustainability Guidelines | 71 | General web |
+| `ghgprotocol` | GHG Protocol Corporate Standard (WRI/WBCSD, revised edition) - one guideline per distinct, process-relevant "shall/should" statement or case study, across 7 of the standard's 11 substantive chapters | 13 | **General, non-IT** |
 | `gbpp` | Green Business Process Patterns (Nowak et al., PLoP 2011) | 9 | **BPM-native** |
 | `ppatterns` | process-pattern.app, patterns tagged "Sustainability" | 6 | **BPM-native** |
 | `lean` | Lean and Environment (EPA Lean & Environment Toolkit; Lean Enterprise Institute "green waste" articles) | 10 | **BPM-native** |
 | `gbpmbook` | Green Business Process Management: Towards the Sustainable Enterprise (vom Brocke, Seidel & Recker, eds., Springer 2012) - one guideline per chapter contribution, across 7 of the book's 13 chapters | 10 | **BPM-native** |
 
-**435 guidelines total.**
+**448 guidelines total.**
 
 `gbpmbook` is deliberately narrower than it could be: the book has 13 chapters, but several (a Green IS literature review, a Triple-Bottom-Line critique, a single-company case study, a generic ICT maturity model) don't yield a BPM-specific, actionable guideline distinct from the general-cloud sources above - including them would reproduce the same "generic sustainability guidance mistaken for BPM guidance" problem this source exists to counterbalance. See issues #5 and #18 for the still-open question of whether ABPMP's BPM CBOK and/or OMG's OCEB syllabus are worth mining the same way (narrowly, for their genuinely sustainability-specific content, not wholesale).
+
+`ghgprotocol` exists for a different reason than the three BPM-native sources: every other "general" source above (`aws`/`azure`/`gcp`/`gsf`/`w3c`) is IT/cloud/web-flavored, so a low BPM-relevance score for the general bucket as a whole couldn't distinguish "generic because it's IT-specific" from "generic because it's just not process-shaped." The GHG Protocol is a real, freely-published primary source (no paywall, unlike ISO 14001 which was considered and rejected for this slot - see PR discussion) that has nothing to do with IT at all, making it a control group for that question. Like `gbpmbook`, it's narrower than its full page count: most of the standard (financial-consolidation rules, double-counting policy, verification materiality thresholds, offset/credit accounting) is detailed and real but pure accounting/bookkeeping mechanics with no process-design angle, so only the chapters/sections with genuine process or organizational-governance content (operational boundaries, inventory-quality management, target-setting) are represented.
 
 `Context` is an optional, hand-written column on `guidelines.csv` (blank for most rows) — a
 sentence or two of extra background for guidelines whose one-line text reads as too thin on its
