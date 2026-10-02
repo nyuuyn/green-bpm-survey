@@ -497,6 +497,11 @@ a.btn-primary, a.btn-secondary {
 
 .analysis-link-row { margin-top: 18px; }
 
+/* Consistent 16px rhythm between any stacked cards under #app (intro -> round
+   results -> source block today) - a sibling rule instead of a per-card class
+   so a future card added to the page gets correct spacing for free. */
+#app > .card + .card { margin-top: 16px; }
+
 .analysis-intro { margin-bottom: 16px; }
 .analysis-intro h1 { margin-bottom: 12px; }
 .analysis-intro .intro-lead { margin-bottom: 0; }
@@ -521,9 +526,13 @@ a.btn-primary, a.btn-secondary {
 }
 
 .tab.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-contrast);
+  /* --tab-accent/--tab-accent-contrast are set per-button in analysis.js
+     (roundColor/sourceColor + readableTextOn) so a pressed tab matches that
+     round/source's own color in the chart legends - falls back to the flat
+     site accent if unset. */
+  background: var(--tab-accent, var(--accent));
+  border-color: var(--tab-accent, var(--accent));
+  color: var(--tab-accent-contrast, var(--accent-contrast));
 }
 
 .analysis-card .btn-row { margin-bottom: 18px; }
