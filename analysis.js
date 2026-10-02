@@ -2,7 +2,7 @@
 
 /* ---------- Analysis page ----------
  * The Green BPM Guideline is being distilled through multiple survey rounds:
- * three AI-generated passes today (Claude rating the same 425 guidelines
+ * three AI-generated passes today (Claude rating the same 448 guidelines
  * under a general / sustainability-expert / BPM-expert framing - test data
  * exploring how much persona shifts relevance judgments), then an internal
  * expert survey (envite Consulting - BPM, architecture, and sustainability
@@ -24,28 +24,28 @@ const ANALYSIS_ROUNDS = [
     id: "claude",
     label: "AI (General)",
     file: "generated/analysis_claude.json",
-    blurb: "An AI-generated preliminary pass with no persona framing: Claude rated all 425 guidelines across 8 sources for BPM relevance, ahead of the human rounds below.",
+    blurb: "An AI-generated preliminary pass with no persona framing: Claude rated all 448 guidelines across 10 sources for BPM relevance, ahead of the human rounds below.",
   },
   {
     id: "sustainability",
     label: "AI (Sustainability Expert)",
     file: "generated/analysis_sustainability.json",
-    blurb: "Same 425 guidelines, rated by Claude framed as a sustainability/green-IT expert with only lay BPM exposure - test data exploring how a sustainability-first lens shifts relevance judgments, ahead of a real expert survey.",
+    blurb: "Same 448 guidelines, rated by Claude framed as a sustainability/green-IT expert with only lay BPM exposure - test data exploring how a sustainability-first lens shifts relevance judgments, ahead of a real expert survey.",
   },
   {
     id: "bpm",
     label: "AI (BPM Expert)",
     file: "generated/analysis_bpm.json",
-    blurb: "Same 425 guidelines, rated by Claude framed as a BPM expert with only lay sustainability exposure - test data exploring how a process-first lens shifts relevance judgments, ahead of a real expert survey.",
+    blurb: "Same 448 guidelines, rated by Claude framed as a BPM expert with only lay sustainability exposure - test data exploring how a process-first lens shifts relevance judgments, ahead of a real expert survey.",
   },
   // Next: an internal expert survey with envite Consulting (BPM, architecture,
   // and sustainability practitioners), then a public survey.
 ];
 
-const ANALYSIS_SOURCE_ORDER = ["aws", "azure", "gcp", "gsf", "w3c", "gbpp", "ppatterns", "lean"];
+const ANALYSIS_SOURCE_ORDER = ["aws", "azure", "gcp", "gsf", "w3c", "ghgprotocol", "gbpp", "ppatterns", "lean", "gbpmbook"];
 const SOURCE_SHORT_LABELS = {
-  aws: "AWS", azure: "Azure", gcp: "GCP", gsf: "GSF", w3c: "W3C",
-  gbpp: "GBPP", ppatterns: "ppatterns.app", lean: "Lean",
+  aws: "AWS", azure: "Azure", gcp: "GCP", gsf: "GSF", w3c: "W3C", ghgprotocol: "GHG Protocol",
+  gbpp: "GBPP", ppatterns: "ppatterns.app", lean: "Lean", gbpmbook: "Green BPM Book",
 };
 
 function isDarkMode() {
@@ -257,7 +257,7 @@ function legendDot(color, label) {
 
 function mountHighRelevanceChart(canvasId, records, pal) {
   const shortLabels = ANALYSIS_SOURCE_ORDER.map((s) => SOURCE_SHORT_LABELS[s]);
-  const nativeSet = new Set(["gbpp", "ppatterns", "lean"]);
+  const nativeSet = new Set(["gbpp", "ppatterns", "lean", "gbpmbook"]);
   return mountChart(canvasId, {
     type: "bar",
     data: {
@@ -343,7 +343,7 @@ function mountGenericShareChart(canvasId, records, pal) {
 
 // "Guidelines collected per source" is a fact about the guideline corpus
 // (data.json), not about any round's ratings - every analysis_<round>.json
-// would report the exact same counts, since every round rates the same 425
+// would report the exact same counts, since every round rates the same 448
 // guidelines. So it isn't part of any round panel or the comparison panel;
 // it's mounted once, here, into the intro card, fetched straight from
 // data.json rather than piggybacking on whichever round happens to load
@@ -400,7 +400,7 @@ function buildRoundPanel(round, records) {
     el("div", { class: "btn-row btn-row-end" }, [
       el("a", { class: "ref-link", href: round.file, download: round.file.replace(/^generated\//, "") }, "Download full dataset (JSON) ↓"),
     ]),
-    el("p", { class: "intro-lead" }, `${round.blurb} ${totalRated} of 425 guidelines have a rating in this round.`),
+    el("p", { class: "intro-lead" }, `${round.blurb} ${totalRated} of ${records.length} guidelines have a rating in this round.`),
 
     el("div", { class: "analysis-grid" }, [
       chartCard("BPM Relevance — overall", "0 = not relevant to BPM at all, 3 = highly relevant.", id("chart-relevance-dist")),
@@ -825,7 +825,7 @@ function buildPage() {
       el("h1", {}, "How relevant are the guidelines to BPM?"),
       el("p", { class: "intro-lead" },
         "The Green BPM Guideline is being distilled through multiple rounds of rating. The three " +
-        "AI tabs below are Claude rating the same 425 guidelines under different framings " +
+        "AI tabs below are Claude rating the same 448 guidelines under different framings " +
         "(general, sustainability-expert, BPM-expert) - test data previewing where those " +
         "perspectives are likely to disagree, ahead of an internal expert survey with envite " +
         "Consulting and eventually a public survey. Select one tab to see that round on its own, " +
@@ -833,7 +833,7 @@ function buildPage() {
       el("div", { class: "analysis-grid" }, [
         chartCard(
           "Guidelines collected per source",
-          "How the 425 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
+          "How the 448 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
           "chart-per-source"
         ),
       ]),
