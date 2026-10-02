@@ -4,12 +4,12 @@
 
 ```
 index.html, survey.html, analysis.html   the three static pages (see docs/ARCHITECTURE.md)
-common.css, survey.css, analysis.css     styles - common.css is shared, the other two are page-specific
-common.js, survey.js, survey-fields.js, analysis.js, analysis-panels.js, charts.js, palette.js
-                                          scripts - see docs/ARCHITECTURE.md
+assets/css/   common.css, survey.css, analysis.css - common.css is shared, the other two are page-specific
+assets/js/    common.js, survey.js, survey-fields.js, analysis.js, analysis-panels.js, charts.js,
+              palette.js - see docs/ARCHITECTURE.md
+assets/img/   images/logos
 generated/data.json                      guideline text for the survey (generated)
 generated/analysis_<round>.json          per-round rating data for the analysis page (generated)
-assets/                                  images/logos
 
 data/                                    raw data, ratings, and analysis tooling
   guidelines/<source>/
@@ -30,8 +30,8 @@ tests_e2e/, tests/, package.json, pytest.ini, .github/workflows/   tests + CI (s
 ```
 
 Everything under `data/` is source material and tooling. What actually gets **deployed** to
-GitHub Pages is a fixed allowlist (see `.github/workflows/deploy.yml`): the static
-pages/scripts/styles at repo root plus the generated `generated/*.json` — the raw
+GitHub Pages is a fixed allowlist (see `.github/workflows/deploy.yml`): the three HTML pages at
+repo root plus `assets/` (scripts, styles, images) and the generated `generated/*.json` — the raw
 CSVs, the notebook, and the Python scripts never ship to the live site.
 
 ## Sources

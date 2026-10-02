@@ -21,9 +21,9 @@ window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 // (classic <script> tags share one global scope), which is exactly what the
 // Playwright suite exercises instead.
 dom.window.eval([
-  fs.readFileSync("common.js", "utf-8"),
-  fs.readFileSync("survey-fields.js", "utf-8"),
-  fs.readFileSync("survey.js", "utf-8"),
+  fs.readFileSync("assets/js/common.js", "utf-8"),
+  fs.readFileSync("assets/js/survey-fields.js", "utf-8"),
+  fs.readFileSync("assets/js/survey.js", "utf-8"),
 ].join("\n"));
 
 let failures = 0;
