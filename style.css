@@ -351,6 +351,22 @@ legend {
 }
 .rating-row-body fieldset:first-of-type { margin-top: 14px; }
 
+/* On wide screens, give the survey page more room and lay the rating list out
+   in two columns instead of one long single-column list. Scoped to the survey
+   page only (not the landing/analysis pages, which stay single-column). Rows
+   are placed row-major (left, right, left, right, ...) rather than reflowing
+   like a masonry/multi-column layout - simpler, and means expanding a row's
+   body never makes other rows jump between columns, just shifts its own
+   row-major neighbor down a bit. */
+@media (min-width: 1100px) {
+  body.survey-page .wrap { max-width: 1180px; }
+  body.survey-page .rating-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
 textarea, input[type="text"] {
   width: 100%;
   font: inherit;
