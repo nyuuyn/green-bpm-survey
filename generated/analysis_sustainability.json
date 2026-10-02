@@ -6166,5 +6166,157 @@
 "Design",
 "Analysis"
 ]
+},
+{
+"id": "GBB.SA.1",
+"name": "Treat sustainability as a fifth process performance dimension",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GBB.SA.2",
+"name": "Audit Green BPM readiness across all six BPM capability areas",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "Yes",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GBB.METH.1",
+"name": "Extend sustainability management to unordered, ad hoc processes",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Organizational/Governance",
+"Process Model"
+],
+"generic": "No",
+"lifecycle": [
+"Not Applicable"
+]
+},
+{
+"id": "GBB.SA.3",
+"name": "Track environmental performance through a Sustainability Balanced Scorecard",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring",
+"Analysis"
+]
+},
+{
+"id": "GBB.METH.2",
+"name": "Model and measure the carbon footprint at the activity level",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Model",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Modeling",
+"Analysis",
+"Optimization"
+]
+},
+{
+"id": "GBB.GOV.1",
+"name": "Use a capability maturity model to manage sustainability like process performance",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring",
+"Optimization"
+]
+},
+{
+"id": "GBB.SA.4",
+"name": "Extend enterprise measurement systems with sustainability indicators at every architecture level",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Process Data",
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring"
+]
+},
+{
+"id": "GBB.IT.1",
+"name": "Capture real-time energy data as a first-class process metric",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "No",
+"lifecycle": [
+"Monitoring",
+"Execution"
+]
+},
+{
+"id": "GBB.GOV.2",
+"name": "Make sustainability an explicit project success and selection criterion",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 3,
+"scope": [
+"Organizational/Governance"
+],
+"generic": "No",
+"lifecycle": [
+"Design"
+]
+},
+{
+"id": "GBB.IT.2",
+"name": "Share sustainability indicators across organizations through a common data platform",
+"source": "gbpmbook",
+"bpmNative": true,
+"relevance": 2,
+"scope": [
+"Infrastructure/Platform",
+"Process Data"
+],
+"generic": "Yes",
+"lifecycle": [
+"Monitoring"
+]
 }
 ]
