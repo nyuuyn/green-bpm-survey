@@ -27,7 +27,7 @@ jobs:
       group: pages-deploy
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Pin to the exact commit Test just validated, not whatever main
           # happens to be at when this fires - avoids deploying a newer,
@@ -42,4 +42,4 @@ jobs:
         with:
           path: ./_site
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
