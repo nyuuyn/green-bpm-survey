@@ -34,8 +34,9 @@ SOURCES = {
     "gbpp": "Green Business Process Patterns (Nowak et al., 2011)",
     "ppatterns": "process-pattern.app",
     "lean": "Lean and Environment (EPA Toolkit / Lean Enterprise Institute)",
+    "gbpmbook": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)",
 }
-BPM_NATIVE = {"gbpp", "ppatterns", "lean"}
+BPM_NATIVE = {"gbpp", "ppatterns", "lean", "gbpmbook"}
 
 # round name -> survey CSV filename suffix (claude itself has no suffix)
 ROUNDS = {

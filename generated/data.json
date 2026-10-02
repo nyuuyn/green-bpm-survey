@@ -4248,5 +4248,105 @@
 "context": "The EPA toolkit’s broader theme here is that volume and toxicity are separate axes: cutting how much of a substance a process uses doesn’t help much if what remains is still highly toxic or persistent, so the two need to be assessed together rather than treating \"less material\" as automatically \"safer.\"",
 "source": "lean",
 "sourceLabel": "Lean and Environment (EPA Toolkit / Lean Enterprise Institute)"
+},
+{
+"id": "GBB.SA.1",
+"name": "Treat sustainability as a fifth process performance dimension",
+"category": "Strategic Alignment",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_1",
+"guideline": "When weighing a process redesign's impact on time, cost, quality, and flexibility (the BPM \"devil's quadrangle\"), add environmental sustainability as an explicit fifth trade-off dimension instead of treating it as an afterthought layered on once the economic trade-offs are already settled.",
+"context": "Seidel, Recker and vom Brocke's opening chapter extends BPM's classic four-way \"devil's quadrangle\" trade-off into what they call the \"devil's pentagon\", arguing sustainability deserves the same first-class status in process design decisions as the four traditional performance dimensions.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.SA.2",
+"name": "Audit Green BPM readiness across all six BPM capability areas",
+"category": "Strategic Alignment",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_1",
+"guideline": "When planning a Green BPM initiative, assess and build capability across all six BPM core elements - strategic alignment, governance, methods, information technology, people, and culture - rather than treating sustainability as purely a process-modeling or IT-tooling problem.",
+"context": "The same chapter frames Green BPM through Rosemann and vom Brocke's six core elements of BPM; a later literature review applying this same lens (Maciel, 2017) found Green BPM research has concentrated almost entirely on Methods and Information Technology, leaving governance, people, and culture comparatively neglected.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.METH.1",
+"name": "Extend sustainability management to unordered, ad hoc processes",
+"category": "Methods",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_3",
+"guideline": "Apply sustainability thinking to unordered, loosely structured knowledge work and ad hoc decision-making, not only to the fully structured, repeatable processes that conventional BPM notations and tooling target.",
+"context": "Hasan's chapter uses the Cynefin sense-making framework to argue that an organization's least BPM-tool-friendly work - unordered, emergent processes - is often where sustainability impact is least understood and most overlooked.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.SA.3",
+"name": "Track environmental performance through a Sustainability Balanced Scorecard",
+"category": "Strategic Alignment",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_5",
+"guideline": "Fold environmental indicators into a Sustainability Balanced Scorecard alongside the existing financial, customer, and process metrics, so process owners see ecological performance in the same cockpit they already use to steer business performance.",
+"context": "Houy, Reiter, Fettke, Loos, Hoesch-Klohe and Ghose's chapter proposes the Sustainability Balanced Scorecard as the mechanism for linking green objectives to an organization's existing BPM governance and strategy structures, rather than running sustainability reporting as a separate exercise.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.METH.2",
+"name": "Model and measure the carbon footprint at the activity level",
+"category": "Methods",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_6",
+"guideline": "Break a process model down into its individual activities and attach emissions data to each one, so carbon hotspots within the process can be identified and targeted for redesign instead of only knowing the process's aggregate footprint.",
+"context": "Recker, Rosemann, Hjalmarsson and Lind extend process modeling notation with per-activity CO2 annotations and demonstrate it on a government shared-services provider and a European airport, showing which specific activities - not just which process - drive emissions.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.GOV.1",
+"name": "Use a capability maturity model to manage sustainability like process performance",
+"category": "Governance",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_7",
+"guideline": "Assess an organization's corporate-sustainability capability using the same kind of staged capability maturity model already used for general process performance management, rather than tracking sustainability maturity informally and separately.",
+"context": "Cleven, Winter and Wortmann adapt an established process-performance-management maturity model to corporate sustainability, giving organizations a staged, comparable way to benchmark and improve their Green BPM governance over time.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.SA.4",
+"name": "Extend enterprise measurement systems with sustainability indicators at every architecture level",
+"category": "Strategic Alignment",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_8",
+"guideline": "Extend existing enterprise performance measurement systems with social and ecological indicators at every level of the enterprise architecture - not only in a top-level corporate sustainability report - so sustainability can be acted on at the process and activity level where it actually originates.",
+"context": "Zeise, Link and Ortner argue sustainability measurement only becomes actionable once it is built into the same dynamic indicator systems already used to control day-to-day enterprise operations, rather than bolted on as an annual, company-wide sustainability report.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.IT.1",
+"name": "Capture real-time energy data as a first-class process metric",
+"category": "Information Technology",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_9",
+"guideline": "Feed real-time energy- and resource-consumption data from the IT systems underpinning a process into the same case management, event-processing, and KPI tooling already used to monitor that process, rather than tracking energy as a separate facilities concern.",
+"context": "Watson, Howells and Boudreau's \"Energy Informatics\" chapter maps energy data directly onto three existing BPM technologies - case management, complex event processing, and KPI dashboards - arguing these are what make energy-aware process management actionable rather than merely measurable.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.GOV.2",
+"name": "Make sustainability an explicit project success and selection criterion",
+"category": "Governance",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_10",
+"guideline": "When selecting projects and defining what counts as project success, add sustainability as an explicit criterion alongside the traditional scope/time/cost constraints, rather than assuming environmental impact falls out of those constraints automatically.",
+"context": "Silvius argues mainstream project management has largely failed to engage with the sustainability agenda, even though projects are usually where an organization's process and strategy changes actually get executed - the point where Green BPM intentions either get built in or get dropped.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
+},
+{
+"id": "GBB.IT.2",
+"name": "Share sustainability indicators across organizations through a common data platform",
+"category": "Information Technology",
+"reference": "https://link.springer.com/chapter/10.1007/978-3-642-27488-6_11",
+"guideline": "Publish and consume environmental indicators through a shared, inter-organizational data platform instead of each organization measuring and reporting its process-level environmental impact in isolation.",
+"context": "Thies, Dada and Stanoevska-Slabeva illustrate this network-centric approach with three cross-organizational use cases, arguing that many sustainability-relevant process impacts (e.g. supply-chain emissions) can only be measured by combining data no single organization holds on its own.",
+"source": "gbpmbook",
+"sourceLabel": "Green Business Process Management (vom Brocke, Seidel & Recker, eds., 2012)"
 }
 ]

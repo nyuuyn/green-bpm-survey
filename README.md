@@ -75,9 +75,9 @@ npm run serve        # python -m http.server 8123, then open http://localhost:81
 
 ## ✅ Status / what's next
 
-- [x] Raw guideline data collected and split from survey data for all 8 sources
+- [x] Raw guideline data collected and split from survey data for all 9 sources
 - [x] Survey schema locked (`BPM Relevance`, `BPM Scope`, `Generic`, `BPM Lifecycle`)
-- [x] Claude-generated rating pass over all 425 guidelines, plus two more passes with persona
+- [x] Claude-generated rating pass over all 435 guidelines, plus two more passes with persona
       framing (sustainability-expert, BPM-expert) - test/comparison data previewing where those
       perspectives diverge, shown as extra tabs on the analysis page
 - [x] Analysis notebook (`data/analysis.ipynb`) and analysis page (`analysis.html`)
