@@ -1,5 +1,22 @@
 "use strict";
 
+/* ---------- Preact + htm ----------
+ * PROTOTYPE: both pages render their screens with Preact + htm instead of
+ * the el()/renderApp() helpers below (el()/renderApp() now only back the
+ * handful of spots noted inline where a screen stays plain DOM). preact,
+ * preact/hooks, and htm are loaded as plain UMD globals from
+ * assets/js/vendor/ before this file - same "classic <script>, no build
+ * step" loading model as the rest of the site. debounceRendering is
+ * overridden to force synchronous re-renders (Preact otherwise batches
+ * setState into a microtask), which keeps the timing identical to the old
+ * imperative code's immediate DOM mutation - this is a global setting, so it
+ * applies to every Preact component on either page, not just one screen.
+ */
+const { h, render: preactRender } = window.preact;
+const { useState, useRef } = window.preactHooks;
+const html = window.htm.bind(h);
+window.preact.options.debounceRendering = (render) => render();
+
 /* ---------- Shared vocabulary ----------
  * Used by both survey.js (the rating form) and analysis.js (aggregating and
  * labeling those same fields) - kept here once so the two can't drift apart.

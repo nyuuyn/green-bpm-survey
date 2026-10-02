@@ -30,11 +30,17 @@ window.Chart = class {
 
 // See test_flow.mjs for why these must be eval'd together in one call.
 dom.window.eval([
+  fs.readFileSync("assets/js/vendor/preact.min.js", "utf-8"),
+  fs.readFileSync("assets/js/vendor/preact-hooks.umd.js", "utf-8"),
+  fs.readFileSync("assets/js/vendor/htm.umd.js", "utf-8"),
   fs.readFileSync("assets/js/common.js", "utf-8"),
-  fs.readFileSync("assets/js/palette.js", "utf-8"),
-  fs.readFileSync("assets/js/charts.js", "utf-8"),
-  fs.readFileSync("assets/js/analysis-panels.js", "utf-8"),
-  fs.readFileSync("assets/js/analysis.js", "utf-8"),
+  fs.readFileSync("assets/js/analysis/palette.js", "utf-8"),
+  fs.readFileSync("assets/js/analysis/charts.js", "utf-8"),
+  fs.readFileSync("assets/js/analysis/chart-dom.js", "utf-8"),
+  fs.readFileSync("assets/js/analysis/round-panel.js", "utf-8"),
+  fs.readFileSync("assets/js/analysis/comparison-panel.js", "utf-8"),
+  fs.readFileSync("assets/js/analysis/source-panel.js", "utf-8"),
+  fs.readFileSync("assets/js/analysis/analysis.js", "utf-8"),
 ].join("\n"));
 
 let failures = 0;

@@ -15,15 +15,20 @@ const { window } = dom;
 window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 
 // A "use strict" eval() gets its own isolated top-level scope per call, even on
-// the same window - so common.js, survey-fields.js, and survey.js must be
-// eval'd together in one call for survey.js to see their declarations (el,
-// renderApp, radioGroup, ...). A real browser doesn't have this quirk
+// the same window - so every script survey.html loads must be eval'd together
+// in one call, in the same order, for each to see the others' declarations
+// (el, html, RatingRow, state, ...). A real browser doesn't have this quirk
 // (classic <script> tags share one global scope), which is exactly what the
 // Playwright suite exercises instead.
 dom.window.eval([
+  fs.readFileSync("assets/js/vendor/preact.min.js", "utf-8"),
+  fs.readFileSync("assets/js/vendor/preact-hooks.umd.js", "utf-8"),
+  fs.readFileSync("assets/js/vendor/htm.umd.js", "utf-8"),
   fs.readFileSync("assets/js/common.js", "utf-8"),
-  fs.readFileSync("assets/js/survey-fields.js", "utf-8"),
-  fs.readFileSync("assets/js/survey.js", "utf-8"),
+  fs.readFileSync("assets/js/survey/rating-row.js", "utf-8"),
+  fs.readFileSync("assets/js/survey/respondent-info-form.js", "utf-8"),
+  fs.readFileSync("assets/js/survey/rating-list.js", "utf-8"),
+  fs.readFileSync("assets/js/survey/survey.js", "utf-8"),
 ].join("\n"));
 
 let failures = 0;

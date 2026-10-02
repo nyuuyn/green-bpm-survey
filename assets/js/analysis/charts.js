@@ -2,15 +2,19 @@
 
 /* ---------- Chart layer for the analysis page ----------
  * Everything here exists to feed Chart.js: the record -> chart-data
- * aggregations, and the mount-/build- functions that actually construct
- * Chart.js configs or chart-adjacent (color-coded) DOM. The color system
- * itself lives in palette.js (loaded before this file) - this file consumes
- * chartPalette()/roundColor()/sourceColor()/etc. as plain globals rather than
- * making any color decisions of its own. analysis-panels.js builds the
- * non-chart DOM (tables, panel scaffolding) around these; analysis.js is the
- * page controller (fetching/caching round data, tab state, routing). All of
- * them call into each other as plain globals (classic <script> tags, no
- * modules), same as they call into common.js's el()/renderApp().
+ * aggregations, and the mount- functions that actually construct and
+ * instantiate Chart.js configs (mountChart() and everything built on it).
+ * No DOM-building lives in this file anymore - chart-dom.js owns the
+ * chart-adjacent Preact/htm markup (chartCard, legendDot, the heatmap table,
+ * the comparison-panel placeholder grids) that these mounts attach to by
+ * canvas id; round-panel.js/comparison-panel.js/source-panel.js build the
+ * rest of each panel's non-chart DOM. The color system lives in palette.js
+ * (loaded before this file) - this file consumes chartPalette()/
+ * roundColor()/sourceColor()/etc. as plain globals rather than making any
+ * color decisions of its own. analysis.js is the page controller (fetching/
+ * caching round data, tab state, routing). All of them call into each other
+ * as plain globals (classic <script> tags, no modules, loaded in the order
+ * listed in analysis.html).
  */
 
 const ANALYSIS_SOURCE_ORDER = ["aws", "azure", "gcp", "gsf", "w3c", "ghgprotocol", "gbpp", "ppatterns", "lean", "gbpmbook"];
@@ -149,22 +153,6 @@ function relevanceCrossTab(recordsA, recordsB) {
 
 /* ---- Chart building blocks shared by a single round's panel and the
  * comparison panel's per-round small multiples ---- */
-
-function chartCard(title, description, canvasId, extra = []) {
-  return el("div", { class: "chart-card" }, [
-    el("h2", {}, title),
-    description ? el("p", { class: "chart-desc" }, description) : null,
-    el("div", { class: "chart-wrap" }, el("canvas", { id: canvasId })),
-    ...extra,
-  ]);
-}
-
-function legendDot(color, label) {
-  return el("span", { class: "legend-item" }, [
-    el("span", { class: "legend-dot", style: `background:${color}` }),
-    el("span", {}, label),
-  ]);
-}
 
 // These four chart types are already two- or four-series (native/general,
 // relevance mix, generic/specific) - see docs/DATA_PIPELINE.md's "Analysis
@@ -358,41 +346,14 @@ function mountRoundCharts(round, records) {
  *    split) would need a 3rd dimension to merge, which doesn't fit in a bar
  *    chart - so each selected round gets its own copy instead, reusing the
  *    exact same mount functions as the single-round panel.
- * 3. Relevance agreement heatmap (heatmapTable, used by analysis-panels.js's
- *    buildHeatmapSection): guideline-level, one heatmap per pair of selected
- *    rounds - only expressible pairwise.
+ * 3. Relevance agreement heatmap (chart-dom.js's heatmapTable, used by
+ *    comparison-panel.js's buildHeatmapSection): guideline-level, one
+ *    heatmap per pair of selected rounds - only expressible pairwise.
  *
  * (The disagreement table - spreadTableCard - isn't here: it's a plain
  * ranked list, not a chart or a color-coded view, so it lives in
- * analysis-panels.js alongside the rest of the page's non-chart DOM.)
+ * comparison-panel.js alongside the rest of the page's non-chart DOM.)
  */
-
-function heatCellStyle(pal, t) {
-  const [r, g, b] = hexToRgb(pal.single);
-  const alpha = t === 0 ? 0 : 0.15 + t * 0.75;
-  const color = t > 0.5 ? pal.tooltipText : pal.ink;
-  return `background: rgba(${r}, ${g}, ${b}, ${alpha}); color: ${color};`;
-}
-
-function heatmapTable(roundA, roundB, recordsByRound, pal) {
-  const matrix = relevanceCrossTab(recordsByRound.get(roundA.id), recordsByRound.get(roundB.id));
-  const max = Math.max(1, ...matrix.flat());
-  const header = el("tr", {}, [el("th", {}, ""), ...RELEVANCE_OPTIONS.map((o) => el("th", {}, o.label))]);
-  const rows = RELEVANCE_OPTIONS.map((rowOpt, i) => el("tr", {}, [
-    el("th", {}, rowOpt.label),
-    ...matrix[i].map((count) => el("td", { style: heatCellStyle(pal, count / max) }, String(count))),
-  ]));
-  return el("div", { class: "table-wrap" }, el("table", { class: "data-table heatmap-table" }, [el("thead", {}, header), el("tbody", {}, rows)]));
-}
-
-function buildMergedGrid(activeList) {
-  return el("div", { class: "analysis-grid" }, [
-    chartCard("BPM Relevance — overall", "0 = not relevant to BPM at all, 3 = highly relevant, compared across the selected rounds.", "cmp-chart-relevance-dist"),
-    chartCard("Which BPM layer do these guidelines touch?", "Count of guidelines acting on each layer, compared across the selected rounds.", "cmp-chart-scope-counts"),
-    chartCard("BPM Lifecycle phases touched", "Phase mentions across all guidelines, compared across the selected rounds.", "cmp-chart-lifecycle"),
-    chartCard("Average relevance by BPM layer", "Mean BPM Relevance (0–3) among guidelines that touch each layer, compared across the selected rounds.", "cmp-chart-mean-by-scope"),
-  ]);
-}
 
 // Shared by the round-comparison panel and the source block's comparison
 // panel: both need "the same aggregate charts as a single [round|source],
@@ -483,45 +444,6 @@ function mountMergedCharts(activeList, recordsByRound, pal) {
   );
 }
 
-function buildSmallMultiples(activeList, pal) {
-  // One legend per section (not repeated per round's small chart) - same
-  // colors/meaning across every chart in the section, so a single legend row
-  // under the section description covers all of them.
-  const section = (title, description, kind, legend) => el("div", { class: "comparison-section" }, [
-    el("h2", { class: "top-table-heading" }, title),
-    el("p", { class: "chart-desc" }, description),
-    el("div", { class: "chart-legend" }, legend),
-    el("div", { class: "analysis-grid" }, activeList.map((round) => chartCard(round.label, null, `cmp-chart-${kind}-${round.id}`))),
-  ]);
-
-  return el("div", {}, [
-    section(
-      "Share rated highly relevant, by source",
-      "Percent of each source's guidelines scoring 3 (highly relevant) - one chart per selected round.",
-      "high-relevance",
-      [legendDot(pal.muted, "General source"), legendDot(pal.strong, "BPM-native source")]
-    ),
-    section(
-      "Relevance mix per source",
-      "Full 0–3 breakdown per source, normalized to 100% - one chart per selected round.",
-      "relevance-mix",
-      RELEVANCE_OPTIONS.map((o, i) => legendDot(pal.relevanceSteps[i], o.label))
-    ),
-    section(
-      "BPM Scope emphasis — BPM-native vs. general sources",
-      "Percent of each group's rated guidelines touching each layer - one chart per selected round.",
-      "scope-native",
-      [legendDot(pal.muted, "General source"), legendDot(pal.strong, "BPM-native source")]
-    ),
-    section(
-      "Generic best practice vs. BPM-specific, by source",
-      "Among rated guidelines: would the same advice apply outside BPM, or is the reasoning process-specific? One chart per selected round.",
-      "generic-share",
-      [legendDot(pal.muted, "Generic practice"), legendDot(pal.strong, "BPM-specific")]
-    ),
-  ]);
-}
-
 function mountSmallMultiples(activeList, recordsByRound, pal) {
   return activeList.flatMap((round) => {
     const records = recordsByRound.get(round.id);
@@ -602,16 +524,6 @@ function mountSourceCharts(sourceId, records, pal) {
   });
 
   return [relevanceDist, scope, lifecycle, meanByScope, genericChart];
-}
-
-function buildSourceMergedGrid() {
-  return el("div", { class: "analysis-grid" }, [
-    chartCard("BPM Relevance", "0 = not relevant to BPM at all, 3 = highly relevant, compared across the selected sources.", "cmp-src-chart-relevance-dist"),
-    chartCard("Which BPM layer do these guidelines touch?", "Count of guidelines acting on each layer, compared across the selected sources.", "cmp-src-chart-scope-counts"),
-    chartCard("BPM Lifecycle phases touched", "Phase mentions, compared across the selected sources.", "cmp-src-chart-lifecycle"),
-    chartCard("Average relevance by BPM layer", "Mean BPM Relevance (0–3) among guidelines that touch each layer, compared across the selected sources.", "cmp-src-chart-mean-by-scope"),
-    chartCard("Generic best practice vs. BPM-specific", "Among rated guidelines: would the same advice apply outside BPM, or is the reasoning process-specific - compared across the selected sources.", "cmp-src-chart-generic-split"),
-  ]);
 }
 
 function mountSourceComparisonCharts(activeSourceIds, records, pal) {
