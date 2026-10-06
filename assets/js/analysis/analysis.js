@@ -267,13 +267,17 @@ function buildPage() {
   renderApp(
     el("div", { class: "card analysis-intro" }, [
       el("h1", {}, "How relevant are the guidelines to BPM?"),
-      el("p", { class: "intro-lead" },
+      el("p", { class: "intro-lead" }, [
         "The Green BPM Guideline is being distilled through multiple rounds of rating. The three " +
         "AI tabs below are Claude rating the same 448 guidelines under different framings " +
         "(general, sustainability-expert, BPM-expert) - test data previewing where those " +
         "perspectives are likely to disagree, ahead of an internal expert survey with envite " +
         "Consulting and eventually a public survey. Select one tab to see that round on its own, " +
-        "or select two or more to compare them directly."),
+        "or select two or more to compare them directly. Or see the guidelines organized by " +
+        "BPM lifecycle phase on the ",
+        el("a", { class: "ref-link", href: "lifecycle.html" }, "lifecycle guide"),
+        ".",
+      ]),
       introChartGridEl,
     ]),
     el("div", { class: "card" }, [
