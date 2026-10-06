@@ -1,7 +1,7 @@
 "use strict";
 
 /* ---------- Rating list screen ----------
- * The 25-guideline rating list, built from RatingRow (rating-row.js).
+ * The sampled-guideline rating list, built from RatingRow (rating-row.js).
  * validateRowAnswer/buildAnswerRecord and renderComplete live in survey.js
  * (the page controller) since Finish needs them too; this file owns the
  * list's own lifted state (answers/expandedRows/invalidRows/errorMessage).

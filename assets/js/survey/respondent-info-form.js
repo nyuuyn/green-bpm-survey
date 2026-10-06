@@ -53,7 +53,7 @@ function RespondentInfoForm() {
       <h1>About you</h1>
       <p class="intro-lead">
         A few quick questions about your background, then you'll rate ${SAMPLE_SIZE} randomly
-        selected guidelines (about 10–15 minutes). This helps us understand whether BPM/sustainability
+        selected guidelines (about 5–8 minutes). This helps us understand whether BPM/sustainability
         background affects how guidelines get rated — it's not used to identify you.
       </p>
       <form onSubmit=${handleSubmit}>

@@ -55,7 +55,7 @@ per-source comparison block — for the interactive version.
   `survey.js` (the rating flow), `analysis.html` + `analysis.js` + `charts.js` (the charts)
 - Before rating starts, a one-time "About you" screen collects respondent background (BPM
   experience, sustainability experience, role) — anonymous, stored once per session
-- 25 randomly sampled guidelines per respondent, rated for Relevance, Scope, Generic-vs-specific,
+- 10 randomly sampled guidelines per respondent, rated for Relevance, Scope, Generic-vs-specific,
   and Lifecycle phase
 
 > ⚠️ **Test mode:** `SUBMIT_ENDPOINT` in `survey.js` is currently `null` — submissions aren't live
