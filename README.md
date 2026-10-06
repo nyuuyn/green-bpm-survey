@@ -51,8 +51,10 @@ per-source comparison block — for the interactive version.
 
 ## 🧭 How it works
 
-- Three static pages, no build step, no framework: `index.html` (landing), `survey.html` +
-  `survey.js` (the rating flow), `analysis.html` + `analysis.js` + `charts.js` (the charts)
+- Four static pages, no build step, no framework: `index.html` (landing), `survey.html` +
+  `survey.js` (the rating flow), `analysis.html` + `analysis.js` + `charts.js` (the charts),
+  `lifecycle.html` + `lifecycle.js` (a clickable BPM-lifecycle wheel - pick a phase, see the
+  guidelines rated most relevant to it)
 - Before rating starts, a one-time "About you" screen collects respondent background (BPM
   experience, sustainability experience, role) — anonymous, stored once per session
 - 10 randomly sampled guidelines per respondent, rated for Relevance, Scope, Generic-vs-specific,

@@ -1,10 +1,10 @@
 # Tests
 
-Three headless functional tests (jsdom + a self-hosted static server, no external dependencies
-beyond `npm install`), one per page - 50 assertions total, living in `tests/`:
+Four headless functional tests (jsdom + a self-hosted static server, no external dependencies
+beyond `npm install`), one per page, living in `tests/`:
 
-- `tests/test_landing.mjs` — index.html is static, so this just parses the markup: both CTAs link
-  to the right page and are styled prominently, no `<script>` tags.
+- `tests/test_landing.mjs` — index.html is static, so this just parses the markup: all three CTAs
+  link to the right page and are styled prominently, no `<script>` tags.
 - `tests/test_flow.mjs` — survey.html: boots straight into "About you" (no intro/Start step), that
   screen's validation (including the Role=Other conditional free-text field), the rating-list
   rendering (row count, progress counter), submit validation (blocking Finish on incomplete
@@ -16,6 +16,11 @@ beyond `npm install`), one per page - 50 assertions total, living in `tests/`:
   itself is stubbed out since jsdom has no `<canvas>` 2D context, so only the surrounding
   DOM/aggregation logic is covered here - see the Playwright suite below for real chart
   rendering.
+- `tests/test_lifecycle.mjs` — lifecycle.html standalone: the wheel renders six wedges/arrows in
+  the right order, clicking one opens the popup for that phase (hash-linked), the listed
+  guidelines are sorted by relevance, and closing (close button or overlay click) clears it.
+  Click events are dispatched directly at the `<path>` elements here - see the Playwright suite
+  below for the real-hit-testing regression test this can't cover on its own.
 
 ```bash
 npm install
@@ -26,8 +31,11 @@ npm test
 
 `tests_e2e/` is a `pytest-playwright` suite that drives the site in a real browser instead of
 jsdom - the only way to actually verify the analysis screen's charts render (non-blank
-`<canvas>` pixels), and the only way to exercise a real file download (the "Download
-responses" button). It spins up its own static file server per test session (same as
+`<canvas>` pixels), the only way to exercise a real file download (the "Download responses"
+button), and the only way to catch real pointer-event hit-testing bugs (`test_lifecycle_page.py`
+is the regression test for the lifecycle wheel's label-intercepts-the-click bug - jsdom's
+synthetic `dispatchEvent` bypasses hit-testing entirely, so `test_lifecycle.mjs` alone couldn't
+have caught it). It spins up its own static file server per test session (same as
 `npm run serve`, just from Python), so nothing else needs to be running first.
 
 ```bash
