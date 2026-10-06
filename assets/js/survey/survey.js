@@ -6,14 +6,14 @@
  * themselves live in their own files (loaded before this one, since this
  * file's boot() call at the bottom is what actually starts the app):
  * respondent-info-form.js ("About you"), rating-row.js + rating-list.js
- * (the 25-guideline list). h/html/preactRender/useState/useRef are globals
+ * (the sampled-guideline list). h/html/preactRender/useState/useRef are globals
  * from common.js/preact - see that file for the synchronous-rendering setup
  * shared by this page and analysis.js.
  */
 
 /* ---------- Config ---------- */
 
-const SAMPLE_SIZE = 25;
+const SAMPLE_SIZE = 10;
 
 // Set this to your deployed Google Apps Script Web App URL to go live.
 // While null, the app runs in test mode: responses are shown on-screen and

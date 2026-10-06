@@ -4,7 +4,7 @@ buttons/inputs instead of dispatching synthetic DOM events.
 """
 import json
 
-SAMPLE_SIZE = 25
+SAMPLE_SIZE = 10
 
 
 def check(page, name, value):
@@ -41,7 +41,7 @@ def finish_rating(page, row_count=SAMPLE_SIZE):
 
 
 def complete_survey(page, base_url, **respondent_kwargs):
-    """Drives the full flow (Start -> About you -> 25 rows -> Finish) and returns
+    """Drives the full flow (Start -> About you -> 10 rows -> Finish) and returns
     the parsed test-mode payload shown on the Thank-you screen."""
     start_survey(page, base_url)
     fill_about_you(page, **respondent_kwargs)

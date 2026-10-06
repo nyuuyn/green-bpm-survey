@@ -142,7 +142,7 @@ authoritative regardless of who gave it. It's stored once per session (in the pa
 Then it shows all sampled guidelines as a collapsible list, one row per guideline (`RatingRow`).
 Picking a Relevance score expands that row's remaining fields; rows can be worked in any order and
 stay visibly marked (✓ complete / ! invalid after a blocked submit) so progress is legible without
-paging through 25 separate screens. Each row collects:
+paging through 10 separate screens. Each row collects:
 
 - **BPM Relevance** (0–3)
 - **BPM Scope** — multi-select, since many guidelines act on more than one layer

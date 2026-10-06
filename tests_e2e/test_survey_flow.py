@@ -58,15 +58,15 @@ def test_about_you_validation(page, base_url):
     role_other.fill("Sustainability Officer")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("h1")).to_have_text("Rate each guideline")
-    expect(page.locator(".rating-row")).to_have_count(25)
-    expect(page.locator("#progressLabel")).to_have_text("0 / 25")
+    expect(page.locator(".rating-row")).to_have_count(10)
+    expect(page.locator("#progressLabel")).to_have_text("0 / 10")
 
 
 def test_finish_blocked_when_rows_incomplete(page, base_url):
     start_survey(page, base_url)
     fill_about_you(page)
     page.get_by_role("button", name="Finish").click()
-    expect(page.locator(".error-text")).to_contain_text("25 guideline")
+    expect(page.locator(".error-text")).to_contain_text("10 guideline")
     expect(page.locator("h1")).to_have_text("Rate each guideline")
 
 
@@ -128,7 +128,7 @@ def test_full_submission_payload_shape(page, base_url):
     )
 
     expect(page.locator(".test-mode-note")).to_be_visible()
-    assert len(payload["responses"]) == 25
+    assert len(payload["responses"]) == 10
     assert payload["sessionId"] and payload["submittedAt"]
     assert payload["respondent"]["BPM Experience"] == "Practitioner, 5+ years"
     assert all("ID" in r for r in payload["responses"])
@@ -183,4 +183,4 @@ def test_download_button_produces_a_real_file(page, base_url):
     path = download.path()
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
-    assert len(data["responses"]) == 25
+    assert len(data["responses"]) == 10

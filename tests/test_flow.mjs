@@ -124,14 +124,14 @@ async function main() {
   log("Re-submitting the edited form returns to the rating list", !!h1 && h1.textContent === "Rate each guideline", h1 && h1.textContent);
 
   const rows = doc.querySelectorAll(".rating-row");
-  log("All 25 guidelines rendered as rows", rows.length === 25, `got ${rows.length}`);
-  log("Progress starts at 0 / 25", progressLabel() === "0 / 25", progressLabel());
+  log("All 10 guidelines rendered as rows", rows.length === 10, `got ${rows.length}`);
+  log("Progress starts at 0 / 10", progressLabel() === "0 / 10", progressLabel());
   log("No Keywords field present", !doc.querySelector('input[name="keywords"]'));
 
   // 2. Clicking Finish with nothing filled should block with an error, not advance.
   submit();
   await sleep(20);
-  log("Empty Finish blocked with error", doc.querySelector(".error-text").textContent.includes("25 guideline"));
+  log("Empty Finish blocked with error", doc.querySelector(".error-text").textContent.includes("10 guideline"));
   log("Still on the rating list after a blocked Finish", doc.querySelector("h1").textContent === "Rate each guideline");
 
   // 3. Row 0: BPM Scope is multi-select - checking two scope boxes should both stay checked,
@@ -150,7 +150,7 @@ async function main() {
   check("lifecycle-0", "Design");
   const row0 = doc.querySelector('.rating-row[data-index="0"]');
   log("Row 0 marked complete once all fields are set", row0.classList.contains("complete"));
-  log("Progress shows 1 / 25 after completing row 0", progressLabel() === "1 / 25", progressLabel());
+  log("Progress shows 1 / 10 after completing row 0", progressLabel() === "1 / 10", progressLabel());
 
   // 4. Row 1: Relevance=0 means there's nothing left to classify - Scope, Generic, and
   //    Lifecycle all get disabled and cleared (mirroring the existing Generic-at-0 behavior),
@@ -165,7 +165,7 @@ async function main() {
     !doc.querySelector('input[name="generic-1"]:checked') &&
     !doc.querySelector('input[name="lifecycle-1"]:checked'));
   log("Row 1 marked complete immediately at Relevance=0", row1.classList.contains("complete"));
-  log("Progress shows 2 / 25 after Relevance=0 alone completes row 1", progressLabel() === "2 / 25", progressLabel());
+  log("Progress shows 2 / 10 after Relevance=0 alone completes row 1", progressLabel() === "2 / 10", progressLabel());
 
   // 5. Row 2: switching Relevance away from 0 re-enables Scope, Generic, and Lifecycle together.
   check("relevance-2", "0");
@@ -202,7 +202,7 @@ async function main() {
 
   // 8. Fill every remaining row with a default valid answer.
   for (let i = 3; i < rows.length; i++) fillDefault(i);
-  log("Progress shows 25 / 25 once every row is answered", progressLabel() === "25 / 25", progressLabel());
+  log("Progress shows 10 / 10 once every row is answered", progressLabel() === "10 / 10", progressLabel());
 
   // 9. Finish -> completion screen.
   submit();
@@ -214,7 +214,7 @@ async function main() {
 
   const pre = doc.querySelector("pre.summary-box");
   const parsed = JSON.parse(pre.textContent);
-  log("Final payload has 25 responses", parsed.responses.length === 25, `got ${parsed.responses.length}`);
+  log("Final payload has 10 responses", parsed.responses.length === 10, `got ${parsed.responses.length}`);
   log("Payload has sessionId and submittedAt", !!parsed.sessionId && !!parsed.submittedAt);
   log("Payload has respondent info with the values entered", !!parsed.respondent
     && parsed.respondent["BPM Experience"] === "Practitioner, 5+ years"
