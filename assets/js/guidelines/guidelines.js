@@ -115,8 +115,8 @@ function buildPage() {
         el("a", { class: "ref-link", href: "analysis.html" }, "analysis page"),
         ".",
       ]),
+      el("div", { class: "guidelines-card" }, [wheelEl]),
     ]),
-    el("div", { class: "card guidelines-card" }, [wheelEl]),
     popupEl
   );
 
