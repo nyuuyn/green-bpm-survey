@@ -1,9 +1,9 @@
 "use strict";
 
-/* ---------- Lifecycle page: the per-phase popup ----------
- * Rendered into a stable wrapper div (lifecycle.js's popupEl) whenever
+/* ---------- Guidelines page: the per-phase popup ----------
+ * Rendered into a stable wrapper div (guidelines.js's popupEl) whenever
  * location.hash names a valid phase - closing (overlay click, close button,
- * or Escape - wired up in lifecycle.js) clears the hash rather than toggling
+ * or Escape - wired up in guidelines.js) clears the hash rather than toggling
  * local component state, so an open popup is itself linkable/shareable the
  * same way a single analysis round already is (see analysis.js).
  */

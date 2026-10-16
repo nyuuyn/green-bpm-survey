@@ -1,13 +1,13 @@
-// Headless functional test of lifecycle.js using jsdom. Independent of the
-// survey/analysis flows - lifecycle.html is its own standalone page.
+// Headless functional test of guidelines.js using jsdom. Independent of the
+// survey/analysis flows - guidelines.html is its own standalone page.
 import { JSDOM } from "jsdom";
 import fs from "node:fs";
 import { startServer, sleep } from "./test_server.mjs";
 
 const { base: BASE, close } = await startServer();
 
-const dom = new JSDOM(fs.readFileSync("lifecycle.html", "utf-8"), {
-  url: `${BASE}/lifecycle.html`,
+const dom = new JSDOM(fs.readFileSync("guidelines.html", "utf-8"), {
+  url: `${BASE}/guidelines.html`,
   runScripts: "outside-only",
   resources: "usable",
 });
@@ -22,9 +22,9 @@ dom.window.eval([
   fs.readFileSync("assets/js/vendor/htm.umd.js", "utf-8"),
   fs.readFileSync("assets/js/common.js", "utf-8"),
   fs.readFileSync("assets/js/analysis/palette.js", "utf-8"),
-  fs.readFileSync("assets/js/lifecycle/wheel.js", "utf-8"),
-  fs.readFileSync("assets/js/lifecycle/guideline-popup.js", "utf-8"),
-  fs.readFileSync("assets/js/lifecycle/lifecycle.js", "utf-8"),
+  fs.readFileSync("assets/js/guidelines/wheel.js", "utf-8"),
+  fs.readFileSync("assets/js/guidelines/guideline-popup.js", "utf-8"),
+  fs.readFileSync("assets/js/guidelines/guidelines.js", "utf-8"),
 ].join("\n"));
 
 let failures = 0;
@@ -48,18 +48,18 @@ async function main() {
   await sleep(300); // allow fetch(data.json + 3x analysis_<round>.json) + first render to settle
 
   const h1 = doc.querySelector("h1");
-  log("Lifecycle page heading present", !!h1 && h1.textContent.includes("lifecycle"), h1 && h1.textContent);
+  log("Guidelines page heading present", !!h1 && h1.textContent.includes("lifecycle"), h1 && h1.textContent);
 
-  const svg = doc.querySelector("svg.lifecycle-wheel");
+  const svg = doc.querySelector("svg.guidelines-wheel");
   log("Wheel SVG is mounted", !!svg);
 
-  const wedges = doc.querySelectorAll("path.lifecycle-wedge");
+  const wedges = doc.querySelectorAll("path.guidelines-wedge");
   log("Six wedges, one per lifecycle phase", wedges.length === 6, `got ${wedges.length}`);
 
-  const labels = [...doc.querySelectorAll(".lifecycle-wedge-label")].map((n) => n.textContent);
+  const labels = [...doc.querySelectorAll(".guidelines-wedge-label")].map((n) => n.textContent);
   log("Wedge labels match LIFECYCLE_OPTIONS in order", JSON.stringify(labels) === JSON.stringify(PHASES), labels.join(", "));
 
-  const popupRoot = doc.getElementById("lifecycle-popup-root");
+  const popupRoot = doc.getElementById("guidelines-popup-root");
   log("Popup starts hidden", popupRoot.hidden === true);
   log("No popup-card in the document yet", !doc.querySelector(".popup-card"));
 
@@ -114,7 +114,7 @@ async function main() {
 
   const brandLink = doc.querySelector("a.brand");
   log("Brand link in the header goes to index.html", !!brandLink && brandLink.getAttribute("href") === "index.html");
-  log('Breadcrumb shows "Lifecycle" as the current page', doc.querySelector(".crumb-current")?.textContent === "Lifecycle");
+  log('Breadcrumb shows "Guidelines" as the current page', doc.querySelector(".crumb-current")?.textContent === "Guidelines");
 
   console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);
   if (failures > 0) process.exitCode = 1;

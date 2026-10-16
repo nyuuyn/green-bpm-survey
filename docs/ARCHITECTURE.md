@@ -9,8 +9,8 @@ filenames are given without that prefix here for brevity.
   first (shared links, GitHub Pages root).
 - **`survey.html`** — the rating flow, built from `assets/js/survey/`.
 - **`analysis.html`** — the charts, built from `assets/js/analysis/`.
-- **`lifecycle.html`** — a clickable BPM-lifecycle wheel, built from `assets/js/lifecycle/`. See
-  "The lifecycle page" below.
+- **`guidelines.html`** — a clickable BPM-lifecycle wheel, built from `assets/js/guidelines/`. See
+  "The guidelines page" below.
 
 ## Preact + htm, no build step
 
@@ -98,10 +98,10 @@ assets/js/
     analysis.js               controller: ANALYSIS_ROUNDS, round/source caching, tab state, hash
                                routing, the TabBar component, and buildPage() (loaded last)
 
-  lifecycle/
-    wheel.js                 LifecycleWheel component - the six-phase inline SVG donut
+  guidelines/
+    wheel.js                 GuidelinesWheel component - the six-phase inline SVG ring
     guideline-popup.js       GuidelinePopup component - the per-phase guideline list
-    lifecycle.js              controller: fetches+joins data.json with all three
+    guidelines.js             controller: fetches+joins data.json with all three
                                analysis_<round>.json files, hash routing (selected phase), and
                                buildPage() (loaded last)
 ```
@@ -170,25 +170,30 @@ Row state (`answers`/`expandedRows`/`invalidRows`) is lifted into the `RatingLis
 (standard Preact/React "parent owns the list, child reports changes via a callback" pattern) -
 `RatingRow` itself holds no state of its own.
 
-## The lifecycle page
+## The guidelines page
 
-`lifecycle.html` distills the per-guideline BPM Lifecycle tagging into one view: a six-phase
+`guidelines.html` distills the per-guideline BPM Lifecycle tagging into one view: a six-phase
 wheel (`LIFECYCLE_OPTIONS`, in order) that doubles as navigation. Clicking a phase opens a popup
 listing the guidelines rated most relevant to it.
 
 It's drawn as a hand-rolled inline SVG ring rather than a Chart.js doughnut - a chart library's
-doughnut can't give each segment its own arrowhead, and per-wedge click/keyboard handling is
-simpler on a plain `<path>` than on a canvas chart. `wheelChevronPath()` in `wheel.js` isn't a
-guessed shape - its proportions (band thickness, taper angle) were measured off a reference
-circular-chevron graphic by ray-casting its pixels in polar coordinates, which showed each
-segment is a plain straight radial edge at its start (`lo`) and a symmetric taper to a point at
-its end (`hi`, within the band - not beyond the outer edge or past the inner hole). The "opening"
-look at a segment's start isn't its own notch - it's empty background next to the *previous*
-segment's own tapered tip (including Optimization's tip sitting next to Design's straight edge,
-closing the loop), which is also why there's no separate arrow glyph needed between segments.
+doughnut can't gap+shadow each segment independently the way `wheelSectorPath()` in `wheel.js`
+does, and per-wedge click/keyboard handling is simpler on a plain `<path>` than on a canvas
+chart. That path isn't a guessed shape - its proportions (band thickness, gap width, corner
+kink) were reverse-measured from a reference circular-chevron graphic
+(`examples/chevron_cycle.svg`) by parsing its path coordinates directly. Two things worth
+knowing if you touch this: every corner is a 2-segment kinked line (not a straight radial cut)
+that bulges a fixed number of degrees clockwise at mid-radius - skip that kink and the wheel
+reads as flat pie wedges instead of chevrons; and the gap between segments is a constant *arc
+length* (`wheelGapInsetDeg()`), not a constant angle - a fixed angular gap looks narrower at the
+inner radius than the outer radius purely because arc length shrinks with radius, so each
+boundary needs its own radius-dependent inset to stay visually parallel end to end. Each wedge's
+label is positioned at its shape's actual polygon centroid (`wheelLabelAnchor()`), not the naive
+mid-angle/mid-radius point, since the kink makes the two asymmetric.
+
 Each wedge is a real `role="button"` with `tabindex`, since SVG shapes aren't natively
 focusable/activatable the way an `<a>` or `<button>` is. The wedge's label `<text>` sits visually
-on top of its `<path>` - `pointer-events: none` on that class (`lifecycle.css`) keeps clicks
+on top of its `<path>` - `pointer-events: none` on that class (`guidelines.css`) keeps clicks
 landing on the wedge underneath rather than the text; a real browser needs this (jsdom's
 synthetic `dispatchEvent` doesn't hit-test, so the unit test alone wouldn't have caught it missing
 - the Playwright suite does).
@@ -205,7 +210,7 @@ how it tagged lifecycle.
 `generated/analysis_<round>.json` (ratings: relevance/lifecycle, no guideline text) and
 `generated/data.json` (guideline text, no ratings) are otherwise never joined by any existing
 code (see `data/generate_data.py`) - `mergeRoundRecords()`/`topGuidelinesForPhase()` in
-`lifecycle.js` are that join, scoped to just this page.
+`guidelines.js` are that join, scoped to just this page.
 
 The open phase is linked via `location.hash` (e.g. `#Design`), the same pattern the analysis
 page uses for its selected rounds - so a specific phase's popup is directly shareable, and

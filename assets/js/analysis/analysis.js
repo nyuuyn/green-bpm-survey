@@ -275,7 +275,7 @@ function buildPage() {
         "Consulting and eventually a public survey. Select one tab to see that round on its own, " +
         "or select two or more to compare them directly. Or see the guidelines organized by " +
         "BPM lifecycle phase on the ",
-        el("a", { class: "ref-link", href: "lifecycle.html" }, "lifecycle guide"),
+        el("a", { class: "ref-link", href: "guidelines.html" }, "guidelines page"),
         ".",
       ]),
       introChartGridEl,

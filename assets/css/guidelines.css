@@ -1,32 +1,33 @@
-.lifecycle-intro { margin-bottom: 16px; }
-.lifecycle-intro h1 { margin-bottom: 12px; }
-.lifecycle-intro .intro-lead { margin-bottom: 0; }
+.guidelines-intro { margin-bottom: 16px; }
+.guidelines-intro h1 { margin-bottom: 12px; }
+.guidelines-intro .intro-lead { margin-bottom: 0; }
 
-.lifecycle-card { display: flex; justify-content: center; }
+.guidelines-card { display: flex; justify-content: center; }
 
-.lifecycle-wheel-wrap {
+.guidelines-wheel-wrap {
   width: 100%;
   max-width: 420px;
 }
 
-.lifecycle-wheel {
+.guidelines-wheel {
   width: 100%;
   height: auto;
   display: block;
 }
 
-.lifecycle-wedge {
+.guidelines-wedge {
   cursor: pointer;
   stroke: var(--surface);
   stroke-width: 2;
   outline: none;
+  filter: url(#guidelines-wedge-shadow);
   transition: opacity 0.15s ease, stroke-width 0.15s ease;
 }
 
-.lifecycle-wedge:hover { opacity: 0.85; }
+.guidelines-wedge:hover { opacity: 0.85; }
 
-.lifecycle-wedge:focus-visible,
-.lifecycle-wedge.active {
+.guidelines-wedge:focus-visible,
+.guidelines-wedge.active {
   stroke: var(--text);
   stroke-width: 3;
 }
@@ -34,19 +35,20 @@
 /* The label sits visually on top of its wedge's <path> - without this,
    clicking near a label (dead center of most wedges) would hit the text
    node instead of the path underneath it, which has no click handler. */
-.lifecycle-wedge-label {
+.guidelines-wedge-label {
   pointer-events: none;
   font-size: 12px;
   font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
 }
 
-.lifecycle-center-title {
+.guidelines-center-title {
   font-size: 15px;
   font-weight: 700;
   fill: var(--text);
 }
 
-.lifecycle-center-sub {
+.guidelines-center-sub {
   font-size: 12px;
   fill: var(--text-muted);
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-/* ---------- Lifecycle page ----------
+/* ---------- Guidelines page ----------
  * Distills the survey's per-guideline BPM Lifecycle tagging into one view: a
  * six-phase wheel (LIFECYCLE_OPTIONS, in common.js) that doubles as
  * navigation - clicking a phase opens a popup of the guidelines rated most
@@ -25,7 +25,7 @@
  * just this page.
  */
 
-const LIFECYCLE_ROUND_FILES = [
+const GUIDELINES_ROUND_FILES = [
   "generated/analysis_claude.json",
   "generated/analysis_sustainability.json",
   "generated/analysis_bpm.json",
@@ -79,7 +79,7 @@ function closePopup() {
 
 function render() {
   const activePhase = phaseFromHash();
-  preactRender(html`<${LifecycleWheel} activePhase=${activePhase} onSelect=${selectPhase} />`, wheelEl);
+  preactRender(html`<${GuidelinesWheel} activePhase=${activePhase} onSelect=${selectPhase} />`, wheelEl);
 
   if (activePhase && merged) {
     const items = topGuidelinesForPhase(activePhase, merged, guidelinesById);
@@ -94,19 +94,19 @@ function render() {
 async function loadData() {
   const [guidelines, ...roundRecordSets] = await Promise.all([
     fetchJSON("generated/data.json"),
-    ...LIFECYCLE_ROUND_FILES.map((file) => fetchJSON(file)),
+    ...GUIDELINES_ROUND_FILES.map((file) => fetchJSON(file)),
   ]);
   guidelinesById = new Map(guidelines.map((g) => [g.id, g]));
   merged = mergeRoundRecords(roundRecordSets);
 }
 
 function buildPage() {
-  wheelEl = el("div", { class: "lifecycle-wheel-wrap" });
-  popupEl = el("div", { id: "lifecycle-popup-root" });
+  wheelEl = el("div", { class: "guidelines-wheel-wrap" });
+  popupEl = el("div", { id: "guidelines-popup-root" });
   popupEl.hidden = true;
 
   renderApp(
-    el("div", { class: "card lifecycle-intro" }, [
+    el("div", { class: "card guidelines-intro" }, [
       el("h1", {}, "Where in the BPM lifecycle do these guidelines apply?"),
       el("p", { class: "intro-lead" }, [
         "Each phase below is one stage of the BPM lifecycle. Click a phase to see the " +
@@ -116,7 +116,7 @@ function buildPage() {
         ".",
       ]),
     ]),
-    el("div", { class: "card lifecycle-card" }, [wheelEl]),
+    el("div", { class: "card guidelines-card" }, [wheelEl]),
     popupEl
   );
 
