@@ -128,6 +128,7 @@ function wheelLabelAnchor(lo, hi) {
 function GuidelinesWheel({ activePhase, onSelect }) {
   const n = LIFECYCLE_OPTIONS.length;
   const step = 360 / n;
+  const rotation = -step / 2; // first phase centered at the top (12 o'clock), not starting there
   const ramp = greenRamp(isDarkMode(), n);
 
   const activate = (phase) => (e) => {
@@ -137,8 +138,8 @@ function GuidelinesWheel({ activePhase, onSelect }) {
   };
 
   const wedges = LIFECYCLE_OPTIONS.map((phase, i) => {
-    const lo = i * step;
-    const hi = (i + 1) * step;
+    const lo = i * step + rotation;
+    const hi = (i + 1) * step + rotation;
     const [lx, ly] = wheelLabelAnchor(lo, hi);
     const color = ramp[i];
     const isActive = activePhase === phase;
