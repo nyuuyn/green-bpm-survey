@@ -18,7 +18,11 @@ log("Landing page links to survey.html", !!surveyLink, surveyLink && surveyLink.
 const analysisLink = [...doc.querySelectorAll("a")].find((a) => a.getAttribute("href") === "analysis.html");
 log("Landing page links to analysis.html", !!analysisLink, analysisLink && analysisLink.textContent.trim());
 
-log("Both CTAs are styled as dominant buttons", !!surveyLink?.classList.contains("btn-hero") && !!analysisLink?.classList.contains("btn-hero"));
+const guidelinesLink = [...doc.querySelectorAll("a")].find((a) => a.getAttribute("href") === "guidelines.html");
+log("Landing page links to guidelines.html", !!guidelinesLink, guidelinesLink && guidelinesLink.textContent.trim());
+
+log("All three CTAs are styled as dominant buttons",
+  !!surveyLink?.classList.contains("btn-hero") && !!analysisLink?.classList.contains("btn-hero") && !!guidelinesLink?.classList.contains("btn-hero"));
 log("No <script> tags on the landing page (fully static)", doc.querySelectorAll("script").length === 0);
 
 console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);

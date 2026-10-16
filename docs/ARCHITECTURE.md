@@ -1,14 +1,16 @@
 # Frontend architecture
 
-Three static pages, no build step. The pages live at the repo root; every script and stylesheet
+Four static pages, no build step. The pages live at the repo root; every script and stylesheet
 below lives under `assets/js/` and `assets/css/` respectively (images under `assets/img/`) —
 filenames are given without that prefix here for brevity.
 
 - **`index.html`** — the landing page. Fully static (no JS): explains the project's goal and
-  guideline sources, and links to the other two pages. This is the page people should land on
+  guideline sources, and links to the other three pages. This is the page people should land on
   first (shared links, GitHub Pages root).
 - **`survey.html`** — the rating flow, built from `assets/js/survey/`.
 - **`analysis.html`** — the charts, built from `assets/js/analysis/`.
+- **`guidelines.html`** — a clickable BPM-lifecycle wheel, built from `assets/js/guidelines/`. See
+  "The guidelines page" below.
 
 ## Preact + htm, no build step
 
@@ -95,6 +97,13 @@ assets/js/
     source-panel.js          SourcePanelContent + SourceComparisonPanelContent - the source block
     analysis.js               controller: ANALYSIS_ROUNDS, round/source caching, tab state, hash
                                routing, the TabBar component, and buildPage() (loaded last)
+
+  guidelines/
+    wheel.js                 GuidelinesWheel component - the six-phase inline SVG ring
+    guideline-popup.js       GuidelinePopup component - the per-phase guideline list
+    guidelines.js             controller: fetches+joins data.json with all three
+                               analysis_<round>.json files, hash routing (selected phase), and
+                               buildPage() (loaded last)
 ```
 
 Every file in a page's folder calls into the others as plain globals - classic `<script>` tags,
@@ -160,6 +169,53 @@ other file).
 Row state (`answers`/`expandedRows`/`invalidRows`) is lifted into the `RatingList` component
 (standard Preact/React "parent owns the list, child reports changes via a callback" pattern) -
 `RatingRow` itself holds no state of its own.
+
+## The guidelines page
+
+`guidelines.html` distills the per-guideline BPM Lifecycle tagging into one view: a six-phase
+wheel (`LIFECYCLE_OPTIONS`, in order) that doubles as navigation. Clicking a phase opens a popup
+listing the guidelines rated most relevant to it.
+
+It's drawn as a hand-rolled inline SVG ring rather than a Chart.js doughnut - a chart library's
+doughnut can't gap+shadow each segment independently the way `wheelSectorPath()` in `wheel.js`
+does, and per-wedge click/keyboard handling is simpler on a plain `<path>` than on a canvas
+chart. That path isn't a guessed shape - its proportions (band thickness, gap width, corner
+kink) were reverse-measured from a reference circular-chevron graphic
+(`examples/chevron_cycle.svg`) by parsing its path coordinates directly. Two things worth
+knowing if you touch this: every corner is a 2-segment kinked line (not a straight radial cut)
+that bulges a fixed number of degrees clockwise at mid-radius - skip that kink and the wheel
+reads as flat pie wedges instead of chevrons; and the gap between segments is a constant *arc
+length* (`wheelGapInsetDeg()`), not a constant angle - a fixed angular gap looks narrower at the
+inner radius than the outer radius purely because arc length shrinks with radius, so each
+boundary needs its own radius-dependent inset to stay visually parallel end to end. Each wedge's
+label is positioned at its shape's actual polygon centroid (`wheelLabelAnchor()`), not the naive
+mid-angle/mid-radius point, since the kink makes the two asymmetric.
+
+Each wedge is a real `role="button"` with `tabindex`, since SVG shapes aren't natively
+focusable/activatable the way an `<a>` or `<button>` is. The wedge's label `<text>` sits visually
+on top of its `<path>` - `pointer-events: none` on that class (`guidelines.css`) keeps clicks
+landing on the wedge underneath rather than the text; a real browser needs this (jsdom's
+synthetic `dispatchEvent` doesn't hit-test, so the unit test alone wouldn't have caught it missing
+- the Playwright suite does).
+
+"Most relevant" is computed across all three AI rating rounds at once, rather than picking one,
+since no single round is meant to be read as final yet (see the analysis page's intro blurb).
+This page doesn't load `analysis.js`, so it keeps its own small round-file list rather than
+reusing `ANALYSIS_ROUNDS`. A guideline counts as touching a phase if **any** round tagged it with
+that phase (union, not intersection) - this page is about surfacing candidates per phase, not
+about rounds agreeing on the tag. Its relevance score is the mean of whichever rounds actually
+rated it (nulls excluded) - the one number every round rates on the same 0–3 scale regardless of
+how it tagged lifecycle.
+
+`generated/analysis_<round>.json` (ratings: relevance/lifecycle, no guideline text) and
+`generated/data.json` (guideline text, no ratings) are otherwise never joined by any existing
+code (see `data/generate_data.py`) - `mergeRoundRecords()`/`topGuidelinesForPhase()` in
+`guidelines.js` are that join, scoped to just this page.
+
+The open phase is linked via `location.hash` (e.g. `#Design`), the same pattern the analysis
+page uses for its selected rounds - so a specific phase's popup is directly shareable, and
+closing it (overlay click, the close button, or Escape) just clears the hash rather than
+toggling local component state.
 
 ## Test mode
 

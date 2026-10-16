@@ -129,6 +129,12 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
   text-align: center;
 }
 
+/* Forces a CTA onto its own row below the others, regardless of how much
+   horizontal space .hero-cta has (flex-wrap alone only wraps once the row
+   actually runs out of room) - used for a secondary CTA that shouldn't
+   compete for top billing with the primary pair above it. */
+.btn-hero-full { flex-basis: 100%; }
+
 .intro-sources { margin-bottom: 24px; }
 .intro-sources-label { font-size: 13px; color: var(--text-muted); margin: 0 0 6px; }
 .source-list {
