@@ -72,11 +72,22 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   width: 100%;
-  max-width: 480px;
+  max-width: 980px;
   max-height: 85vh;
   overflow-y: auto;
   padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
+
+.popup-card::-webkit-scrollbar { width: 10px; }
+.popup-card::-webkit-scrollbar-track { background: transparent; }
+.popup-card::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 999px;
+  border: 2px solid var(--surface);
+}
+.popup-card::-webkit-scrollbar-thumb:hover { background-color: var(--text-muted); }
 
 .popup-header {
   display: flex;
@@ -97,20 +108,25 @@
 }
 .popup-close:hover { color: var(--text); }
 
+/* auto-fit + minmax, not a fixed column count behind a breakpoint: the
+   number of columns (1 on a narrow popup, up to 3 on a wide one) falls out
+   of how much width is actually available, no media query needed. Fewer
+   rows means less height, which is the whole point - fitting all 6
+   guidelines without the card needing to scroll. */
 .popup-guideline-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 14px;
 }
 
 .popup-guideline {
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
 }
-.popup-guideline:last-child { border-bottom: none; padding-bottom: 0; }
 
 .popup-guideline-head {
   display: flex;
