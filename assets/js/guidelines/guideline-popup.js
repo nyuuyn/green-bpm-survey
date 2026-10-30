@@ -29,8 +29,11 @@ function GuidelinePopup({ phase, items, onClose }) {
               ${items.map((item) => html`
                 <li class="popup-guideline" key=${item.id}>
                   <div class="popup-guideline-head">
+                    <div class="popup-guideline-tags">
+                      <span class="badge">${item.guideline.sourceLabel}</span>
+                      <span class="popup-guideline-score" title="Average BPM Relevance across AI rating rounds (0–3)">${item.avgRelevance.toFixed(1)}</span>
+                    </div>
                     <span class="popup-guideline-name">${item.guideline.name}</span>
-                    <span class="popup-guideline-score" title="Average BPM Relevance across AI rating rounds (0–3)">${item.avgRelevance.toFixed(1)}</span>
                   </div>
                   <p class="popup-guideline-text">${item.guideline.guideline}</p>
                   <a class="ref-link" href=${item.guideline.reference} target="_blank" rel="noopener">${item.guideline.sourceLabel} ↗</a>

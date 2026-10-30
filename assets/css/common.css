@@ -87,6 +87,25 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
 }
 .ref-link:hover { text-decoration: underline; }
 
+.badge {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 8px;
+  /* A fixed (not 999px/capsule) radius: a two-line badge - the rare very
+     long source name that doesn't fit even a widened card on one line -
+     then reads as a normal rounded tag instead of the lopsided shape a
+     capsule radius produces once its box is taller than it is wide. */
+  border-radius: 12px;
+  line-height: 1.3;
+}
+
 .intro-lead { color: var(--text-muted); margin-bottom: 18px; }
 
 /* ---------- Landing page ---------- */
