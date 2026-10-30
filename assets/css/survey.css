@@ -1,3 +1,24 @@
+/* ---------- Card header/footer dividers ----------
+ * Mirrors the header/footer line treatment used for guideline cards
+ * (guidelines.css) and chart cards (analysis.css): a line under the
+ * title block, and one above the trailing action row. Scoped to the
+ * screen's own h1+intro-lead header and its last .btn-row so it never
+ * catches a mid-content row like the completion screen's download/
+ * restart buttons. */
+
+body.survey-page .card > h1 + .intro-lead {
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+body.survey-page .card > form > .btn-row:last-child,
+body.survey-page .card > .btn-row:last-child {
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
 /* ---------- Progress bar ---------- */
 
 .progress-label { color: var(--text-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
@@ -20,18 +41,6 @@
 /* ---------- Badges ---------- */
 
 .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-
-.badge {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: var(--accent);
-  background: var(--accent-soft);
-  padding: 3px 8px;
-  border-radius: 999px;
-}
 
 /* ---------- Form fields ---------- */
 
@@ -196,11 +205,14 @@ textarea:focus, input[type="text"]:focus {
 .rating-row.invalid .row-status::before { content: "!"; color: var(--danger); font-weight: 700; }
 
 .rating-row-label {
+  display: block;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--text-muted);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
 }
 
 .rating-row-guideline { font-weight: 500; line-height: 1.4; margin: 2px 0 0; }

@@ -56,13 +56,20 @@
 
 .chart-desc { color: var(--text-muted); font-size: 12.5px; margin: 0 0 12px; }
 
-.chart-wrap { position: relative; height: 220px; }
+.chart-wrap {
+  position: relative;
+  height: 220px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
 
 .chart-legend {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 16px;
   margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
 }
 
 .legend-item {
