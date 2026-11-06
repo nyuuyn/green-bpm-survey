@@ -1,7 +1,8 @@
 # Tests
 
-Four headless functional tests (jsdom + a self-hosted static server, no external dependencies
-beyond `npm install`), one per page, living in `tests/`:
+Five headless functional tests (jsdom + a self-hosted static server, no external dependencies
+beyond `npm install`), living in `tests/` - one per page, plus a standalone one for the
+color system:
 
 - `tests/test_landing.mjs` — index.html is static, so this just parses the markup: all three CTAs
   link to the right page and are styled prominently, no `<script>` tags.
@@ -21,11 +22,29 @@ beyond `npm install`), one per page, living in `tests/`:
   guidelines are sorted by relevance, and closing (close button or overlay click) clears it.
   Click events are dispatched directly at the `<path>` elements here - see the Playwright suite
   below for the real-hit-testing regression test this can't cover on its own.
+- `tests/test_palette.mjs` — `assets/js/analysis/palette.js` in isolation (no chart/page scaffolding
+  needed): both branches of `isDarkMode()`/`chartPalette()`/`greenRamp()` (the other suites only
+  ever run in jsdom's default no-`matchMedia` light mode, so dark mode was previously untested
+  everywhere) and both sides of `readableTextOn()`'s luminance threshold.
 
 ```bash
 npm install
 npm test
 ```
+
+### Coverage
+
+```bash
+npm run coverage   # c8, gated at 80% lines/branches/functions/statements, scoped to assets/js/**
+```
+
+The four page suites load each script as its own `vm.Script` (see `runPageScripts()` in
+`tests/test_server.mjs`) rather than `window.eval()`-ing one concatenated string, specifically so
+c8/V8 coverage can attribute executed code back to the real file - `window.eval()` runs as an
+isolated "Eval" per the spec, which coverage tooling can't map to a source path; `vm.Script` in
+the jsdom window's own context runs as a "Script" instead (the same goal a classic `<script>` tag
+uses), which both fixes attribution and - as a side effect - is what makes top-level `let`/`const`/
+`class` visible across files in the first place, the same as in a real browser.
 
 ## End-to-end tests (Playwright)
 
@@ -52,6 +71,27 @@ on every push/PR to `main`; `.github/workflows/deploy.yml` only deploys after th
 succeeds on a push to `main` (see its file for why deploy is a separate workflow rather than a
 job in `test.yml`: cross-workflow `needs` isn't a thing in GitHub Actions, so it listens for
 the Test workflow's completion via `workflow_run` instead).
+
+## Data pipeline unit tests (pytest)
+
+`data/tests/` unit-tests `data/generate_data.py` and `data/validate_survey.py` directly - CI's
+"Data pipeline" job only ever runs those scripts against the real (already-valid) data and diffs
+the output, which proves the checked-in `generated/*.json` is fresh but never exercises an error
+path. These tests monkeypatch each module's path/table globals (`GUIDELINES_DIR`, `SOURCES`, ...)
+to point at small fixture CSVs under `tmp_path` instead, so every rule from `SURVEY_SCHEMA.md` -
+the Generic-blank-at-Relevance-0 rule, the Not-Applicable-must-be-alone rule, single- vs.
+multi-mode duplicate handling, coverage reporting, etc. - gets a test that actually breaks it, not
+just one that round-trips already-valid data.
+
+Collected by the same `pytest` invocation as the Playwright suite above (`pytest.ini` lists both
+`tests_e2e` and `data/tests`, plus `pythonpath = data` so the tests can `import generate_data` /
+`import validate_survey` directly) - run `pytest data/tests` instead of bare `pytest` to run just
+this half, when you want it fast and without a browser.
+
+```bash
+pip install -r tests_e2e/requirements.txt   # pytest-cov is included
+npm run coverage:py   # pytest + coverage.py, gated at 80% lines/branches, scoped to data/*.py
+```
 
 ## Running locally
 

@@ -1,4 +1,6 @@
 node_modules/
+coverage/
+.coverage
 
 # Playwright e2e suite (tests_e2e/)
 .venv/

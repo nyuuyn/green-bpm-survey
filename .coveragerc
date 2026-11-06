@@ -1,0 +1,8 @@
+[run]
+source = data
+omit = data/tests/*
+branch = True
+
+[report]
+exclude_also =
+    if __name__ == .__main__.:

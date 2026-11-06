@@ -2,7 +2,7 @@
 // survey/analysis flows - guidelines.html is its own standalone page.
 import { JSDOM } from "jsdom";
 import fs from "node:fs";
-import { startServer, sleep } from "./test_server.mjs";
+import { startServer, sleep, runPageScripts } from "./test_server.mjs";
 
 const { base: BASE, close } = await startServer();
 
@@ -15,19 +15,18 @@ const dom = new JSDOM(fs.readFileSync("guidelines.html", "utf-8"), {
 const { window } = dom;
 window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 
-// See test_flow.mjs for why these must be eval'd together in one call.
-dom.window.eval(
-  [
-    fs.readFileSync("assets/js/vendor/preact.min.js", "utf-8"),
-    fs.readFileSync("assets/js/vendor/preact-hooks.umd.js", "utf-8"),
-    fs.readFileSync("assets/js/vendor/htm.umd.js", "utf-8"),
-    fs.readFileSync("assets/js/common.js", "utf-8"),
-    fs.readFileSync("assets/js/analysis/palette.js", "utf-8"),
-    fs.readFileSync("assets/js/guidelines/wheel.js", "utf-8"),
-    fs.readFileSync("assets/js/guidelines/guideline-popup.js", "utf-8"),
-    fs.readFileSync("assets/js/guidelines/guidelines.js", "utf-8"),
-  ].join("\n"),
-);
+// See test_server.mjs's runPageScripts for why each file runs as its own
+// vm.Script instead of being eval'd together as one concatenated string.
+runPageScripts(dom, [
+  "assets/js/vendor/preact.min.js",
+  "assets/js/vendor/preact-hooks.umd.js",
+  "assets/js/vendor/htm.umd.js",
+  "assets/js/common.js",
+  "assets/js/analysis/palette.js",
+  "assets/js/guidelines/wheel.js",
+  "assets/js/guidelines/guideline-popup.js",
+  "assets/js/guidelines/guidelines.js",
+]);
 
 let failures = 0;
 function log(label, ok, extra = "") {
