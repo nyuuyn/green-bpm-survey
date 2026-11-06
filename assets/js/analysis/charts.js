@@ -353,7 +353,7 @@ function mountGenericShareChart(canvasId, records, pal) {
 
 // "Guidelines collected per source" is a fact about the guideline corpus
 // (data.json), not about any round's ratings - every analysis_<round>.json
-// would report the exact same counts, since every round rates the same 448
+// would report the exact same counts, since every round rates the same 443
 // guidelines. So it isn't part of any round panel or the comparison panel;
 // it's mounted once, here, into the intro card, fetched straight from
 // data.json rather than piggybacking on whichever round happens to load

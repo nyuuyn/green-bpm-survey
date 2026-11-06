@@ -2,7 +2,7 @@
 
 /* ---------- Analysis page ----------
  * The Green BPM Guideline is being distilled through multiple survey rounds:
- * three AI-generated passes today (Claude rating the same 448 guidelines
+ * three AI-generated passes today (Claude rating the same 443 guidelines
  * under a general / sustainability-expert / BPM-expert framing - test data
  * exploring how much persona shifts relevance judgments), then an internal
  * expert survey (envite Consulting - BPM, architecture, and sustainability
@@ -45,21 +45,21 @@ const ANALYSIS_ROUNDS = [
     label: "AI (General)",
     file: "generated/analysis_claude.json",
     blurb:
-      "An AI-generated preliminary pass with no persona framing: Claude rated all 448 guidelines across 10 sources for BPM relevance, ahead of the human rounds below.",
+      "An AI-generated preliminary pass with no persona framing: Claude rated all 443 guidelines across 10 sources for BPM relevance, ahead of the human rounds below.",
   },
   {
     id: "sustainability",
     label: "AI (Sustainability Expert)",
     file: "generated/analysis_sustainability.json",
     blurb:
-      "Same 448 guidelines, rated by Claude framed as a sustainability/green-IT expert with only lay BPM exposure - test data exploring how a sustainability-first lens shifts relevance judgments, ahead of a real expert survey.",
+      "Same 443 guidelines, rated by Claude framed as a sustainability/green-IT expert with only lay BPM exposure - test data exploring how a sustainability-first lens shifts relevance judgments, ahead of a real expert survey.",
   },
   {
     id: "bpm",
     label: "AI (BPM Expert)",
     file: "generated/analysis_bpm.json",
     blurb:
-      "Same 448 guidelines, rated by Claude framed as a BPM expert with only lay sustainability exposure - test data exploring how a process-first lens shifts relevance judgments, ahead of a real expert survey.",
+      "Same 443 guidelines, rated by Claude framed as a BPM expert with only lay sustainability exposure - test data exploring how a process-first lens shifts relevance judgments, ahead of a real expert survey.",
   },
   // Next: an internal expert survey with envite Consulting (BPM, architecture,
   // and sustainability practitioners), then a public survey.
@@ -332,7 +332,7 @@ function buildPage() {
       el("h1", {}, "How relevant are the guidelines to BPM?"),
       el("p", { class: "intro-lead" }, [
         "The Green BPM Guideline is being distilled through multiple rounds of rating. The three " +
-          "AI tabs below are Claude rating the same 448 guidelines under different framings " +
+          "AI tabs below are Claude rating the same 443 guidelines under different framings " +
           "(general, sustainability-expert, BPM-expert) - test data previewing where those " +
           "perspectives are likely to disagree, ahead of an internal expert survey with envite " +
           "Consulting and eventually a public survey. Select one tab to see that round on its own, " +
@@ -364,7 +364,7 @@ function buildPage() {
   preactRender(
     chartCard(
       "Guidelines collected per source",
-      "How the 448 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
+      "How the 443 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
       "chart-per-source",
     ),
     introChartGridEl,

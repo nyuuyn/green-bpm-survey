@@ -237,7 +237,7 @@ def test_completion_screen_link_navigates_to_analysis_page(page, base_url):
 
 # --- Source block: a second, independent tab bar below the round results,
 # scoped to whichever single round is active above rather than the URL hash
-# (see docs/DATA_PIPELINE.md). Sources partition the 448 guidelines rather
+# (see docs/DATA_PIPELINE.md). Sources partition the 443 guidelines rather
 # than re-rating them, so its comparison panel has no heatmap/disagreement
 # table - just the merged charts and a guideline-level top-rated table. ---
 
