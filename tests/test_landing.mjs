@@ -12,18 +12,39 @@ function log(label, ok, extra = "") {
 const dom = new JSDOM(fs.readFileSync("index.html", "utf-8"));
 const doc = dom.window.document;
 
-const surveyLink = [...doc.querySelectorAll("a")].find((a) => a.getAttribute("href") === "survey.html");
+const surveyLink = [...doc.querySelectorAll("a")].find(
+  (a) => a.getAttribute("href") === "survey.html",
+);
 log("Landing page links to survey.html", !!surveyLink, surveyLink && surveyLink.textContent.trim());
 
-const analysisLink = [...doc.querySelectorAll("a")].find((a) => a.getAttribute("href") === "analysis.html");
-log("Landing page links to analysis.html", !!analysisLink, analysisLink && analysisLink.textContent.trim());
+const analysisLink = [...doc.querySelectorAll("a")].find(
+  (a) => a.getAttribute("href") === "analysis.html",
+);
+log(
+  "Landing page links to analysis.html",
+  !!analysisLink,
+  analysisLink && analysisLink.textContent.trim(),
+);
 
-const guidelinesLink = [...doc.querySelectorAll("a")].find((a) => a.getAttribute("href") === "guidelines.html");
-log("Landing page links to guidelines.html", !!guidelinesLink, guidelinesLink && guidelinesLink.textContent.trim());
+const guidelinesLink = [...doc.querySelectorAll("a")].find(
+  (a) => a.getAttribute("href") === "guidelines.html",
+);
+log(
+  "Landing page links to guidelines.html",
+  !!guidelinesLink,
+  guidelinesLink && guidelinesLink.textContent.trim(),
+);
 
-log("All three CTAs are styled as dominant buttons",
-  !!surveyLink?.classList.contains("btn-hero") && !!analysisLink?.classList.contains("btn-hero") && !!guidelinesLink?.classList.contains("btn-hero"));
-log("No <script> tags on the landing page (fully static)", doc.querySelectorAll("script").length === 0);
+log(
+  "All three CTAs are styled as dominant buttons",
+  !!surveyLink?.classList.contains("btn-hero") &&
+    !!analysisLink?.classList.contains("btn-hero") &&
+    !!guidelinesLink?.classList.contains("btn-hero"),
+);
+log(
+  "No <script> tags on the landing page (fully static)",
+  doc.querySelectorAll("script").length === 0,
+);
 
 console.log(`\n${failures === 0 ? "All tests passed." : failures + " test(s) FAILED."}`);
 if (failures > 0) process.exitCode = 1;

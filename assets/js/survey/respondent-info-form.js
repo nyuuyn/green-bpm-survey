@@ -12,12 +12,20 @@
 // Reads a radio group's options and renders them, each pre-checked (via
 // defaultChecked - uncontrolled, same as plain HTML) when it matches `prior`.
 function experienceOptions(name, prior) {
-  return EXPERIENCE_OPTIONS.map((opt, i) => html`
-    <div class="option">
-      <input type="radio" name=${name} id="${name}-${i}" value=${opt} defaultChecked=${prior === opt} />
-      <label for="${name}-${i}">${opt}</label>
-    </div>
-  `);
+  return EXPERIENCE_OPTIONS.map(
+    (opt, i) => html`
+      <div class="option">
+        <input
+          type="radio"
+          name=${name}
+          id="${name}-${i}"
+          value=${opt}
+          defaultChecked=${prior === opt}
+        />
+        <label for="${name}-${i}">${opt}</label>
+      </div>
+    `,
+  );
 }
 
 function RespondentInfoForm() {
@@ -44,9 +52,8 @@ function RespondentInfoForm() {
     renderRatingList();
   }
 
-  const errorFor = (field) => (error && error.field === field
-    ? html`<p class="error-text">${error.message}</p>`
-    : null);
+  const errorFor = (field) =>
+    error && error.field === field ? html`<p class="error-text">${error.message}</p>` : null;
 
   return html`
     <div class="card">
@@ -59,35 +66,69 @@ function RespondentInfoForm() {
       <form onSubmit=${handleSubmit}>
         <fieldset class=${`field-group${error?.field === "bpmExperience" ? " invalid" : ""}`}>
           <legend class="sr-only">BPM experience</legend>
-          <div class="field-group-title">BPM experience <span class="hint">Your own background with business process management.</span></div>
-          <div class="option-row vertical">${experienceOptions("bpmExperience", prior?.["BPM Experience"])}</div>
+          <div class="field-group-title">
+            BPM experience
+            <span class="hint">Your own background with business process management.</span>
+          </div>
+          <div class="option-row vertical">
+            ${experienceOptions("bpmExperience", prior?.["BPM Experience"])}
+          </div>
           ${errorFor("bpmExperience")}
         </fieldset>
 
-        <fieldset class=${`field-group${error?.field === "sustainabilityExperience" ? " invalid" : ""}`}>
+        <fieldset
+          class=${`field-group${error?.field === "sustainabilityExperience" ? " invalid" : ""}`}
+        >
           <legend class="sr-only">Sustainability / green-IT experience</legend>
-          <div class="field-group-title">Sustainability / green-IT experience <span class="hint">Separate from BPM — your background with sustainability specifically.</span></div>
-          <div class="option-row vertical">${experienceOptions("sustainabilityExperience", prior?.["Sustainability Experience"])}</div>
+          <div class="field-group-title">
+            Sustainability / green-IT experience
+            <span class="hint"
+              >Separate from BPM — your background with sustainability specifically.</span
+            >
+          </div>
+          <div class="option-row vertical">
+            ${experienceOptions("sustainabilityExperience", prior?.["Sustainability Experience"])}
+          </div>
           ${errorFor("sustainabilityExperience")}
         </fieldset>
 
-        <fieldset class=${`field-group${error && (error.field === "role" || error.field === "roleOther") ? " invalid" : ""}`}>
+        <fieldset
+          class=${`field-group${error && (error.field === "role" || error.field === "roleOther") ? " invalid" : ""}`}
+        >
           <legend class="sr-only">Role</legend>
-          <div class="field-group-title">Role <span class="hint">Whichever best describes you.</span></div>
-          <div class="option-row vertical" onChange=${(e) => { if (e.target.name === "role") setRole(e.target.value); }}>
-            ${ROLE_OPTIONS.map((opt, i) => html`
-              <div class="option">
-                <input type="radio" name="role" id="role-${i}" value=${opt} defaultChecked=${role === opt} />
-                <label for="role-${i}">${opt}</label>
-              </div>
-            `)}
+          <div class="field-group-title">
+            Role <span class="hint">Whichever best describes you.</span>
+          </div>
+          <div
+            class="option-row vertical"
+            onChange=${(e) => {
+              if (e.target.name === "role") setRole(e.target.value);
+            }}
+          >
+            ${ROLE_OPTIONS.map(
+              (opt, i) => html`
+                <div class="option">
+                  <input
+                    type="radio"
+                    name="role"
+                    id="role-${i}"
+                    value=${opt}
+                    defaultChecked=${role === opt}
+                  />
+                  <label for="role-${i}">${opt}</label>
+                </div>
+              `,
+            )}
           </div>
           <div style="margin-top:8px" hidden=${role !== "Other"}>
-            <input type="text" name="roleOther" placeholder="Please specify your role"
-              defaultValue=${!priorRoleMatches && prior ? prior.Role : ""} />
+            <input
+              type="text"
+              name="roleOther"
+              placeholder="Please specify your role"
+              defaultValue=${!priorRoleMatches && prior ? prior.Role : ""}
+            />
           </div>
-          ${errorFor("role")}
-          ${errorFor("roleOther")}
+          ${errorFor("role")} ${errorFor("roleOther")}
         </fieldset>
 
         <div class="btn-row">
@@ -112,10 +153,21 @@ function collectRespondentInfo(form) {
   const role = fd.get("role");
   const roleOther = (fd.get("roleOther") || "").trim();
 
-  if (!bpmExperience) return { ok: false, field: "bpmExperience", error: "Please select your BPM experience." };
-  if (!sustainabilityExperience) return { ok: false, field: "sustainabilityExperience", error: "Please select your sustainability/green-IT experience." };
+  if (!bpmExperience)
+    return { ok: false, field: "bpmExperience", error: "Please select your BPM experience." };
+  if (!sustainabilityExperience)
+    return {
+      ok: false,
+      field: "sustainabilityExperience",
+      error: "Please select your sustainability/green-IT experience.",
+    };
   if (!role) return { ok: false, field: "role", error: "Please select a role." };
-  if (role === "Other" && !roleOther) return { ok: false, field: "roleOther", error: "Please specify your role, or choose a different option." };
+  if (role === "Other" && !roleOther)
+    return {
+      ok: false,
+      field: "roleOther",
+      error: "Please specify your role, or choose a different option.",
+    };
 
   return {
     ok: true,

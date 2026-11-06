@@ -4,7 +4,12 @@ import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
 
-const MIME = { ".html": "text/html", ".js": "text/javascript", ".json": "application/json", ".css": "text/css" };
+const MIME = {
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".json": "application/json",
+  ".css": "text/css",
+};
 
 export async function startServer() {
   const server = http.createServer((req, res) => {
@@ -16,7 +21,9 @@ export async function startServer() {
         res.end("not found");
         return;
       }
-      res.writeHead(200, { "Content-Type": MIME[path.extname(filePath)] || "application/octet-stream" });
+      res.writeHead(200, {
+        "Content-Type": MIME[path.extname(filePath)] || "application/octet-stream",
+      });
       res.end(data);
     });
   });

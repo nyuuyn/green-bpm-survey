@@ -6,7 +6,7 @@ monitoring — out of the flood of general-purpose sustainability guidance that 
 
 Sustainability guidance is abundant (cloud vendor frameworks, web guidelines, pattern
 catalogs), but almost all of it is written for infrastructure and application engineers, not
-process designers. Most of it is *not* actually relevant to BPM — that gap is why this project
+process designers. Most of it is _not_ actually relevant to BPM — that gap is why this project
 exists: rather than pointing a BPM practitioner at seven different sustainability frameworks and
 asking them to guess which parts apply, this project collects them all, has both an AI pass and a
 real human interview rate every guideline's BPM relevance, and will use the highly-rated results
@@ -40,8 +40,8 @@ that will be compared against the existing AI pass. Full pipeline details:
   BPM-native territory either
 - Neither bucket is uniform once you look source-by-source instead of at the two aggregates:
   among general sources, GCP is the clear low point (mean relevance **0.85**, only **10.4%** at 3)
-  versus AWS/W3C (~1.3, ~17% at 3) — and GHG Protocol actually ranks *above every other general
-  source individually* (mean **1.62**), not just "in between" on average. Among BPM-native
+  versus AWS/W3C (~1.3, ~17% at 3) — and GHG Protocol actually ranks _above every other general
+  source individually_ (mean **1.62**), not just "in between" on average. Among BPM-native
   sources, GBPP and ppatterns.app (**83–89%** at 3) clearly outscore Green BPM Book and Lean
   (**60–70%**) — a ~29-point spread inside a bucket the aggregate makes look monolithic
 

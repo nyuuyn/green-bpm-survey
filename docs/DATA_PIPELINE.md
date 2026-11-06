@@ -36,18 +36,18 @@ CSVs, the notebook, and the Python scripts never ship to the live site.
 
 ## Sources
 
-| Folder | Source | Rows | Type |
-|---|---|---|---|
-| `aws` | AWS Well-Architected Framework — Sustainability Pillar | 29 | General cloud |
-| `azure` | Azure Well-Architected Framework — Sustainability recommendations | 135 | General cloud |
-| `gcp` | Google Cloud Well-Architected Framework — Sustainability pillar | 106 | General cloud |
-| `gsf` | Green Software Foundation Patterns Catalog | 59 | General cloud/web |
-| `w3c` | W3C Web Sustainability Guidelines | 71 | General web |
-| `ghgprotocol` | GHG Protocol Corporate Standard (WRI/WBCSD, revised edition) - one guideline per distinct, process-relevant "shall/should" statement or case study, across 7 of the standard's 11 substantive chapters | 13 | **General, non-IT** |
-| `gbpp` | Green Business Process Patterns (Nowak et al., PLoP 2011) | 9 | **BPM-native** |
-| `ppatterns` | process-pattern.app, patterns tagged "Sustainability" | 6 | **BPM-native** |
-| `lean` | Lean and Environment (EPA Lean & Environment Toolkit; Lean Enterprise Institute "green waste" articles) | 10 | **BPM-native** |
-| `gbpmbook` | Green Business Process Management: Towards the Sustainable Enterprise (vom Brocke, Seidel & Recker, eds., Springer 2012) - one guideline per chapter contribution, across 7 of the book's 13 chapters | 10 | **BPM-native** |
+| Folder        | Source                                                                                                                                                                                                 | Rows | Type                |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- | ------------------- |
+| `aws`         | AWS Well-Architected Framework — Sustainability Pillar                                                                                                                                                 | 29   | General cloud       |
+| `azure`       | Azure Well-Architected Framework — Sustainability recommendations                                                                                                                                      | 135  | General cloud       |
+| `gcp`         | Google Cloud Well-Architected Framework — Sustainability pillar                                                                                                                                        | 106  | General cloud       |
+| `gsf`         | Green Software Foundation Patterns Catalog                                                                                                                                                             | 59   | General cloud/web   |
+| `w3c`         | W3C Web Sustainability Guidelines                                                                                                                                                                      | 71   | General web         |
+| `ghgprotocol` | GHG Protocol Corporate Standard (WRI/WBCSD, revised edition) - one guideline per distinct, process-relevant "shall/should" statement or case study, across 7 of the standard's 11 substantive chapters | 13   | **General, non-IT** |
+| `gbpp`        | Green Business Process Patterns (Nowak et al., PLoP 2011)                                                                                                                                              | 9    | **BPM-native**      |
+| `ppatterns`   | process-pattern.app, patterns tagged "Sustainability"                                                                                                                                                  | 6    | **BPM-native**      |
+| `lean`        | Lean and Environment (EPA Lean & Environment Toolkit; Lean Enterprise Institute "green waste" articles)                                                                                                | 10   | **BPM-native**      |
+| `gbpmbook`    | Green Business Process Management: Towards the Sustainable Enterprise (vom Brocke, Seidel & Recker, eds., Springer 2012) - one guideline per chapter contribution, across 7 of the book's 13 chapters  | 10   | **BPM-native**      |
 
 **448 guidelines total.**
 
@@ -170,7 +170,7 @@ rounds or doesn't:
    merge, which doesn't fit in a bar chart - so each selected round gets its own copy instead,
    reusing the exact mount functions the single-round panel uses.
 3. **Relevance agreement heatmap** (`buildHeatmapSection`) - guideline-level, one 4x4 heatmap per
-   *pair* of selected rounds (only pairwise makes sense here), counting how many guidelines got
+   _pair_ of selected rounds (only pairwise makes sense here), counting how many guidelines got
    each combination of relevance scores from both rounds. The diagonal is exact agreement.
 4. **Disagreement table** (`spreadTableCard`) - guidelines rated in every selected round, ranked
    by the gap between the highest and lowest relevance score given, for spotting the specific
@@ -192,7 +192,7 @@ round gets - a dedicated single-source panel, or a focused multi-source comparis
 **Always scoped to one round.** The source block reads from exactly one round's records -
 whichever is first, in canonical `ANALYSIS_ROUNDS` order, among the round(s) currently selected
 above (`activeRoundForSourceBlock()` in `analysis.js`). Selecting 2+ rounds up top (entering
-round-comparison mode) does *not* hide the source block or empty it out - it keeps showing
+round-comparison mode) does _not_ hide the source block or empty it out - it keeps showing
 whichever of the selected rounds comes first, with a note naming which one and how many are
 selected, rather than trying to support both axes of comparison (round x source) at once - that
 combination wasn't judged worth the added complexity for what it'd show. Source-tab selection is
@@ -212,7 +212,7 @@ into each other as plain globals, the same way they all call into `common.js`'s 
 the Preact+htm setup and the full file list).
 
 **Why there's no heatmap or disagreement table here.** The round comparison's heatmap and
-disagreement table both work because every round re-rates the *same* 448 guidelines, so
+disagreement table both work because every round re-rates the _same_ 448 guidelines, so
 "did round A and round B score this guideline the same way" is a meaningful question. Sources
 don't have that property - every guideline belongs to exactly one source, so there's no second
 rating of the same guideline to compare against. The source comparison panel instead reuses

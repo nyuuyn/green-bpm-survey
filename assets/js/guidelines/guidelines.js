@@ -40,7 +40,9 @@ function mergeRoundRecords(roundRecordSets) {
       if (!merged.has(r.id)) merged.set(r.id, { id: r.id, relevances: [], phases: new Set() });
       const entry = merged.get(r.id);
       if (r.relevance !== null && r.relevance !== undefined) entry.relevances.push(r.relevance);
-      r.lifecycle.forEach((p) => { if (p !== "Not Applicable") entry.phases.add(p); });
+      r.lifecycle.forEach((p) => {
+        if (p !== "Not Applicable") entry.phases.add(p);
+      });
     });
   });
   return merged;
@@ -54,9 +56,15 @@ function averageRelevance(relevances) {
 function topGuidelinesForPhase(phase, merged, guidelinesById, limit = TOP_GUIDELINES_PER_PHASE) {
   return [...merged.values()]
     .filter((entry) => entry.phases.has(phase))
-    .map((entry) => ({ ...entry, avgRelevance: averageRelevance(entry.relevances), guideline: guidelinesById.get(entry.id) }))
+    .map((entry) => ({
+      ...entry,
+      avgRelevance: averageRelevance(entry.relevances),
+      guideline: guidelinesById.get(entry.id),
+    }))
     .filter((entry) => entry.avgRelevance !== null && entry.guideline)
-    .sort((a, b) => b.avgRelevance - a.avgRelevance || a.guideline.name.localeCompare(b.guideline.name))
+    .sort(
+      (a, b) => b.avgRelevance - a.avgRelevance || a.guideline.name.localeCompare(b.guideline.name),
+    )
     .slice(0, limit);
 }
 
@@ -79,11 +87,17 @@ function closePopup() {
 
 function render() {
   const activePhase = phaseFromHash();
-  preactRender(html`<${GuidelinesWheel} activePhase=${activePhase} onSelect=${selectPhase} />`, wheelEl);
+  preactRender(
+    html`<${GuidelinesWheel} activePhase=${activePhase} onSelect=${selectPhase} />`,
+    wheelEl,
+  );
 
   if (activePhase && merged) {
     const items = topGuidelinesForPhase(activePhase, merged, guidelinesById);
-    preactRender(html`<${GuidelinePopup} phase=${activePhase} items=${items} onClose=${closePopup} />`, popupEl);
+    preactRender(
+      html`<${GuidelinePopup} phase=${activePhase} items=${items} onClose=${closePopup} />`,
+      popupEl,
+    );
     popupEl.hidden = false;
   } else {
     popupEl.hidden = true;
@@ -110,14 +124,14 @@ function buildPage() {
       el("h1", {}, "Where in the BPM lifecycle do these guidelines apply?"),
       el("p", { class: "intro-lead" }, [
         "Each phase below is one stage of the BPM lifecycle. Click a phase to see the " +
-        "sustainability guidelines rated most relevant to it, averaged across every AI rating " +
-        "round so far. For the full breakdown of charts and tables behind this, see the ",
+          "sustainability guidelines rated most relevant to it, averaged across every AI rating " +
+          "round so far. For the full breakdown of charts and tables behind this, see the ",
         el("a", { class: "ref-link", href: "analysis.html" }, "analysis page"),
         ".",
       ]),
       el("div", { class: "guidelines-card" }, [wheelEl]),
     ]),
-    popupEl
+    popupEl,
   );
 
   window.addEventListener("hashchange", render);

@@ -1,7 +1,16 @@
-.guidelines-intro h1 { margin-bottom: 12px; }
-.guidelines-intro .intro-lead { margin-bottom: 0; }
+.guidelines-intro h1 {
+  margin-bottom: 12px;
+}
 
-.guidelines-card { display: flex; justify-content: center; margin-top: 24px; }
+.guidelines-intro .intro-lead {
+  margin-bottom: 0;
+}
+
+.guidelines-card {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
 
 .guidelines-wheel-wrap {
   width: 100%;
@@ -19,11 +28,15 @@
   stroke: var(--surface);
   stroke-width: 2;
   outline: none;
-  filter: url(#guidelines-wedge-shadow);
-  transition: opacity 0.15s ease, stroke-width 0.15s ease;
+  filter: url("#guidelines-wedge-shadow");
+  transition:
+    opacity 0.15s ease,
+    stroke-width 0.15s ease;
 }
 
-.guidelines-wedge:hover { opacity: 0.85; }
+.guidelines-wedge:hover {
+  opacity: 0.85;
+}
 
 .guidelines-wedge:focus-visible,
 .guidelines-wedge.active {
@@ -38,7 +51,7 @@
   pointer-events: none;
   font-size: 9.5px;
   font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 45%);
 }
 
 .guidelines-center-title {
@@ -57,7 +70,7 @@
 .popup-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgb(0 0 0 / 55%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,14 +92,23 @@
   scrollbar-color: var(--border) transparent;
 }
 
-.popup-card::-webkit-scrollbar { width: 10px; }
-.popup-card::-webkit-scrollbar-track { background: transparent; }
+.popup-card::-webkit-scrollbar {
+  width: 10px;
+}
+
+.popup-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .popup-card::-webkit-scrollbar-thumb {
   background-color: var(--border);
   border-radius: 999px;
   border: 2px solid var(--surface);
 }
-.popup-card::-webkit-scrollbar-thumb:hover { background-color: var(--text-muted); }
+
+.popup-card::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-muted);
+}
 
 .popup-header {
   display: flex;
@@ -96,7 +118,9 @@
   margin-bottom: 14px;
 }
 
-.popup-header h2 { margin: 0; }
+.popup-header h2 {
+  margin: 0;
+}
 
 .popup-close {
   background: transparent;
@@ -105,7 +129,10 @@
   font-size: 16px;
   color: var(--text-muted);
 }
-.popup-close:hover { color: var(--text); }
+
+.popup-close:hover {
+  color: var(--text);
+}
 
 /* auto-fit + minmax, not a fixed column count behind a breakpoint: the
    number of columns (1 on a narrow popup, up to 3 on a wide one) falls out
@@ -143,7 +170,9 @@
   gap: 6px 10px;
 }
 
-.popup-guideline-name { font-weight: 600; }
+.popup-guideline-name {
+  font-weight: 600;
+}
 
 .popup-guideline-score {
   flex-shrink: 0;

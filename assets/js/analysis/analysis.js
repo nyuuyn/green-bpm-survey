@@ -44,19 +44,22 @@ const ANALYSIS_ROUNDS = [
     id: "claude",
     label: "AI (General)",
     file: "generated/analysis_claude.json",
-    blurb: "An AI-generated preliminary pass with no persona framing: Claude rated all 448 guidelines across 10 sources for BPM relevance, ahead of the human rounds below.",
+    blurb:
+      "An AI-generated preliminary pass with no persona framing: Claude rated all 448 guidelines across 10 sources for BPM relevance, ahead of the human rounds below.",
   },
   {
     id: "sustainability",
     label: "AI (Sustainability Expert)",
     file: "generated/analysis_sustainability.json",
-    blurb: "Same 448 guidelines, rated by Claude framed as a sustainability/green-IT expert with only lay BPM exposure - test data exploring how a sustainability-first lens shifts relevance judgments, ahead of a real expert survey.",
+    blurb:
+      "Same 448 guidelines, rated by Claude framed as a sustainability/green-IT expert with only lay BPM exposure - test data exploring how a sustainability-first lens shifts relevance judgments, ahead of a real expert survey.",
   },
   {
     id: "bpm",
     label: "AI (BPM Expert)",
     file: "generated/analysis_bpm.json",
-    blurb: "Same 448 guidelines, rated by Claude framed as a BPM expert with only lay sustainability exposure - test data exploring how a process-first lens shifts relevance judgments, ahead of a real expert survey.",
+    blurb:
+      "Same 448 guidelines, rated by Claude framed as a BPM expert with only lay sustainability exposure - test data exploring how a process-first lens shifts relevance judgments, ahead of a real expert survey.",
   },
   // Next: an internal expert survey with envite Consulting (BPM, architecture,
   // and sustainability practitioners), then a public survey.
@@ -78,11 +81,16 @@ function TabBar({ items, active, colorFor, dataAttr, onToggle }) {
     const isActive = active.has(item.id);
     const color = colorFor(item);
     return html`
-      <button type="button" class=${`tab${isActive ? " active" : ""}`} ...${{ [`data-${dataAttr}`]: item.id }}
+      <button
+        type="button"
+        class=${`tab${isActive ? " active" : ""}`}
+        ...${{ [`data-${dataAttr}`]: item.id }}
         aria-pressed=${String(isActive)}
         style=${`--tab-accent:${color}; --tab-accent-contrast:${readableTextOn(color)};`}
         onClick=${() => onToggle(item.id)}
-      >${item.label}</button>
+      >
+        ${item.label}
+      </button>
     `;
   });
 }
@@ -135,7 +143,10 @@ async function ensureSinglePanelShown(id) {
 }
 
 async function renderComparison(activeList) {
-  const key = activeList.map((r) => r.id).sort().join(",");
+  const key = activeList
+    .map((r) => r.id)
+    .sort()
+    .join(",");
   if (key === lastComparisonKey) return;
   lastComparisonKey = key;
 
@@ -145,7 +156,14 @@ async function renderComparison(activeList) {
   comparisonCharts = [];
 
   const pal = chartPalette();
-  preactRender(html`<${ComparisonPanelContent} activeList=${activeList} recordsByRound=${recordsByRound} pal=${pal} />`, comparisonEl);
+  preactRender(
+    html`<${ComparisonPanelContent}
+      activeList=${activeList}
+      recordsByRound=${recordsByRound}
+      pal=${pal}
+    />`,
+    comparisonEl,
+  );
   comparisonCharts = [
     ...mountMergedCharts(activeList, recordsByRound, pal),
     ...mountSmallMultiples(activeList, recordsByRound, pal),
@@ -156,16 +174,29 @@ async function render() {
   // Pressed state uses the same per-round color as its chart legend/series
   // (roundColor) instead of a flat accent, so the button tells you which
   // series is "yours" at a glance.
-  preactRender(html`<${TabBar} items=${ANALYSIS_ROUNDS} active=${activeRounds} colorFor=${roundColor} dataAttr="round" onToggle=${toggleRound} />`, tabsEl);
+  preactRender(
+    html`<${TabBar}
+      items=${ANALYSIS_ROUNDS}
+      active=${activeRounds}
+      colorFor=${roundColor}
+      dataAttr="round"
+      onToggle=${toggleRound}
+    />`,
+    tabsEl,
+  );
 
   if (activeRounds.size === 1) {
     lastComparisonKey = null;
     comparisonEl.hidden = true;
     const id = [...activeRounds][0];
-    [...panelsEl.children].forEach((panel) => { panel.hidden = panel.dataset.round !== id; });
+    [...panelsEl.children].forEach((panel) => {
+      panel.hidden = panel.dataset.round !== id;
+    });
     await ensureSinglePanelShown(id);
   } else {
-    [...panelsEl.children].forEach((panel) => { panel.hidden = true; });
+    [...panelsEl.children].forEach((panel) => {
+      panel.hidden = true;
+    });
     comparisonEl.hidden = false;
     const activeList = ANALYSIS_ROUNDS.filter((r) => activeRounds.has(r.id));
     await renderComparison(activeList);
@@ -195,12 +226,24 @@ function activeRoundForSourceBlock() {
   return ANALYSIS_ROUNDS.find((r) => activeRounds.has(r.id));
 }
 
-const SOURCE_TAB_ITEMS = ANALYSIS_SOURCE_ORDER.map((id) => ({ id, label: SOURCE_SHORT_LABELS[id] }));
+const SOURCE_TAB_ITEMS = ANALYSIS_SOURCE_ORDER.map((id) => ({
+  id,
+  label: SOURCE_SHORT_LABELS[id],
+}));
 
 async function renderSourceBlock() {
   // Pressed state uses the same per-source color as its chart legend/series
   // (sourceColor) instead of a flat accent - see the matching round-tab logic in render().
-  preactRender(html`<${TabBar} items=${SOURCE_TAB_ITEMS} active=${activeSources} colorFor=${(item) => sourceColor(item.id)} dataAttr="source" onToggle=${toggleSource} />`, sourceTabsEl);
+  preactRender(
+    html`<${TabBar}
+      items=${SOURCE_TAB_ITEMS}
+      active=${activeSources}
+      colorFor=${(item) => sourceColor(item.id)}
+      dataAttr="source"
+      onToggle=${toggleSource}
+    />`,
+    sourceTabsEl,
+  );
 
   const round = activeRoundForSourceBlock();
   const records = recordsByRound.get(round.id);
@@ -225,10 +268,16 @@ async function renderSourceBlock() {
   if (sourceIds.length === 1) {
     const sourceId = sourceIds[0];
     const filtered = records.filter((r) => r.source === sourceId);
-    preactRender(html`<${SourcePanelContent} sourceId=${sourceId} records=${filtered} />`, sourceResultEl);
+    preactRender(
+      html`<${SourcePanelContent} sourceId=${sourceId} records=${filtered} />`,
+      sourceResultEl,
+    );
     sourceCharts = mountSourceCharts(sourceId, filtered, pal);
   } else {
-    preactRender(html`<${SourceComparisonPanelContent} activeSourceIds=${sourceIds} records=${records} />`, sourceResultEl);
+    preactRender(
+      html`<${SourceComparisonPanelContent} activeSourceIds=${sourceIds} records=${records} />`,
+      sourceResultEl,
+    );
     sourceCharts = mountSourceComparisonCharts(sourceIds, records, pal);
   }
 }
@@ -248,17 +297,31 @@ function buildPage() {
 
   // Tab bars are empty shells here - render()/renderSourceBlock() (called
   // below, and on every toggle) fill them via preactRender(<${TabBar} .../>).
-  tabsEl = el("div", { class: "tabs", role: "group", "aria-label": "Rounds to analyze - select one, or two or more to compare" });
+  tabsEl = el("div", {
+    class: "tabs",
+    role: "group",
+    "aria-label": "Rounds to analyze - select one, or two or more to compare",
+  });
 
-  panelsEl = el("div", { class: "round-panels" },
-    ANALYSIS_ROUNDS.map((round) => el("div", { class: "analysis-card", "data-round": round.id, hidden: true },
-      el("p", { class: "intro-lead" }, "Loading…")
-    ))
+  panelsEl = el(
+    "div",
+    { class: "round-panels" },
+    ANALYSIS_ROUNDS.map((round) =>
+      el(
+        "div",
+        { class: "analysis-card", "data-round": round.id, hidden: true },
+        el("p", { class: "intro-lead" }, "Loading…"),
+      ),
+    ),
   );
 
   comparisonEl = el("div", { id: "comparison-panel", class: "analysis-card", hidden: true });
 
-  sourceTabsEl = el("div", { class: "tabs", role: "group", "aria-label": "Guideline sources to analyze - select one, or two or more to compare" });
+  sourceTabsEl = el("div", {
+    class: "tabs",
+    role: "group",
+    "aria-label": "Guideline sources to analyze - select one, or two or more to compare",
+  });
   sourceNoteEl = el("p", { id: "source-note", class: "intro-lead", hidden: true }, "");
   sourceResultEl = el("div", { id: "source-result", class: "analysis-card" });
 
@@ -269,41 +332,43 @@ function buildPage() {
       el("h1", {}, "How relevant are the guidelines to BPM?"),
       el("p", { class: "intro-lead" }, [
         "The Green BPM Guideline is being distilled through multiple rounds of rating. The three " +
-        "AI tabs below are Claude rating the same 448 guidelines under different framings " +
-        "(general, sustainability-expert, BPM-expert) - test data previewing where those " +
-        "perspectives are likely to disagree, ahead of an internal expert survey with envite " +
-        "Consulting and eventually a public survey. Select one tab to see that round on its own, " +
-        "or select two or more to compare them directly. Or see the guidelines organized by " +
-        "BPM lifecycle phase on the ",
+          "AI tabs below are Claude rating the same 448 guidelines under different framings " +
+          "(general, sustainability-expert, BPM-expert) - test data previewing where those " +
+          "perspectives are likely to disagree, ahead of an internal expert survey with envite " +
+          "Consulting and eventually a public survey. Select one tab to see that round on its own, " +
+          "or select two or more to compare them directly. Or see the guidelines organized by " +
+          "BPM lifecycle phase on the ",
         el("a", { class: "ref-link", href: "guidelines.html" }, "guidelines page"),
         ".",
       ]),
       introChartGridEl,
     ]),
-    el("div", { class: "card" }, [
-      tabsEl,
-      panelsEl,
-      comparisonEl,
-    ]),
+    el("div", { class: "card" }, [tabsEl, panelsEl, comparisonEl]),
     el("div", { class: "card" }, [
       el("h2", {}, "How do the guideline sources compare?"),
-      el("p", { class: "intro-lead" },
+      el(
+        "p",
+        { class: "intro-lead" },
         "Always scoped to one round - if multiple are selected above, this shows the first of " +
-        "them. Select one source to see it on its own, or select two or more to compare them " +
-        "directly."),
+          "them. Select one source to see it on its own, or select two or more to compare them " +
+          "directly.",
+      ),
       sourceTabsEl,
       sourceNoteEl,
       sourceResultEl,
-    ])
+    ]),
   );
 
   // The one chartCard() use that isn't inside a Preact-rendered panel -
   // mounted once, directly, since the intro card never changes after this.
-  preactRender(chartCard(
-    "Guidelines collected per source",
-    "How the 448 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
-    "chart-per-source"
-  ), introChartGridEl);
+  preactRender(
+    chartCard(
+      "Guidelines collected per source",
+      "How the 448 guidelines are distributed across sources - the same regardless of which round(s) you select below.",
+      "chart-per-source",
+    ),
+    introChartGridEl,
+  );
 
   mountIntroSourceChart();
   render();

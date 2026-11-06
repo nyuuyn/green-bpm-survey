@@ -1,15 +1,15 @@
 :root {
   --bg: #f8f8f7;
-  --surface: #ffffff;
+  --surface: #fff;
   --text: #1f1f1f;
   --text-muted: #5b655e;
   --border: #e2e2e1;
   --accent: #1e7a5c;
-  --accent-contrast: #ffffff;
+  --accent-contrast: #fff;
   --accent-soft: #e5f6f0;
   --danger: #b3402b;
   --radius: 10px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow: 0 1px 3px rgb(0 0 0 / 6%), 0 1px 2px rgb(0 0 0 / 8%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,18 +23,30 @@
     --accent-contrast: #0f1b16;
     --accent-soft: #1c3229;
     --danger: #e07056;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow: 0 1px 3px rgb(0 0 0 / 40%), 0 1px 2px rgb(0 0 0 / 50%);
   }
 }
 
-* { box-sizing: border-box; }
-[hidden] { display: none !important; }
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
 
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font:
+    15px/1.55 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
 .wrap {
@@ -53,14 +65,46 @@ body {
   padding: 20px 0 8px;
 }
 
-.brand-crumbs { display: flex; align-items: center; gap: 8px; font-size: 16px; }
-.brand { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: inherit; text-decoration: none; }
-.brand-icon { width: 20px; height: 20px; display: block; }
-.brand-text { line-height: 1; }
-.crumb-sep { color: var(--border); }
-.crumb-current { font-weight: 700; color: var(--text-muted); }
+.brand-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
 
-main { flex: 1; padding-bottom: 32px; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.brand-text {
+  line-height: 1;
+}
+
+.crumb-sep {
+  color: var(--border);
+}
+
+.crumb-current {
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+main {
+  flex: 1;
+  padding-bottom: 32px;
+}
 
 .card {
   background: var(--surface);
@@ -70,8 +114,16 @@ main { flex: 1; padding-bottom: 32px; }
   padding: 28px;
 }
 
-h1 { font-size: 22px; margin: 0 0 12px; }
-h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
+h1 {
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+
+h2 {
+  font-size: 19px;
+  margin: 0 0 4px;
+  line-height: 1.35;
+}
 
 .guideline-text {
   color: var(--text);
@@ -85,7 +137,10 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
   text-decoration: none;
   margin-bottom: 18px;
 }
-.ref-link:hover { text-decoration: underline; }
+
+.ref-link:hover {
+  text-decoration: underline;
+}
 
 .badge {
   display: inline-block;
@@ -98,6 +153,7 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
   color: var(--accent);
   background: var(--accent-soft);
   padding: 3px 8px;
+
   /* A fixed (not 999px/capsule) radius: a two-line badge - the rare very
      long source name that doesn't fit even a widened card on one line -
      then reads as a normal rounded tag instead of the lopsided shape a
@@ -106,7 +162,10 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
   line-height: 1.3;
 }
 
-.intro-lead { color: var(--text-muted); margin-bottom: 18px; }
+.intro-lead {
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
 
 /* ---------- Landing page ---------- */
 
@@ -121,8 +180,17 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
   letter-spacing: 0.03em;
   margin: 0 0 10px;
 }
-.intro-eyebrow .ref-link { font-size: inherit; font-weight: 600; margin-bottom: 0; }
-.eyebrow-icon { width: 14px; height: 14px; }
+
+.intro-eyebrow .ref-link {
+  font-size: inherit;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.eyebrow-icon {
+  width: 14px;
+  height: 14px;
+}
 
 .intro-facts {
   list-style: none;
@@ -131,8 +199,16 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
   display: grid;
   gap: 10px;
 }
-.intro-facts li { display: flex; gap: 10px; align-items: baseline; }
-.intro-facts .ico { font-size: 16px; }
+
+.intro-facts li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.intro-facts .ico {
+  font-size: 16px;
+}
 
 .hero-cta {
   display: flex;
@@ -152,10 +228,20 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
    horizontal space .hero-cta has (flex-wrap alone only wraps once the row
    actually runs out of room) - used for a secondary CTA that shouldn't
    compete for top billing with the primary pair above it. */
-.btn-hero-full { flex-basis: 100%; }
+.btn-hero-full {
+  flex-basis: 100%;
+}
 
-.intro-sources { margin-bottom: 24px; }
-.intro-sources-label { font-size: 13px; color: var(--text-muted); margin: 0 0 6px; }
+.intro-sources {
+  margin-bottom: 24px;
+}
+
+.intro-sources-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+}
+
 .source-list {
   list-style: none;
   padding: 0;
@@ -164,7 +250,10 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
   flex-wrap: wrap;
   gap: 4px 14px;
 }
-.source-list .ref-link { margin-bottom: 0; }
+
+.source-list .ref-link {
+  margin-bottom: 0;
+}
 
 /* ---------- Buttons ---------- */
 
@@ -179,7 +268,9 @@ h2 { font-size: 19px; margin: 0 0 4px; line-height: 1.35; }
   justify-content: flex-end;
 }
 
-button, a.btn-primary, a.btn-secondary {
+button,
+a.btn-primary,
+a.btn-secondary {
   font: inherit;
   font-weight: 600;
   padding: 11px 20px;
@@ -188,7 +279,8 @@ button, a.btn-primary, a.btn-secondary {
   cursor: pointer;
 }
 
-a.btn-primary, a.btn-secondary {
+a.btn-primary,
+a.btn-secondary {
   display: inline-block;
   text-decoration: none;
   text-align: center;
@@ -198,6 +290,7 @@ a.btn-primary, a.btn-secondary {
   background: var(--accent);
   color: var(--accent-contrast);
 }
+
 .btn-primary:disabled {
   opacity: 0.45;
   cursor: not-allowed;
@@ -226,17 +319,40 @@ a.btn-primary, a.btn-secondary {
   margin-top: 14px;
 }
 
-.footer-credit a { display: flex; align-items: center; line-height: 0; }
+.footer-credit a {
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}
 
-.footer-sep { color: var(--border); }
+.footer-sep {
+  color: var(--border);
+}
 
-.gh-link { display: flex; color: var(--text-muted); }
-.gh-link:hover { color: var(--text); }
+.gh-link {
+  display: flex;
+  color: var(--text-muted);
+}
 
-.footer-logo { height: 16px; width: auto; }
-.footer-logo-dark { display: none; }
+.gh-link:hover {
+  color: var(--text);
+}
+
+.footer-logo {
+  height: 16px;
+  width: auto;
+}
+
+.footer-logo-dark {
+  display: none;
+}
 
 @media (prefers-color-scheme: dark) {
-  .footer-logo-light { display: none; }
-  .footer-logo-dark { display: inline; }
+  .footer-logo-light {
+    display: none;
+  }
+
+  .footer-logo-dark {
+    display: inline;
+  }
 }

@@ -36,17 +36,19 @@ function buildHeatmapSection(activeList, recordsByRound, pal) {
       <h2 class="top-table-heading">Relevance agreement between rounds</h2>
       <p class="chart-desc">
         Each cell counts guidelines that got that pair of relevance scores from both rounds. The
-        diagonal (top-left to bottom-right) is where the two rounds agree exactly; cells further
-        off it are bigger disagreements.
+        diagonal (top-left to bottom-right) is where the two rounds agree exactly; cells further off
+        it are bigger disagreements.
       </p>
       <div class="analysis-grid">
-        ${pairs.map(([a, b]) => html`
-          <div class="chart-card">
-            <h2>${a.label} vs ${b.label}</h2>
-            <p class="chart-desc">Rows: ${a.label} score. Columns: ${b.label} score.</p>
-            ${heatmapTable(a, b, recordsByRound, pal)}
-          </div>
-        `)}
+        ${pairs.map(
+          ([a, b]) => html`
+            <div class="chart-card">
+              <h2>${a.label} vs ${b.label}</h2>
+              <p class="chart-desc">Rows: ${a.label} score. Columns: ${b.label} score.</p>
+              ${heatmapTable(a, b, recordsByRound, pal)}
+            </div>
+          `,
+        )}
       </div>
     </div>
   `;
@@ -59,15 +61,18 @@ function relevanceSpread(activeList, recordsByRound) {
   const byId = new Map();
   activeList.forEach((round) => {
     recordsByRound.get(round.id).forEach((r) => {
-      if (!byId.has(r.id)) byId.set(r.id, { id: r.id, name: r.name, source: r.source, perRound: {} });
+      if (!byId.has(r.id))
+        byId.set(r.id, { id: r.id, name: r.name, source: r.source, perRound: {} });
       byId.get(r.id).perRound[round.id] = r.relevance;
     });
   });
   return [...byId.values()]
-    .filter((row) => activeList.every((round) => {
-      const v = row.perRound[round.id];
-      return v !== null && v !== undefined;
-    }))
+    .filter((row) =>
+      activeList.every((round) => {
+        const v = row.perRound[round.id];
+        return v !== null && v !== undefined;
+      }),
+    )
     .map((row) => {
       const values = activeList.map((round) => row.perRound[round.id]);
       return { ...row, spread: Math.max(...values) - Math.min(...values) };
@@ -89,20 +94,23 @@ function spreadTableCard(activeList, recordsByRound) {
         <table class="data-table">
           <thead>
             <tr>
-              <th>Source</th><th>Guideline</th>
+              <th>Source</th>
+              <th>Guideline</th>
               ${activeList.map((round) => html`<th>${round.label}</th>`)}
               <th>Spread</th>
             </tr>
           </thead>
           <tbody>
-            ${rows.map((row) => html`
-              <tr>
-                <td>${SOURCE_SHORT_LABELS[row.source] || row.source}</td>
-                <td>${row.name}</td>
-                ${activeList.map((round) => html`<td>${row.perRound[round.id]}</td>`)}
-                <td>${row.spread}</td>
-              </tr>
-            `)}
+            ${rows.map(
+              (row) => html`
+                <tr>
+                  <td>${SOURCE_SHORT_LABELS[row.source] || row.source}</td>
+                  <td>${row.name}</td>
+                  ${activeList.map((round) => html`<td>${row.perRound[round.id]}</td>`)}
+                  <td>${row.spread}</td>
+                </tr>
+              `,
+            )}
           </tbody>
         </table>
       </div>
@@ -118,10 +126,10 @@ function ComparisonPanelContent({ activeList, recordsByRound, pal }) {
     </div>
 
     <h2 class="top-table-heading">Combined charts</h2>
-    <p class="chart-desc">The same aggregate charts as a single round, with one series per selected round.</p>
-    ${buildMergedGrid(activeList)}
-
-    ${buildSmallMultiples(activeList, pal)}
+    <p class="chart-desc">
+      The same aggregate charts as a single round, with one series per selected round.
+    </p>
+    ${buildMergedGrid(activeList)} ${buildSmallMultiples(activeList, pal)}
     ${buildHeatmapSection(activeList, recordsByRound, pal)}
     ${spreadTableCard(activeList, recordsByRound)}
   `;

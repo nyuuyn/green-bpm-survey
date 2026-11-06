@@ -21,21 +21,33 @@ const SOURCE_TOP_N_SINGLE = 10;
 const SOURCE_TOP_N_COMPARISON = 15;
 
 function topGuidelinesTable(rows, { includeSourceColumn }) {
-  const headers = [...(includeSourceColumn ? ["Source"] : []), "Guideline", "Relevance", "Scope", "Generic"];
+  const headers = [
+    ...(includeSourceColumn ? ["Source"] : []),
+    "Guideline",
+    "Relevance",
+    "Scope",
+    "Generic",
+  ];
   return html`
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr>${headers.map((h) => html`<th>${h}</th>`)}</tr></thead>
+        <thead>
+          <tr>
+            ${headers.map((h) => html`<th>${h}</th>`)}
+          </tr>
+        </thead>
         <tbody>
-          ${rows.map((r) => html`
-            <tr>
-              ${includeSourceColumn ? html`<td>${SOURCE_SHORT_LABELS[r.source] || r.source}</td>` : null}
-              <td>${r.name}</td>
-              <td>${r.relevance}</td>
-              <td>${r.scope.join(", ")}</td>
-              <td>${r.generic || ""}</td>
-            </tr>
-          `)}
+          ${rows.map(
+            (r) => html`
+              <tr>
+                ${includeSourceColumn ? html`<td>${SOURCE_SHORT_LABELS[r.source] || r.source}</td>` : null}
+                <td>${r.name}</td>
+                <td>${r.relevance}</td>
+                <td>${r.scope.join(", ")}</td>
+                <td>${r.generic || ""}</td>
+              </tr>
+            `,
+          )}
         </tbody>
       </table>
     </div>
@@ -46,12 +58,18 @@ function SourcePanelContent({ sourceId, records }) {
   const pal = chartPalette();
   const id = (name) => `src-chart-${name}-${sourceId}`;
   const totalRated = ratedRecords(records).length;
-  const top = records.filter((r) => r.relevance !== null && r.relevance !== undefined)
-    .slice().sort((a, b) => b.relevance - a.relevance).slice(0, SOURCE_TOP_N_SINGLE);
+  const top = records
+    .filter((r) => r.relevance !== null && r.relevance !== undefined)
+    .slice()
+    .sort((a, b) => b.relevance - a.relevance)
+    .slice(0, SOURCE_TOP_N_SINGLE);
 
   return html`
     <h2>${SOURCE_SHORT_LABELS[sourceId] || sourceId} results</h2>
-    <p class="intro-lead">${totalRated} of ${records.length} guidelines from this source have a rating in the active round.</p>
+    <p class="intro-lead">
+      ${totalRated} of ${records.length} guidelines from this source have a rating in the active
+      round.
+    </p>
 
     <div class="analysis-grid">
       ${chartCard("BPM Relevance", "0 = not relevant to BPM at all, 3 = highly relevant.", id("relevance-dist"))}
@@ -62,7 +80,11 @@ function SourcePanelContent({ sourceId, records }) {
         "Generic best practice vs. BPM-specific",
         "Among rated guidelines from this source: would the same advice apply outside BPM, or is the reasoning process-specific?",
         id("generic-split"),
-        [html`<div class="chart-legend">${[legendDot(pal.muted, "Generic practice"), legendDot(pal.strong, "BPM-specific")]}</div>`]
+        [
+          html`<div class="chart-legend">
+            ${[legendDot(pal.muted, "Generic practice"), legendDot(pal.strong, "BPM-specific")]}
+          </div>`,
+        ],
       )}
     </div>
 
@@ -76,12 +98,17 @@ function topTableForSources(activeSourceIds, records) {
   const idSet = new Set(activeSourceIds);
   const rows = records
     .filter((r) => idSet.has(r.source) && r.relevance !== null && r.relevance !== undefined)
-    .slice().sort((a, b) => b.relevance - a.relevance).slice(0, SOURCE_TOP_N_COMPARISON);
+    .slice()
+    .sort((a, b) => b.relevance - a.relevance)
+    .slice(0, SOURCE_TOP_N_COMPARISON);
 
   return html`
     <div class="comparison-section">
       <h2 class="top-table-heading">Top-rated guidelines among selected sources</h2>
-      <p class="chart-desc">The ${SOURCE_TOP_N_COMPARISON} highest-scoring guidelines among the selected sources, in the active round.</p>
+      <p class="chart-desc">
+        The ${SOURCE_TOP_N_COMPARISON} highest-scoring guidelines among the selected sources, in the
+        active round.
+      </p>
       ${topGuidelinesTable(rows, { includeSourceColumn: true })}
     </div>
   `;
@@ -92,8 +119,9 @@ function SourceComparisonPanelContent({ activeSourceIds, records }) {
   return html`
     <h2>Comparing ${labels.join(", ")}</h2>
     <h2 class="top-table-heading">Combined charts</h2>
-    <p class="chart-desc">The same aggregate charts as a single source, with one series per selected source.</p>
-    ${buildSourceMergedGrid()}
-    ${topTableForSources(activeSourceIds, records)}
+    <p class="chart-desc">
+      The same aggregate charts as a single source, with one series per selected source.
+    </p>
+    ${buildSourceMergedGrid()} ${topTableForSources(activeSourceIds, records)}
   `;
 }

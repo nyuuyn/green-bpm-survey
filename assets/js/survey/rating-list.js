@@ -14,17 +14,32 @@ function RespondentSummary() {
   const r = state.respondent;
   return html`
     <p class="respondent-summary">
-      Role: ${r.Role} · BPM experience: ${r["BPM Experience"]} · Sustainability experience: ${r["Sustainability Experience"]}.
-      <a href="#" class="respondent-edit-link" onClick=${(e) => { e.preventDefault(); renderRespondentInfo(); }}>Not you? Edit your info</a>
+      Role: ${r.Role} · BPM experience: ${r["BPM Experience"]} · Sustainability experience:
+      ${r["Sustainability Experience"]}.
+      <a
+        href="#"
+        class="respondent-edit-link"
+        onClick=${(e) => {
+          e.preventDefault();
+          renderRespondentInfo();
+        }}
+        >Not you? Edit your info</a
+      >
     </p>
   `;
 }
 
 function RatingList() {
   const total = state.items.length;
-  const [answers, setAnswers] = useState(() => state.items.map(() => (
-    { relevance: "", scope: [], generic: "", lifecycle: [], justification: "" }
-  )));
+  const [answers, setAnswers] = useState(() =>
+    state.items.map(() => ({
+      relevance: "",
+      scope: [],
+      generic: "",
+      lifecycle: [],
+      justification: "",
+    })),
+  );
   const [expandedRows, setExpandedRows] = useState(() => state.items.map(() => false));
   const [invalidRows, setInvalidRows] = useState(() => new Set());
   const [errorMessage, setErrorMessage] = useState(null);
@@ -38,19 +53,35 @@ function RatingList() {
 
   function updateAnswer(i, updater) {
     const nextAnswer = updater(answers[i]);
-    setAnswers((prev) => { const next = prev.slice(); next[i] = nextAnswer; return next; });
+    setAnswers((prev) => {
+      const next = prev.slice();
+      next[i] = nextAnswer;
+      return next;
+    });
     if (invalidRows.has(i)) {
-      setInvalidRows((prev) => { const next = new Set(prev); next.delete(i); return next; });
+      setInvalidRows((prev) => {
+        const next = new Set(prev);
+        next.delete(i);
+        return next;
+      });
     }
     // Picking a relevance score (or touching any field once it has one) opens
     // the row's remaining fields, same as the original's per-change toggleRow(rowEl, true).
     if (nextAnswer.relevance !== "" && !expandedRows[i]) {
-      setExpandedRows((prev) => { const next = prev.slice(); next[i] = true; return next; });
+      setExpandedRows((prev) => {
+        const next = prev.slice();
+        next[i] = true;
+        return next;
+      });
     }
   }
 
   function toggleRow(i) {
-    setExpandedRows((prev) => { const next = prev.slice(); next[i] = !next[i]; return next; });
+    setExpandedRows((prev) => {
+      const next = prev.slice();
+      next[i] = !next[i];
+      return next;
+    });
   }
 
   function handleFinish(e) {
@@ -65,8 +96,14 @@ function RatingList() {
 
     if (invalid.size > 0) {
       setInvalidRows(invalid);
-      setExpandedRows((prev) => { const next = prev.slice(); next[Math.min(...invalid)] = true; return next; });
-      setErrorMessage(`${invalid.size} guideline(s) still need an answer — see the highlighted row(s) below.`);
+      setExpandedRows((prev) => {
+        const next = prev.slice();
+        next[Math.min(...invalid)] = true;
+        return next;
+      });
+      setErrorMessage(
+        `${invalid.size} guideline(s) still need an answer — see the highlighted row(s) below.`,
+      );
       // Rendering is forced synchronous, so the error <p> (and its ref) already exist in the DOM here.
       errorRef.current?.scrollIntoView?.({ behavior: "smooth", block: "center" });
       return;
@@ -82,17 +119,26 @@ function RatingList() {
     <div class="card">
       <h1>Rate each guideline</h1>
       <p class="intro-lead">
-        Click a guideline to rate it — picking a relevance score opens the rest of its fields.
-        You can jump between guidelines in any order and come back to finish later.
+        Click a guideline to rate it — picking a relevance score opens the rest of its fields. You
+        can jump between guidelines in any order and come back to finish later.
       </p>
       <${RespondentSummary} />
       <form onSubmit=${handleFinish}>
         <div class="rating-list">
-          ${state.items.map((item, i) => html`
-            <${RatingRow} key=${item.id} item=${item} index=${i} answer=${answers[i]}
-              expanded=${expandedRows[i]} invalid=${invalidRows.has(i)}
-              onChange=${updateAnswer} onToggle=${toggleRow} />
-          `)}
+          ${state.items.map(
+            (item, i) => html`
+              <${RatingRow}
+                key=${item.id}
+                item=${item}
+                index=${i}
+                answer=${answers[i]}
+                expanded=${expandedRows[i]}
+                invalid=${invalidRows.has(i)}
+                onChange=${updateAnswer}
+                onToggle=${toggleRow}
+              />
+            `,
+          )}
         </div>
         ${errorMessage ? html`<p class="error-text" ref=${errorRef}>${errorMessage}</p>` : null}
         <div class="btn-row">

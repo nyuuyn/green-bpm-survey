@@ -64,7 +64,7 @@ avoids the unmount dance entirely for panels that only ever render via Preact.
 ## File layout
 
 Each page's screens are split one-component-per-file, with a slim **controller** file (same name
-as the page) that owns shared config/state/orchestration and is loaded *last* — its `boot()` /
+as the page) that owns shared config/state/orchestration and is loaded _last_ — its `boot()` /
 `buildPage()` call at the bottom is what actually starts the page, so everything it calls must
 already be loaded.
 
@@ -114,7 +114,7 @@ source in one call, in the same order, since each `eval()` call would otherwise 
 isolated top-level scope even on the same `window`.
 
 **Why this split, not something else.** The controller/component split follows the actual seam in
-the code - "decides *which* screen/panel to show and when" vs. "renders one screen/panel" - rather
+the code - "decides _which_ screen/panel to show and when" vs. "renders one screen/panel" - rather
 than a generic MVC-style model/view/controller folder scheme. The latter doesn't actually fit:
 there's no persistent model layer or router, and `charts.js`'s chart-mounting code is genuinely
 both data-shaping (the aggregation functions) and view (it builds canvas DOM) at once, so forcing
@@ -128,7 +128,7 @@ Before rating starts, an **"About you"** screen collects respondent background �
 from personal data, and not used to identify anyone:
 
 - **BPM experience** (None / studied it / practitioner at a few duration bands)
-- **Sustainability/green-IT experience** — a *separate* axis from BPM experience, since the
+- **Sustainability/green-IT experience** — a _separate_ axis from BPM experience, since the
   two are independent (a BPM expert can be new to sustainability and vice versa)
 - **Role** (Process Analyst, Developer, Consultant, Researcher, Student, etc., or a free-text
   "Other")
@@ -160,7 +160,7 @@ paging through 10 separate screens. Each row collects:
 - **BPM Lifecycle** (multi-select, with "Not Applicable" enforced as mutually exclusive)
 - optional free-text **Justification**
 
-Keywords are deliberately *not* collected — that's done analytically over the guideline text
+Keywords are deliberately _not_ collected — that's done analytically over the guideline text
 after the real survey, not by asking respondents to invent tags. This is the same schema as
 [`../data/SURVEY_SCHEMA.md`](../data/SURVEY_SCHEMA.md) — keep both in sync if you change one
 (they're now the same repo, so there's no cross-repo drift risk left, just don't forget the
@@ -184,8 +184,8 @@ kink) were reverse-measured from a reference circular-chevron graphic
 (`examples/chevron_cycle.svg`) by parsing its path coordinates directly. Two things worth
 knowing if you touch this: every corner is a 2-segment kinked line (not a straight radial cut)
 that bulges a fixed number of degrees clockwise at mid-radius - skip that kink and the wheel
-reads as flat pie wedges instead of chevrons; and the gap between segments is a constant *arc
-length* (`wheelGapInsetDeg()`), not a constant angle - a fixed angular gap looks narrower at the
+reads as flat pie wedges instead of chevrons; and the gap between segments is a constant _arc
+length_ (`wheelGapInsetDeg()`), not a constant angle - a fixed angular gap looks narrower at the
 inner radius than the outer radius purely because arc length shrinks with radius, so each
 boundary needs its own radius-dependent inset to stay visually parallel end to end. Each wedge's
 label is positioned at its shape's actual polygon centroid (`wheelLabelAnchor()`), not the naive
@@ -196,6 +196,7 @@ focusable/activatable the way an `<a>` or `<button>` is. The wedge's label `<tex
 on top of its `<path>` - `pointer-events: none` on that class (`guidelines.css`) keeps clicks
 landing on the wedge underneath rather than the text; a real browser needs this (jsdom's
 synthetic `dispatchEvent` doesn't hit-test, so the unit test alone wouldn't have caught it missing
+
 - the Playwright suite does).
 
 "Most relevant" is computed across all three AI rating rounds at once, rather than picking one,

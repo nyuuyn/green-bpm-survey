@@ -52,15 +52,20 @@ function heatmapTable(roundA, roundB, recordsByRound, pal) {
     <div class="table-wrap">
       <table class="data-table heatmap-table">
         <thead>
-          <tr><th></th>${RELEVANCE_OPTIONS.map((o) => html`<th>${o.label}</th>`)}</tr>
+          <tr>
+            <th></th>
+            ${RELEVANCE_OPTIONS.map((o) => html`<th>${o.label}</th>`)}
+          </tr>
         </thead>
         <tbody>
-          ${RELEVANCE_OPTIONS.map((rowOpt, i) => html`
-            <tr>
-              <th>${rowOpt.label}</th>
-              ${matrix[i].map((count) => html`<td style=${heatCellStyle(pal, count / max)}>${count}</td>`)}
-            </tr>
-          `)}
+          ${RELEVANCE_OPTIONS.map(
+            (rowOpt, i) => html`
+              <tr>
+                <th>${rowOpt.label}</th>
+                ${matrix[i].map((count) => html`<td style=${heatCellStyle(pal, count / max)}>${count}</td>`)}
+              </tr>
+            `,
+          )}
         </tbody>
       </table>
     </div>
@@ -87,7 +92,9 @@ function buildSmallMultiples(activeList, pal) {
       <h2 class="top-table-heading">${title}</h2>
       <p class="chart-desc">${description}</p>
       <div class="chart-legend">${legend}</div>
-      <div class="analysis-grid">${activeList.map((round) => chartCard(round.label, null, `cmp-chart-${kind}-${round.id}`))}</div>
+      <div class="analysis-grid">
+        ${activeList.map((round) => chartCard(round.label, null, `cmp-chart-${kind}-${round.id}`))}
+      </div>
     </div>
   `;
 
@@ -96,25 +103,25 @@ function buildSmallMultiples(activeList, pal) {
       "Share rated highly relevant, by source",
       "Percent of each source's guidelines scoring 3 (highly relevant) - one chart per selected round.",
       "high-relevance",
-      [legendDot(pal.muted, "General source"), legendDot(pal.strong, "BPM-native source")]
+      [legendDot(pal.muted, "General source"), legendDot(pal.strong, "BPM-native source")],
     )}
     ${section(
       "Relevance mix per source",
       "Full 0–3 breakdown per source, normalized to 100% - one chart per selected round.",
       "relevance-mix",
-      RELEVANCE_OPTIONS.map((o, i) => legendDot(pal.relevanceSteps[i], o.label))
+      RELEVANCE_OPTIONS.map((o, i) => legendDot(pal.relevanceSteps[i], o.label)),
     )}
     ${section(
       "BPM Scope emphasis — BPM-native vs. general sources",
       "Percent of each group's rated guidelines touching each layer - one chart per selected round.",
       "scope-native",
-      [legendDot(pal.muted, "General source"), legendDot(pal.strong, "BPM-native source")]
+      [legendDot(pal.muted, "General source"), legendDot(pal.strong, "BPM-native source")],
     )}
     ${section(
       "Generic best practice vs. BPM-specific, by source",
       "Among rated guidelines: would the same advice apply outside BPM, or is the reasoning process-specific? One chart per selected round.",
       "generic-share",
-      [legendDot(pal.muted, "Generic practice"), legendDot(pal.strong, "BPM-specific")]
+      [legendDot(pal.muted, "Generic practice"), legendDot(pal.strong, "BPM-specific")],
     )}
   </div>`;
 }
