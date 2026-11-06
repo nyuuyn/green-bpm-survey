@@ -3,7 +3,7 @@
 /* ---------- Source block ----------
  * Drills into specific sources, scoped to whichever single round is active
  * above (see analysis.js's activeRoundForSourceBlock). Unlike the round
- * comparison, sources partition the 448 guidelines rather than re-rating the
+ * comparison, sources partition the 443 guidelines rather than re-rating the
  * same set, so there's no guideline-level "did these two sources agree"
  * question to ask - no heatmap, no disagreement table. Instead: a
  * single-source panel (reusing the same per-record aggregations as a round

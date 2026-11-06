@@ -103,6 +103,35 @@ def test_build_data_json_reads_every_source_and_falls_back_on_missing_columns(tm
     ]
 
 
+def test_build_data_json_skips_rows_marked_duplicate_of(tmp_path, monkeypatch):
+    monkeypatch.setattr(generate_data, "SOURCES", {"src1": "Source One"})
+    monkeypatch.setattr(generate_data, "GUIDELINES_DIR", tmp_path)
+
+    write_csv(
+        tmp_path / "src1" / "guidelines.csv",
+        [
+            {
+                "ID": "S1.1",
+                "Name": "Original",
+                "Reference": "Ref 1",
+                "Guideline": "Do the thing",
+                "DuplicateOf": "",
+            },
+            {
+                "ID": "S1.2",
+                "Name": "Republished elsewhere",
+                "Reference": "Ref 2",
+                "Guideline": "Do the same thing",
+                "DuplicateOf": "OTHER.1",
+            },
+        ],
+    )
+
+    items = generate_data.build_data_json()
+
+    assert [item["id"] for item in items] == ["S1.1"]
+
+
 def test_build_analysis_json_joins_ratings_and_fills_gaps(tmp_path, monkeypatch):
     monkeypatch.setattr(generate_data, "SOURCES", {"native": "Native Source", "ext": "External Source"})
     monkeypatch.setattr(generate_data, "BPM_NATIVE", {"native"})
@@ -127,10 +156,19 @@ def test_build_analysis_json_joins_ratings_and_fills_gaps(tmp_path, monkeypatch)
             }
         ],
     )
-    write_csv(tmp_path / "ext" / "guidelines.csv", [{"ID": "E1", "Name": "External"}])
+    write_csv(
+        tmp_path / "ext" / "guidelines.csv",
+        [
+            {"ID": "E1", "Name": "External", "DuplicateOf": ""},
+            {"ID": "E2", "Name": "Duplicate of N1", "DuplicateOf": "N1"},
+        ],
+    )
     write_csv(
         tmp_path / "ext" / "survey_claude.csv",
-        [{"ID": "E1", "BPM Relevance": "0", "BPM Scope": "", "Generic": "", "BPM Lifecycle": ""}],
+        [
+            {"ID": "E1", "BPM Relevance": "0", "BPM Scope": "", "Generic": "", "BPM Lifecycle": ""},
+            {"ID": "E2", "BPM Relevance": "3", "BPM Scope": "", "Generic": "", "BPM Lifecycle": ""},
+        ],
     )
 
     records = generate_data.build_analysis_json("survey_claude.csv")

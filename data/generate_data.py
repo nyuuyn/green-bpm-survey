@@ -12,6 +12,13 @@ Single-source-of-truth generator for everything the frontend fetches:
 Both output kinds land in generated/ (../generated from this file), where the
 GitHub Pages deploy step already expects them (see .github/workflows/test.yml).
 
+A row in any guidelines.csv may carry an optional `DuplicateOf` column set to
+another source's guideline ID (e.g. ppatterns rows that just republish a
+Green Business Process Patterns pattern under a different name/source — see
+issue #35). Such rows are kept in the CSV/survey_claude* ratings for
+provenance but are excluded from both generated outputs, so they're never
+sampled into the live survey and never double-counted in totals or charts.
+
 Usage: python data/generate_data.py
 Run this after editing any guidelines.csv/survey_claude*.csv, then commit the
 regenerated output alongside the CSV change — CI (data-freshness check in
@@ -66,6 +73,8 @@ def build_data_json():
     items = []
     for source, label in SOURCES.items():
         for r in read_csv(GUIDELINES_DIR / source / "guidelines.csv"):
+            if r.get("DuplicateOf", "").strip():
+                continue
             items.append({
                 "id": r["ID"], "name": r["Name"], "category": r.get("Category", ""),
                 "reference": r["Reference"], "guideline": r["Guideline"],
@@ -81,6 +90,8 @@ def build_analysis_json(survey_filename):
         guidelines = {r["ID"]: r for r in read_csv(GUIDELINES_DIR / source / "guidelines.csv")}
         ratings = {r["ID"]: r for r in read_csv(GUIDELINES_DIR / source / survey_filename)}
         for gid, g in guidelines.items():
+            if g.get("DuplicateOf", "").strip():
+                continue
             r = ratings.get(gid, {})
             relevance = r.get("BPM Relevance", "")
             records.append({

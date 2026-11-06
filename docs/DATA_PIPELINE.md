@@ -13,7 +13,7 @@ generated/analysis_<round>.json          per-round rating data for the analysis 
 
 data/                                    raw data, ratings, and analysis tooling
   guidelines/<source>/
-    guidelines.csv          raw guideline data scraped from the source (ID, Name, Category, Reference, Guideline, Context)
+    guidelines.csv          raw guideline data scraped from the source (ID, Name, Category, Reference, Guideline, Context, DuplicateOf)
     survey.csv              human interview ratings — currently empty, reserved for the real interview pass
     survey_claude.csv       Claude-generated ratings, no persona framing, same schema as survey.csv
     survey_claude_sustainability.csv  Claude ratings framed as a sustainability/green-IT expert (lay BPM exposure) — test data
@@ -36,20 +36,27 @@ CSVs, the notebook, and the Python scripts never ship to the live site.
 
 ## Sources
 
-| Folder        | Source                                                                                                                                                                                                 | Rows | Type                |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- | ------------------- |
-| `aws`         | AWS Well-Architected Framework — Sustainability Pillar                                                                                                                                                 | 29   | General cloud       |
-| `azure`       | Azure Well-Architected Framework — Sustainability recommendations                                                                                                                                      | 135  | General cloud       |
-| `gcp`         | Google Cloud Well-Architected Framework — Sustainability pillar                                                                                                                                        | 106  | General cloud       |
-| `gsf`         | Green Software Foundation Patterns Catalog                                                                                                                                                             | 59   | General cloud/web   |
-| `w3c`         | W3C Web Sustainability Guidelines                                                                                                                                                                      | 71   | General web         |
-| `ghgprotocol` | GHG Protocol Corporate Standard (WRI/WBCSD, revised edition) - one guideline per distinct, process-relevant "shall/should" statement or case study, across 7 of the standard's 11 substantive chapters | 13   | **General, non-IT** |
-| `gbpp`        | Green Business Process Patterns (Nowak et al., PLoP 2011)                                                                                                                                              | 9    | **BPM-native**      |
-| `ppatterns`   | process-pattern.app, patterns tagged "Sustainability"                                                                                                                                                  | 6    | **BPM-native**      |
-| `lean`        | Lean and Environment (EPA Lean & Environment Toolkit; Lean Enterprise Institute "green waste" articles)                                                                                                | 10   | **BPM-native**      |
-| `gbpmbook`    | Green Business Process Management: Towards the Sustainable Enterprise (vom Brocke, Seidel & Recker, eds., Springer 2012) - one guideline per chapter contribution, across 7 of the book's 13 chapters  | 10   | **BPM-native**      |
+| Folder        | Source                                                                                                                                                                                                 | Rows         | Type                |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ | ------------------- |
+| `aws`         | AWS Well-Architected Framework — Sustainability Pillar                                                                                                                                                 | 29           | General cloud       |
+| `azure`       | Azure Well-Architected Framework — Sustainability recommendations                                                                                                                                      | 135          | General cloud       |
+| `gcp`         | Google Cloud Well-Architected Framework — Sustainability pillar                                                                                                                                        | 106          | General cloud       |
+| `gsf`         | Green Software Foundation Patterns Catalog                                                                                                                                                             | 59           | General cloud/web   |
+| `w3c`         | W3C Web Sustainability Guidelines                                                                                                                                                                      | 71           | General web         |
+| `ghgprotocol` | GHG Protocol Corporate Standard (WRI/WBCSD, revised edition) - one guideline per distinct, process-relevant "shall/should" statement or case study, across 7 of the standard's 11 substantive chapters | 13           | **General, non-IT** |
+| `gbpp`        | Green Business Process Patterns (Nowak et al., PLoP 2011)                                                                                                                                              | 9            | **BPM-native**      |
+| `ppatterns`   | process-pattern.app, patterns tagged "Sustainability"                                                                                                                                                  | 6 (1 unique) | **BPM-native**      |
+| `lean`        | Lean and Environment (EPA Lean & Environment Toolkit; Lean Enterprise Institute "green waste" articles)                                                                                                | 10           | **BPM-native**      |
+| `gbpmbook`    | Green Business Process Management: Towards the Sustainable Enterprise (vom Brocke, Seidel & Recker, eds., Springer 2012) - one guideline per chapter contribution, across 7 of the book's 13 chapters  | 10           | **BPM-native**      |
 
-**448 guidelines total.**
+**448 guideline rows, 443 unique guidelines.** `ppatterns` republishes 5 of its 6 patterns from
+`gbpp` (the Nowak et al. paper) under different names — e.g. `ppatterns`' "Green Variant" is
+`gbpp`'s `GBPP.BASIC.2`. Those 5 rows carry a `DuplicateOf` value on `guidelines.csv` pointing at
+the canonical `gbpp` ID; `generate_data.py` keeps the rows (and any ratings already collected on
+them) for traceability but excludes them from `generated/data.json` and every
+`generated/analysis_<round>.json`, so they're never sampled into the live survey and never
+double-counted in totals or charts. Only `ppatterns`' "Shift Workload" has no `gbpp` counterpart
+and so is the only `ppatterns` row that actually surfaces anywhere live — see issue #35.
 
 `gbpmbook` is deliberately narrower than it could be: the book has 13 chapters, but several (a Green IS literature review, a Triple-Bottom-Line critique, a single-company case study, a generic ICT maturity model) don't yield a BPM-specific, actionable guideline distinct from the general-cloud sources above - including them would reproduce the same "generic sustainability guidance mistaken for BPM guidance" problem this source exists to counterbalance. See issues #5 and #18 for the still-open question of whether ABPMP's BPM CBOK and/or OMG's OCEB syllabus are worth mining the same way (narrowly, for their genuinely sustainability-specific content, not wholesale).
 
@@ -135,7 +142,7 @@ required to see it. This reuses `RELEVANCE_OPTIONS`/`SCOPE_OPTIONS`/`LIFECYCLE_O
 The intro card's "Guidelines collected per source" chart is fetched from `generated/data.json`
 directly rather than any round's file (`mountIntroSourceChart` in `charts.js`). It isn't part
 of the results card at all, because it's a fact about the guideline corpus, not about anyone's
-ratings - every round rates the same 425 guidelines, so a per-round or per-comparison copy of
+ratings - every round rates the same 443 guidelines, so a per-round or per-comparison copy of
 this chart would always show identical numbers.
 
 Each round is driven by its own `generated/analysis_<round>.json` - one flat record per guideline
@@ -212,7 +219,7 @@ into each other as plain globals, the same way they all call into `common.js`'s 
 the Preact+htm setup and the full file list).
 
 **Why there's no heatmap or disagreement table here.** The round comparison's heatmap and
-disagreement table both work because every round re-rates the _same_ 448 guidelines, so
+disagreement table both work because every round re-rates the _same_ 443 guidelines, so
 "did round A and round B score this guideline the same way" is a meaningful question. Sources
 don't have that property - every guideline belongs to exactly one source, so there's no second
 rating of the same guideline to compare against. The source comparison panel instead reuses

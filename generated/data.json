@@ -4220,56 +4220,6 @@
 "sourceLabel": "Green Business Process Patterns (Nowak et al., 2011)"
 },
 {
-"id": "PPA.1",
-"name": "Automate for environmental impact",
-"category": "Sustainability",
-"reference": "https://process-pattern.app/book/patterns/green-process-automatization",
-"guideline": "Reduce a process's environmental footprint by automating specific activities, fully or partially (semi-automation), choosing which steps to automate based on where automation yields the greater ecological benefit compared to human execution.",
-"context": "The catalog’s own example: a telecom company that switched from mailing paper invoices to emailing them, cutting cost and turnaround time while reducing paper waste in one change.",
-"source": "ppatterns",
-"sourceLabel": "process-pattern.app"
-},
-{
-"id": "PPA.2",
-"name": "Green Compensation",
-"category": "Sustainability",
-"reference": "https://process-pattern.app/book/patterns/green-compensation",
-"guideline": "When a process cannot be redesigned for sustainability due to internal or technical restrictions, trigger a parallel compensation activity (e.g. a certified environmental offset such as tree planting or renewable-energy investment) whenever the process runs, so its environmental impact is counterbalanced without changing the process itself.",
-"context": "The catalog frames the trigger condition specifically: production waste from machinery that can’t be reduced without investing in new, expensive equipment is the typical case this pattern is meant for, instead of attempting a redesign that isn’t really feasible.",
-"source": "ppatterns",
-"sourceLabel": "process-pattern.app"
-},
-{
-"id": "PPA.3",
-"name": "Green Feature",
-"category": "Sustainability",
-"reference": "https://process-pattern.app/book/patterns/green-feature",
-"guideline": "Identify prominent, easily communicable features of a product or its process that can be swapped for greener alternatives; even a marginal reduction in ecological footprint from a highly visible feature can substantially improve the organization's perceived environmental reputation.",
-"context": "The catalog notes this pattern deliberately optimizes for visibility and communicability over raw impact size — a feature with a small ecological effect is still worth choosing if it’s the one customers will actually notice and associate with the brand.",
-"source": "ppatterns",
-"sourceLabel": "process-pattern.app"
-},
-{
-"id": "PPA.4",
-"name": "Green Variant",
-"category": "Sustainability",
-"reference": "https://process-pattern.app/book/patterns/green-variant",
-"guideline": "Offer an alternative, lower-impact variant of a business process (different steps, resources, or partners) that achieves the same functional outcome as the original, letting customers choose between the conventional and green variant rather than replacing the existing process.",
-"context": "The catalog’s example: a trading company offering eco-friendly, renewable-material packaging as a premium option alongside its standard plastic wrapping — customers choose, the original process isn’t replaced.",
-"source": "ppatterns",
-"sourceLabel": "process-pattern.app"
-},
-{
-"id": "PPA.5",
-"name": "Human Process Performance",
-"category": "Sustainability",
-"reference": "https://process-pattern.app/book/patterns/human-process-performance",
-"guideline": "Where it reduces environmental impact, replace machine- or IT-driven activities that pollute or consume significant energy with human-performed activities, weighing the ecological gain against cost and efficiency trade-offs.",
-"context": "The catalog’s worked example: a metal-parts manufacturer replacing energy-intensive laser-scanning inspection with manual quality checks by employees, lowering both environmental impact and cost.",
-"source": "ppatterns",
-"sourceLabel": "process-pattern.app"
-},
-{
 "id": "PPA.6",
 "name": "Shift Workload",
 "category": "Sustainability",
