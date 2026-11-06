@@ -8,17 +8,13 @@
  * respondent-info-form.js ("About you"), rating-row.js + rating-list.js
  * (the sampled-guideline list). h/html/preactRender/useState/useRef are globals
  * from common.js/preact - see that file for the synchronous-rendering setup
- * shared by this page and analysis.js.
+ * shared by this page and analysis.js. SUBMIT_ENDPOINT/SUBMIT_TOKEN are
+ * globals from submit-config.js, loaded just before this file.
  */
 
 /* ---------- Config ---------- */
 
 const SAMPLE_SIZE = 10;
-
-// Set this to your deployed Google Apps Script Web App URL to go live.
-// While null, the app runs in test mode: responses are shown on-screen and
-// downloadable as JSON instead of being submitted anywhere.
-const SUBMIT_ENDPOINT = null;
 
 const EXPERIENCE_OPTIONS = [
   "None",
@@ -137,6 +133,7 @@ async function renderComplete() {
   setProgress(state.items.length, state.items.length);
 
   const payload = {
+    token: SUBMIT_TOKEN,
     sessionId: state.sessionId,
     submittedAt: new Date().toISOString(),
     respondent: state.respondent,

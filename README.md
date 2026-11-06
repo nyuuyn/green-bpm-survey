@@ -60,8 +60,9 @@ per-source comparison block — for the interactive version.
 - 10 randomly sampled guidelines per respondent, rated for Relevance, Scope, Generic-vs-specific,
   and Lifecycle phase
 
-> ⚠️ **Test mode:** `SUBMIT_ENDPOINT` in `survey.js` is currently `null` — submissions aren't live
-> yet, responses are just shown/downloaded as JSON. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#test-mode).
+> ✅ **Live:** `assets/js/survey/submit-config.js` has a deployed `SUBMIT_ENDPOINT` —
+> submissions are saved to the backend Sheet. See
+> [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#submission-backend).
 
 Full architecture, page-by-page and the survey flow in detail:
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
@@ -85,6 +86,8 @@ npm run serve        # python -m http.server 8123, then open http://localhost:81
 - [`docs/TESTING.md`](docs/TESTING.md) — unit tests (jsdom) and the Playwright e2e suite, plus
   how CI/CD (`.github/workflows/test.yml` + `deploy.yml`) is wired up.
 - [`data/SURVEY_SCHEMA.md`](data/SURVEY_SCHEMA.md) — the locked rating rubric.
+- [`backend/apps-script/README.md`](backend/apps-script/README.md) — deploying the submission
+  backend (Google Apps Script + Sheet) and its security model.
 
 ## ✅ Status / what's next
 
@@ -98,7 +101,8 @@ npm run serve        # python -m http.server 8123, then open http://localhost:81
       respondent background screen, GitHub Pages live, real-browser Playwright regression suite
 - [x] Single-repo data pipeline: `data/generate_data.py` regenerates `generated/*.json`
       from the CSVs, CI fails the build if they've drifted out of sync
-- [ ] Submission backend (Google Apps Script + Sheet) deployed and `SUBMIT_ENDPOINT` set
+- [x] Submission backend ([`backend/apps-script/`](backend/apps-script/README.md)) deployed and
+      `SUBMIT_ENDPOINT`/`SUBMIT_TOKEN` set
 - [ ] Real human interview pass (`data/guidelines/*/survey.csv` is still empty everywhere)
 - [ ] Human vs. Claude rating comparison (`data/analysis.ipynb` has a stub section ready for this)
 - [ ] Filter to the high-relevance subset and synthesize the actual Green BPM Guideline document

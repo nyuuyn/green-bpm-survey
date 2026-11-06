@@ -44,6 +44,11 @@ export function sleep(ms) {
 // in the same context - matching how classic <script> tags share one global
 // scope in a real browser - while also giving each file a real path on disk,
 // which is what lets c8/V8 coverage attribute executed code back to it.
+//
+// Tests that need a different SUBMIT_ENDPOINT/SUBMIT_TOKEN than whatever's
+// actually deployed pass a fixture path (tests/fixtures/submit-config.*.js)
+// in place of assets/js/survey/submit-config.js - a real file swap, not a
+// text patch - see test_flow.mjs and test_submission.mjs.
 export function runPageScripts(dom, filePaths) {
   const context = dom.getInternalVMContext();
   for (const filePath of filePaths) {
