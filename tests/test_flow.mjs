@@ -17,6 +17,11 @@ window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 // Run each script in its own vm.Script (see test_server.mjs for why this -
 // rather than window.eval() - keeps top-level declarations like RatingRow
 // shared across files in the same order the <script> tags load them).
+// This test asserts test-mode behavior (the ".test-mode-note" branch) - the
+// fixture config file below forces that regardless of what's actually
+// deployed for production, so this doesn't break (or submit to the real
+// backend) once survey.js has a live SUBMIT_ENDPOINT. See test_submission.mjs
+// for the live-branch assertions.
 runPageScripts(dom, [
   "assets/js/vendor/preact.min.js",
   "assets/js/vendor/preact-hooks.umd.js",
@@ -25,6 +30,7 @@ runPageScripts(dom, [
   "assets/js/survey/rating-row.js",
   "assets/js/survey/respondent-info-form.js",
   "assets/js/survey/rating-list.js",
+  "tests/fixtures/submit-config.test-mode.js",
   "assets/js/survey/survey.js",
 ]);
 

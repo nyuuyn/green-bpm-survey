@@ -5,8 +5,9 @@
   "private": true,
   "scripts": {
     "serve": "python -m http.server 8123",
-    "test": "node tests/test_landing.mjs && node tests/test_flow.mjs && node tests/test_analysis.mjs && node tests/test_guidelines.mjs && node tests/test_palette.mjs",
+    "test": "node tests/test_landing.mjs && node tests/test_flow.mjs && node tests/test_submission.mjs && node tests/test_analysis.mjs && node tests/test_guidelines.mjs && node tests/test_palette.mjs",
     "test:e2e": "pytest",
+    "smoketest:backend": "node backend/apps-script/smoketest.mjs",
     "coverage": "c8 --check-coverage --lines 80 --branches 80 --functions 80 --statements 80 npm test",
     "coverage:py": "pytest data/tests --cov --cov-report=term-missing --cov-fail-under=80",
     "lint:css": "stylelint \"assets/css/**/*.css\"",

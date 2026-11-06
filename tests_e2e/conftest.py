@@ -19,6 +19,13 @@ import pytest
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
+# Matches the jsdom suite's approach (tests/test_flow.mjs): serves the
+# committed test-mode fixture in place of the real
+# assets/js/survey/submit-config.js, regardless of whatever's actually
+# deployed for production - so this suite never depends on, or accidentally
+# submits real rows to, the live backend.
+_TEST_CONFIG_PATH = REPO_ROOT / "tests" / "fixtures" / "submit-config.test-mode.js"
+
 
 def _free_port():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -44,3 +51,16 @@ def base_url():
 def browser_context_args(browser_context_args):
     # Deterministic viewport so chart layout (grid column count) doesn't vary by runner.
     return {**browser_context_args, "viewport": {"width": 1280, "height": 900}}
+
+
+@pytest.fixture(autouse=True)
+def force_survey_test_mode(page):
+    # Every test that completes the survey goes through this - without it,
+    # a real deployed SUBMIT_ENDPOINT would mean every e2e run (including CI)
+    # submits live rows to the production Sheet, and the existing test-mode
+    # assertions (.test-mode-note, pre.summary-box) would stop matching.
+    page.route(
+        "**/assets/js/survey/submit-config.js",
+        lambda route: route.fulfill(path=str(_TEST_CONFIG_PATH)),
+    )
+    yield

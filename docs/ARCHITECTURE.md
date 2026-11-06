@@ -78,8 +78,9 @@ assets/js/
     rating-row.js           RatingRow component - one guideline's rating fields
     respondent-info-form.js RespondentInfoForm component + renderRespondentInfo()/collectRespondentInfo()
     rating-list.js          RespondentSummary + RatingList components + renderRatingList()
-    survey.js               controller: config, `state`, validateRowAnswer/buildAnswerRecord,
-                             the completion screen (renderComplete, plain el()/renderApp() - see
+    submit-config.js        SUBMIT_ENDPOINT/SUBMIT_TOKEN - see "Submission backend" below
+    survey.js               controller: `state`, validateRowAnswer/buildAnswerRecord, the
+                             completion screen (renderComplete, plain el()/renderApp() - see
                              above), and boot() (loaded last)
 
   analysis/
@@ -218,9 +219,25 @@ page uses for its selected rounds - so a specific phase's popup is directly shar
 closing it (overlay click, the close button, or Escape) just clears the hash rather than
 toggling local component state.
 
-## Test mode
+## Submission backend
 
-`SUBMIT_ENDPOINT` in `survey.js` is currently `null`. In this state, finishing the survey doesn't
-submit anywhere — responses are shown on-screen as JSON and downloadable, so the whole flow is
-testable without a backend. To go live, deploy a submission backend (Google Apps Script + Sheet)
-and set `SUBMIT_ENDPOINT` to its URL.
+`SUBMIT_ENDPOINT`/`SUBMIT_TOKEN` live in their own file, `assets/js/survey/submit-config.js`
+(loaded as its own `<script>` tag before `survey.js`, same pattern as `common.js`/`rating-row.js`
+etc.) rather than inline in `survey.js` - so tests can swap in their own copy of that one file
+(`tests/fixtures/submit-config.*.js`) instead of text-patching the real one. `null`/`""` is test
+mode: finishing the survey doesn't submit anywhere, responses are shown on-screen as JSON and
+downloadable, so the whole flow is testable without a backend.
+
+Going live means deploying `backend/apps-script/Code.gs` as a Google Apps Script Web App backed
+by a Google Sheet, then setting both constants in `submit-config.js` to match. Full deployment
+steps: [`backend/apps-script/README.md`](../backend/apps-script/README.md).
+
+**Security model, in brief** (full detail in that README): the deployed Web App URL is not a
+secret - it's public client JS, so anyone can POST to it directly. The Sheet itself is never
+shared with anyone; the script (running "as Me") is the only thing with write access, regardless
+of who called it. `SUBMIT_TOKEN` is a cheap spam filter, not real access control. The actual
+protection is server-side in `Code.gs`: `validatePayload()` rejects malformed/oversized/
+out-of-range payloads before anything is written, and `sanitizeForSheet()` +
+`setNumberFormat('@')` neutralize formula injection (a free-text field like "BPM Justification"
+starting with `=` would otherwise be written as a live, executable Sheets formula via
+`setValues()`).
