@@ -2,7 +2,7 @@
 // flow entirely now that analysis.html is its own standalone page.
 import { JSDOM } from "jsdom";
 import fs from "node:fs";
-import { startServer, sleep } from "./test_server.mjs";
+import { startServer, sleep, runPageScripts } from "./test_server.mjs";
 
 const { base: BASE, close } = await startServer();
 
@@ -28,22 +28,21 @@ window.Chart = class {
   destroy() {}
 };
 
-// See test_flow.mjs for why these must be eval'd together in one call.
-dom.window.eval(
-  [
-    fs.readFileSync("assets/js/vendor/preact.min.js", "utf-8"),
-    fs.readFileSync("assets/js/vendor/preact-hooks.umd.js", "utf-8"),
-    fs.readFileSync("assets/js/vendor/htm.umd.js", "utf-8"),
-    fs.readFileSync("assets/js/common.js", "utf-8"),
-    fs.readFileSync("assets/js/analysis/palette.js", "utf-8"),
-    fs.readFileSync("assets/js/analysis/charts.js", "utf-8"),
-    fs.readFileSync("assets/js/analysis/chart-dom.js", "utf-8"),
-    fs.readFileSync("assets/js/analysis/round-panel.js", "utf-8"),
-    fs.readFileSync("assets/js/analysis/comparison-panel.js", "utf-8"),
-    fs.readFileSync("assets/js/analysis/source-panel.js", "utf-8"),
-    fs.readFileSync("assets/js/analysis/analysis.js", "utf-8"),
-  ].join("\n"),
-);
+// See test_server.mjs's runPageScripts for why each file runs as its own
+// vm.Script instead of being eval'd together as one concatenated string.
+runPageScripts(dom, [
+  "assets/js/vendor/preact.min.js",
+  "assets/js/vendor/preact-hooks.umd.js",
+  "assets/js/vendor/htm.umd.js",
+  "assets/js/common.js",
+  "assets/js/analysis/palette.js",
+  "assets/js/analysis/charts.js",
+  "assets/js/analysis/chart-dom.js",
+  "assets/js/analysis/round-panel.js",
+  "assets/js/analysis/comparison-panel.js",
+  "assets/js/analysis/source-panel.js",
+  "assets/js/analysis/analysis.js",
+]);
 
 let failures = 0;
 function log(label, ok, extra = "") {

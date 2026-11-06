@@ -1,7 +1,7 @@
 // Headless functional test of survey.js using jsdom.
 import { JSDOM } from "jsdom";
 import fs from "node:fs";
-import { startServer, sleep } from "./test_server.mjs";
+import { startServer, sleep, runPageScripts } from "./test_server.mjs";
 
 const { base: BASE, close } = await startServer();
 
@@ -14,24 +14,19 @@ const dom = new JSDOM(fs.readFileSync("survey.html", "utf-8"), {
 const { window } = dom;
 window.fetch = (url, ...rest) => fetch(new URL(url, BASE + "/"), ...rest);
 
-// A "use strict" eval() gets its own isolated top-level scope per call, even on
-// the same window - so every script survey.html loads must be eval'd together
-// in one call, in the same order, for each to see the others' declarations
-// (el, html, RatingRow, state, ...). A real browser doesn't have this quirk
-// (classic <script> tags share one global scope), which is exactly what the
-// Playwright suite exercises instead.
-dom.window.eval(
-  [
-    fs.readFileSync("assets/js/vendor/preact.min.js", "utf-8"),
-    fs.readFileSync("assets/js/vendor/preact-hooks.umd.js", "utf-8"),
-    fs.readFileSync("assets/js/vendor/htm.umd.js", "utf-8"),
-    fs.readFileSync("assets/js/common.js", "utf-8"),
-    fs.readFileSync("assets/js/survey/rating-row.js", "utf-8"),
-    fs.readFileSync("assets/js/survey/respondent-info-form.js", "utf-8"),
-    fs.readFileSync("assets/js/survey/rating-list.js", "utf-8"),
-    fs.readFileSync("assets/js/survey/survey.js", "utf-8"),
-  ].join("\n"),
-);
+// Run each script in its own vm.Script (see test_server.mjs for why this -
+// rather than window.eval() - keeps top-level declarations like RatingRow
+// shared across files in the same order the <script> tags load them).
+runPageScripts(dom, [
+  "assets/js/vendor/preact.min.js",
+  "assets/js/vendor/preact-hooks.umd.js",
+  "assets/js/vendor/htm.umd.js",
+  "assets/js/common.js",
+  "assets/js/survey/rating-row.js",
+  "assets/js/survey/respondent-info-form.js",
+  "assets/js/survey/rating-list.js",
+  "assets/js/survey/survey.js",
+]);
 
 let failures = 0;
 function log(label, ok, extra = "") {
