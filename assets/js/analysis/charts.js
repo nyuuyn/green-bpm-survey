@@ -17,10 +17,29 @@
  * listed in analysis.html).
  */
 
-const ANALYSIS_SOURCE_ORDER = ["aws", "azure", "gcp", "gsf", "w3c", "ghgprotocol", "gbpp", "ppatterns", "lean", "gbpmbook"];
+const ANALYSIS_SOURCE_ORDER = [
+  "aws",
+  "azure",
+  "gcp",
+  "gsf",
+  "w3c",
+  "ghgprotocol",
+  "gbpp",
+  "ppatterns",
+  "lean",
+  "gbpmbook",
+];
 const SOURCE_SHORT_LABELS = {
-  aws: "AWS", azure: "Azure", gcp: "GCP", gsf: "GSF", w3c: "W3C", ghgprotocol: "GHG Protocol",
-  gbpp: "GBPP", ppatterns: "ppatterns.app", lean: "Lean", gbpmbook: "Green BPM Book",
+  aws: "AWS",
+  azure: "Azure",
+  gcp: "GCP",
+  gsf: "GSF",
+  w3c: "W3C",
+  ghgprotocol: "GHG Protocol",
+  gbpp: "GBPP",
+  ppatterns: "ppatterns.app",
+  lean: "Lean",
+  gbpmbook: "Green BPM Book",
 };
 
 function baseScaleOptions(pal) {
@@ -32,7 +51,13 @@ function baseScaleOptions(pal) {
 }
 
 function baseTooltip(pal) {
-  return { backgroundColor: pal.tooltipBg, titleColor: pal.tooltipText, bodyColor: pal.tooltipText, padding: 8, cornerRadius: 6 };
+  return {
+    backgroundColor: pal.tooltipBg,
+    titleColor: pal.tooltipText,
+    bodyColor: pal.tooltipText,
+    padding: 8,
+    cornerRadius: 6,
+  };
 }
 
 function mountChart(canvasId, config) {
@@ -47,13 +72,17 @@ function mountChart(canvasId, config) {
 
 function countsPerSource(records) {
   const counts = Object.fromEntries(ANALYSIS_SOURCE_ORDER.map((s) => [s, 0]));
-  records.forEach((r) => { counts[r.source] = (counts[r.source] || 0) + 1; });
+  records.forEach((r) => {
+    counts[r.source] = (counts[r.source] || 0) + 1;
+  });
   return ANALYSIS_SOURCE_ORDER.map((s) => counts[s]);
 }
 
 function relevanceDistribution(records) {
   const counts = [0, 0, 0, 0];
-  ratedRecords(records).forEach((r) => { counts[r.relevance] += 1; });
+  ratedRecords(records).forEach((r) => {
+    counts[r.relevance] += 1;
+  });
   return counts;
 }
 
@@ -80,17 +109,26 @@ function relevanceDistributionPerSource(records) {
 
 function scopeCounts(records) {
   const counts = Object.fromEntries(SCOPE_OPTIONS.map((s) => [s, 0]));
-  records.forEach((r) => r.scope.forEach((s) => { counts[s] += 1; }));
+  records.forEach((r) =>
+    r.scope.forEach((s) => {
+      counts[s] += 1;
+    }),
+  );
   return SCOPE_OPTIONS.map((s) => counts[s]);
 }
 
 function scopeShareByNative(records) {
-  const groups = { general: records.filter((r) => !r.bpmNative), native: records.filter((r) => r.bpmNative) };
+  const groups = {
+    general: records.filter((r) => !r.bpmNative),
+    native: records.filter((r) => r.bpmNative),
+  };
   const result = {};
   for (const [key, group] of Object.entries(groups)) {
     const rated = ratedRecords(group);
     const denom = rated.length || 1;
-    result[key] = SCOPE_OPTIONS.map((scope) => (rated.filter((r) => r.scope.includes(scope)).length / denom) * 100);
+    result[key] = SCOPE_OPTIONS.map(
+      (scope) => (rated.filter((r) => r.scope.includes(scope)).length / denom) * 100,
+    );
   }
   return result;
 }
@@ -122,7 +160,11 @@ function genericSplit(records) {
 function lifecycleCounts(records) {
   const phases = [...LIFECYCLE_OPTIONS, "Not Applicable"];
   const counts = Object.fromEntries(phases.map((p) => [p, 0]));
-  records.forEach((r) => r.lifecycle.forEach((p) => { counts[p] += 1; }));
+  records.forEach((r) =>
+    r.lifecycle.forEach((p) => {
+      counts[p] += 1;
+    }),
+  );
   return { phases, counts: phases.map((p) => counts[p]) };
 }
 
@@ -141,7 +183,12 @@ function meanRelevanceByScope(records) {
 // disagreement sized by how far off the diagonal it lands.
 function relevanceCrossTab(recordsA, recordsB) {
   const byIdB = new Map(recordsB.map((r) => [r.id, r]));
-  const matrix = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+  const matrix = [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ];
   recordsA.forEach((ra) => {
     if (ra.relevance === null || ra.relevance === undefined) return;
     const rb = byIdB.get(ra.id);
@@ -169,16 +216,30 @@ function mountHighRelevanceChart(canvasId, records, pal) {
     type: "bar",
     data: {
       labels: shortLabels,
-      datasets: [{
-        data: highRelevanceShareBySource(records),
-        backgroundColor: ANALYSIS_SOURCE_ORDER.map((s) => (nativeSet.has(s) ? pal.strong : pal.muted)),
-        borderRadius: 4,
-      }],
+      datasets: [
+        {
+          data: highRelevanceShareBySource(records),
+          backgroundColor: ANALYSIS_SOURCE_ORDER.map((s) =>
+            nativeSet.has(s) ? pal.strong : pal.muted,
+          ),
+          borderRadius: 4,
+        },
+      ],
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { ...baseTooltip(pal), callbacks: { label: (ctx) => `${ctx.parsed.y.toFixed(0)}%` } } },
-      scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 } },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...baseTooltip(pal),
+          callbacks: { label: (ctx) => `${ctx.parsed.y.toFixed(0)}%` },
+        },
+      },
+      scales: {
+        x: baseScaleOptions(pal),
+        y: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 },
+      },
     },
   });
 }
@@ -191,12 +252,22 @@ function mountRelevanceMixChart(canvasId, records, pal) {
     data: {
       labels: shortLabels,
       datasets: RELEVANCE_OPTIONS.map((o, i) => ({
-        label: o.label, data: mixPerRelevance[i], backgroundColor: pal.relevanceSteps[i], stack: "mix",
+        label: o.label,
+        data: mixPerRelevance[i],
+        backgroundColor: pal.relevanceSteps[i],
+        stack: "mix",
       })),
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { ...baseTooltip(pal), callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}%` } } },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...baseTooltip(pal),
+          callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}%` },
+        },
+      },
       scales: {
         x: { ...baseScaleOptions(pal), stacked: true },
         y: { ...baseScaleOptions(pal), stacked: true, beginAtZero: true, max: 100 },
@@ -212,15 +283,35 @@ function mountScopeNativeChart(canvasId, records, pal) {
     data: {
       labels: SCOPE_OPTIONS,
       datasets: [
-        { label: "General source", data: scopeByNative.general, backgroundColor: pal.muted, borderRadius: 3 },
-        { label: "BPM-native source", data: scopeByNative.native, backgroundColor: pal.strong, borderRadius: 3 },
+        {
+          label: "General source",
+          data: scopeByNative.general,
+          backgroundColor: pal.muted,
+          borderRadius: 3,
+        },
+        {
+          label: "BPM-native source",
+          data: scopeByNative.native,
+          backgroundColor: pal.strong,
+          borderRadius: 3,
+        },
       ],
     },
     options: {
       indexAxis: "y",
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { ...baseTooltip(pal), callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.x.toFixed(0)}%` } } },
-      scales: { x: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 }, y: baseScaleOptions(pal) },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...baseTooltip(pal),
+          callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.x.toFixed(0)}%` },
+        },
+      },
+      scales: {
+        x: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 },
+        y: baseScaleOptions(pal),
+      },
     },
   });
 }
@@ -233,13 +324,25 @@ function mountGenericShareChart(canvasId, records, pal) {
     data: {
       labels: shortLabels,
       datasets: [
-        { label: "Generic practice", data: genericShare.yes, backgroundColor: pal.muted, stack: "gen" },
+        {
+          label: "Generic practice",
+          data: genericShare.yes,
+          backgroundColor: pal.muted,
+          stack: "gen",
+        },
         { label: "BPM-specific", data: genericShare.no, backgroundColor: pal.strong, stack: "gen" },
       ],
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { ...baseTooltip(pal), callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}%` } } },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...baseTooltip(pal),
+          callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}%` },
+        },
+      },
       scales: {
         x: { ...baseScaleOptions(pal), stacked: true },
         y: { ...baseScaleOptions(pal), stacked: true, beginAtZero: true, max: 100 },
@@ -262,10 +365,13 @@ async function mountIntroSourceChart() {
     type: "bar",
     data: {
       labels: ANALYSIS_SOURCE_ORDER.map((s) => SOURCE_SHORT_LABELS[s]),
-      datasets: [{ data: countsPerSource(guidelines), backgroundColor: pal.single, borderRadius: 4 }],
+      datasets: [
+        { data: countsPerSource(guidelines), backgroundColor: pal.single, borderRadius: 4 },
+      ],
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: baseTooltip(pal) },
       scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
     },
@@ -285,10 +391,17 @@ function mountRoundCharts(round, records) {
     type: "bar",
     data: {
       labels: RELEVANCE_OPTIONS.map((o) => o.label),
-      datasets: [{ data: relevanceDistribution(records), backgroundColor: pal.relevanceSteps, borderRadius: 4 }],
+      datasets: [
+        {
+          data: relevanceDistribution(records),
+          backgroundColor: pal.relevanceSteps,
+          borderRadius: 4,
+        },
+      ],
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend, tooltip },
       scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
     },
@@ -299,10 +412,14 @@ function mountRoundCharts(round, records) {
 
   mountChart(id("chart-scope-counts"), {
     type: "bar",
-    data: { labels: SCOPE_OPTIONS, datasets: [{ data: scopeCounts(records), backgroundColor: pal.single, borderRadius: 4 }] },
+    data: {
+      labels: SCOPE_OPTIONS,
+      datasets: [{ data: scopeCounts(records), backgroundColor: pal.single, borderRadius: 4 }],
+    },
     options: {
       indexAxis: "y",
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend, tooltip },
       scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
     },
@@ -314,10 +431,14 @@ function mountRoundCharts(round, records) {
   const lc = lifecycleCounts(records);
   mountChart(id("chart-lifecycle"), {
     type: "bar",
-    data: { labels: lc.phases, datasets: [{ data: lc.counts, backgroundColor: pal.single, borderRadius: 4 }] },
+    data: {
+      labels: lc.phases,
+      datasets: [{ data: lc.counts, backgroundColor: pal.single, borderRadius: 4 }],
+    },
     options: {
       indexAxis: "y",
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend, tooltip },
       scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
     },
@@ -325,12 +446,21 @@ function mountRoundCharts(round, records) {
 
   mountChart(id("chart-mean-by-scope"), {
     type: "bar",
-    data: { labels: SCOPE_OPTIONS, datasets: [{ data: meanRelevanceByScope(records), backgroundColor: pal.single, borderRadius: 4 }] },
+    data: {
+      labels: SCOPE_OPTIONS,
+      datasets: [
+        { data: meanRelevanceByScope(records), backgroundColor: pal.single, borderRadius: 4 },
+      ],
+    },
     options: {
       indexAxis: "y",
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend, tooltip },
-      scales: { x: { ...baseScaleOptions(pal), beginAtZero: true, max: 3 }, y: baseScaleOptions(pal) },
+      scales: {
+        x: { ...baseScaleOptions(pal), beginAtZero: true, max: 3 },
+        y: baseScaleOptions(pal),
+      },
     },
   });
 }
@@ -367,18 +497,29 @@ function mountRoundCharts(round, records) {
 // "compare these groups side by side" view the round panel already shows
 // per-round elsewhere (mountGenericShareChart, by source).
 function mountMergedBarCharts(targets, recordsFor, colorFor, idPrefix, pal, includeGeneric) {
-  const legend = { display: true, labels: { color: pal.inkSecondary, boxWidth: 12, font: { size: 11.5 } } };
+  const legend = {
+    display: true,
+    labels: { color: pal.inkSecondary, boxWidth: 12, font: { size: 11.5 } },
+  };
   const tooltip = baseTooltip(pal);
-  const datasetsFor = (getter) => targets.map((t) => ({
-    label: t.label, data: getter(recordsFor(t.id)), backgroundColor: colorFor(t), borderRadius: 4,
-  }));
+  const datasetsFor = (getter) =>
+    targets.map((t) => ({
+      label: t.label,
+      data: getter(recordsFor(t.id)),
+      backgroundColor: colorFor(t),
+      borderRadius: 4,
+    }));
 
   const charts = [
     mountChart(`${idPrefix}-relevance-dist`, {
       type: "bar",
-      data: { labels: RELEVANCE_OPTIONS.map((o) => o.label), datasets: datasetsFor(relevanceDistribution) },
+      data: {
+        labels: RELEVANCE_OPTIONS.map((o) => o.label),
+        datasets: datasetsFor(relevanceDistribution),
+      },
       options: {
-        responsive: true, maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend, tooltip },
         scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
       },
@@ -388,17 +529,22 @@ function mountMergedBarCharts(targets, recordsFor, colorFor, idPrefix, pal, incl
       data: { labels: SCOPE_OPTIONS, datasets: datasetsFor(scopeCounts) },
       options: {
         indexAxis: "y",
-        responsive: true, maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend, tooltip },
         scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
       },
     }),
     mountChart(`${idPrefix}-lifecycle`, {
       type: "bar",
-      data: { labels: [...LIFECYCLE_OPTIONS, "Not Applicable"], datasets: datasetsFor((records) => lifecycleCounts(records).counts) },
+      data: {
+        labels: [...LIFECYCLE_OPTIONS, "Not Applicable"],
+        datasets: datasetsFor((records) => lifecycleCounts(records).counts),
+      },
       options: {
         indexAxis: "y",
-        responsive: true, maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend, tooltip },
         scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
       },
@@ -408,26 +554,45 @@ function mountMergedBarCharts(targets, recordsFor, colorFor, idPrefix, pal, incl
       data: { labels: SCOPE_OPTIONS, datasets: datasetsFor(meanRelevanceByScope) },
       options: {
         indexAxis: "y",
-        responsive: true, maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend, tooltip },
-        scales: { x: { ...baseScaleOptions(pal), beginAtZero: true, max: 3 }, y: baseScaleOptions(pal) },
+        scales: {
+          x: { ...baseScaleOptions(pal), beginAtZero: true, max: 3 },
+          y: baseScaleOptions(pal),
+        },
       },
     }),
   ];
 
   if (includeGeneric) {
-    charts.push(mountChart(`${idPrefix}-generic-split`, {
-      type: "bar",
-      data: {
-        labels: ["Generic practice", "BPM-specific"],
-        datasets: datasetsFor((records) => { const g = genericSplit(records); return [g.yes, g.no]; }),
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend, tooltip: { ...tooltip, callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}%` } } },
-        scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 } },
-      },
-    }));
+    charts.push(
+      mountChart(`${idPrefix}-generic-split`, {
+        type: "bar",
+        data: {
+          labels: ["Generic practice", "BPM-specific"],
+          datasets: datasetsFor((records) => {
+            const g = genericSplit(records);
+            return [g.yes, g.no];
+          }),
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend,
+            tooltip: {
+              ...tooltip,
+              callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}%` },
+            },
+          },
+          scales: {
+            x: baseScaleOptions(pal),
+            y: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 },
+          },
+        },
+      }),
+    );
   }
 
   return charts;
@@ -440,7 +605,7 @@ function mountMergedCharts(activeList, recordsByRound, pal) {
     (t) => roundColor(t),
     "cmp-chart",
     pal,
-    false
+    false,
   );
 }
 
@@ -470,9 +635,19 @@ function mountSourceCharts(sourceId, records, pal) {
 
   const relevanceDist = mountChart(id("relevance-dist"), {
     type: "bar",
-    data: { labels: RELEVANCE_OPTIONS.map((o) => o.label), datasets: [{ data: relevanceDistribution(records), backgroundColor: pal.relevanceSteps, borderRadius: 4 }] },
+    data: {
+      labels: RELEVANCE_OPTIONS.map((o) => o.label),
+      datasets: [
+        {
+          data: relevanceDistribution(records),
+          backgroundColor: pal.relevanceSteps,
+          borderRadius: 4,
+        },
+      ],
+    },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend, tooltip },
       scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true } },
     },
@@ -480,10 +655,14 @@ function mountSourceCharts(sourceId, records, pal) {
 
   const scope = mountChart(id("scope-counts"), {
     type: "bar",
-    data: { labels: SCOPE_OPTIONS, datasets: [{ data: scopeCounts(records), backgroundColor: pal.single, borderRadius: 4 }] },
+    data: {
+      labels: SCOPE_OPTIONS,
+      datasets: [{ data: scopeCounts(records), backgroundColor: pal.single, borderRadius: 4 }],
+    },
     options: {
       indexAxis: "y",
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend, tooltip },
       scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
     },
@@ -492,10 +671,14 @@ function mountSourceCharts(sourceId, records, pal) {
   const lc = lifecycleCounts(records);
   const lifecycle = mountChart(id("lifecycle"), {
     type: "bar",
-    data: { labels: lc.phases, datasets: [{ data: lc.counts, backgroundColor: pal.single, borderRadius: 4 }] },
+    data: {
+      labels: lc.phases,
+      datasets: [{ data: lc.counts, backgroundColor: pal.single, borderRadius: 4 }],
+    },
     options: {
       indexAxis: "y",
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend, tooltip },
       scales: { x: { ...baseScaleOptions(pal), beginAtZero: true }, y: baseScaleOptions(pal) },
     },
@@ -503,23 +686,44 @@ function mountSourceCharts(sourceId, records, pal) {
 
   const meanByScope = mountChart(id("mean-by-scope"), {
     type: "bar",
-    data: { labels: SCOPE_OPTIONS, datasets: [{ data: meanRelevanceByScope(records), backgroundColor: pal.single, borderRadius: 4 }] },
+    data: {
+      labels: SCOPE_OPTIONS,
+      datasets: [
+        { data: meanRelevanceByScope(records), backgroundColor: pal.single, borderRadius: 4 },
+      ],
+    },
     options: {
       indexAxis: "y",
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend, tooltip },
-      scales: { x: { ...baseScaleOptions(pal), beginAtZero: true, max: 3 }, y: baseScaleOptions(pal) },
+      scales: {
+        x: { ...baseScaleOptions(pal), beginAtZero: true, max: 3 },
+        y: baseScaleOptions(pal),
+      },
     },
   });
 
   const split = genericSplit(records);
   const genericChart = mountChart(id("generic-split"), {
     type: "bar",
-    data: { labels: ["Generic practice", "BPM-specific"], datasets: [{ data: [split.yes, split.no], backgroundColor: [pal.muted, pal.strong], borderRadius: 4 }] },
+    data: {
+      labels: ["Generic practice", "BPM-specific"],
+      datasets: [
+        { data: [split.yes, split.no], backgroundColor: [pal.muted, pal.strong], borderRadius: 4 },
+      ],
+    },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend, tooltip: { ...tooltip, callbacks: { label: (ctx) => `${ctx.parsed.y.toFixed(0)}%` } } },
-      scales: { x: baseScaleOptions(pal), y: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 } },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend,
+        tooltip: { ...tooltip, callbacks: { label: (ctx) => `${ctx.parsed.y.toFixed(0)}%` } },
+      },
+      scales: {
+        x: baseScaleOptions(pal),
+        y: { ...baseScaleOptions(pal), beginAtZero: true, max: 100 },
+      },
     },
   });
 
@@ -529,5 +733,12 @@ function mountSourceCharts(sourceId, records, pal) {
 function mountSourceComparisonCharts(activeSourceIds, records, pal) {
   const targets = activeSourceIds.map((id) => ({ id, label: SOURCE_SHORT_LABELS[id] || id }));
   const recordsFor = (id) => records.filter((r) => r.source === id);
-  return mountMergedBarCharts(targets, recordsFor, (t) => sourceColor(t.id), "cmp-src-chart", pal, true);
+  return mountMergedBarCharts(
+    targets,
+    recordsFor,
+    (t) => sourceColor(t.id),
+    "cmp-src-chart",
+    pal,
+    true,
+  );
 }

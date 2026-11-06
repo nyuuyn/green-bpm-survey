@@ -109,7 +109,8 @@ function validateRowAnswer(a) {
   if (a.relevance === "0") return null;
   if (a.scope.length === 0) return "Please select at least one BPM Scope.";
   if (!a.generic) return "Please select Yes or No for Generic.";
-  if (a.lifecycle.length === 0) return "Please select at least one BPM Lifecycle phase, or Not Applicable.";
+  if (a.lifecycle.length === 0)
+    return "Please select at least one BPM Lifecycle phase, or Not Applicable.";
   if (a.lifecycle.includes("Not Applicable") && a.lifecycle.length > 1) {
     return "Not Applicable can't be combined with other lifecycle phases.";
   }
@@ -159,31 +160,48 @@ async function renderComplete() {
       });
       card.append(el("p", {}, "✅ Submitted. You can close this tab."));
     } catch (err) {
-      card.append(el("p", { class: "error-text" }, "Something went wrong submitting your responses. Please try again shortly."));
+      card.append(
+        el(
+          "p",
+          { class: "error-text" },
+          "Something went wrong submitting your responses. Please try again shortly.",
+        ),
+      );
     }
   } else {
     // Test mode: no backend wired up yet.
     const json = JSON.stringify(payload, null, 2);
     card.append(
-      el("div", { class: "test-mode-note" },
+      el(
+        "div",
+        { class: "test-mode-note" },
         "Test mode — no backend is connected yet, so nothing was actually submitted. " +
-        "Your responses are shown below and can be downloaded."),
+          "Your responses are shown below and can be downloaded.",
+      ),
       el("div", { class: "btn-row" }, [
-        el("button", {
-          class: "btn-secondary",
-          onclick: () => {
-            const blob = new Blob([json], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = el("a", { href: url, download: `survey-response-${state.sessionId}.json` });
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
+        el(
+          "button",
+          {
+            class: "btn-secondary",
+            onclick: () => {
+              const blob = new Blob([json], { type: "application/json" });
+              const url = URL.createObjectURL(blob);
+              const a = el("a", { href: url, download: `survey-response-${state.sessionId}.json` });
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+              URL.revokeObjectURL(url);
+            },
           },
-        }, "Download responses (JSON)"),
-        el("button", { class: "btn-primary", onclick: () => location.reload() }, "Start another round"),
+          "Download responses (JSON)",
+        ),
+        el(
+          "button",
+          { class: "btn-primary", onclick: () => location.reload() },
+          "Start another round",
+        ),
       ]),
-      el("pre", { class: "summary-box" }, json)
+      el("pre", { class: "summary-box" }, json),
     );
   }
 
@@ -191,7 +209,7 @@ async function renderComplete() {
     el("div", { class: "btn-row analysis-link-row" }, [
       el("span"),
       el("a", { class: "btn-secondary", href: "analysis.html" }, "See the guideline analysis →"),
-    ])
+    ]),
   );
 
   renderApp(card);

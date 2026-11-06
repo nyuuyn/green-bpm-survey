@@ -6,7 +6,11 @@
   "scripts": {
     "serve": "python -m http.server 8123",
     "test": "node tests/test_landing.mjs && node tests/test_flow.mjs && node tests/test_analysis.mjs && node tests/test_guidelines.mjs",
-    "test:e2e": "pytest"
+    "test:e2e": "pytest",
+    "lint:css": "stylelint \"assets/css/**/*.css\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "npm run lint:css && npm run format:check"
   },
   "repository": {
     "type": "git",
@@ -16,6 +20,9 @@
   "devDependencies": {
     "htm": "^3.1.1",
     "jsdom": "^30.0.1",
-    "preact": "^10.28.4"
+    "preact": "^10.28.4",
+    "prettier": "3.9.10",
+    "stylelint": "18.0.0",
+    "stylelint-config-standard": "41.0.0"
   }
 }

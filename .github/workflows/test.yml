@@ -6,6 +6,17 @@ on:
   pull_request:
 
 jobs:
+  lint:
+    name: Lint (Stylelint + Prettier)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - run: npm install
+      - run: npm run lint
+
   data:
     name: Data pipeline (freshness + schema)
     runs-on: ubuntu-latest

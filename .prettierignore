@@ -1,0 +1,4 @@
+assets/js/vendor/
+generated/
+data/
+package-lock.json

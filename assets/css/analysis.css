@@ -1,11 +1,21 @@
 /* Consistent 16px rhythm between any stacked cards under #app (intro -> round
    results -> source block today) - a sibling rule instead of a per-card class
    so a future card added to the page gets correct spacing for free. */
-#app > .card + .card { margin-top: 16px; }
+#app > .card + .card {
+  margin-top: 16px;
+}
 
-.analysis-intro { margin-bottom: 16px; }
-.analysis-intro h1 { margin-bottom: 12px; }
-.analysis-intro .intro-lead { margin-bottom: 0; }
+.analysis-intro {
+  margin-bottom: 16px;
+}
+
+.analysis-intro h1 {
+  margin-bottom: 12px;
+}
+
+.analysis-intro .intro-lead {
+  margin-bottom: 0;
+}
 
 .tabs {
   display: flex;
@@ -36,7 +46,9 @@
   color: var(--tab-accent-contrast, var(--accent-contrast));
 }
 
-.analysis-card .btn-row { margin-bottom: 18px; }
+.analysis-card .btn-row {
+  margin-bottom: 18px;
+}
 
 .analysis-grid {
   display: grid;
@@ -52,9 +64,16 @@
   padding: 16px;
 }
 
-.chart-card h2 { font-size: 14.5px; margin: 0 0 4px; }
+.chart-card h2 {
+  font-size: 14.5px;
+  margin: 0 0 4px;
+}
 
-.chart-desc { color: var(--text-muted); font-size: 12.5px; margin: 0 0 12px; }
+.chart-desc {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  margin: 0 0 12px;
+}
 
 .chart-wrap {
   position: relative;
@@ -87,12 +106,24 @@
   flex-shrink: 0;
 }
 
-.top-table-heading { margin-top: 8px; }
+.top-table-heading {
+  margin-top: 8px;
+}
 
-.comparison-section { margin-top: 28px; }
+.comparison-section {
+  margin-top: 28px;
+}
 
-.heatmap-table th, .heatmap-table td { text-align: center; white-space: nowrap; }
-.heatmap-table td { font-variant-numeric: tabular-nums; font-weight: 600; }
+.heatmap-table th,
+.heatmap-table td {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.heatmap-table td {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
 
 .table-wrap {
   overflow-x: auto;
@@ -107,7 +138,8 @@
   white-space: nowrap;
 }
 
-.data-table th, .data-table td {
+.data-table th,
+.data-table td {
   padding: 8px 10px;
   text-align: left;
   border-bottom: 1px solid var(--border);
@@ -126,4 +158,6 @@
   min-width: 220px;
 }
 
-.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}

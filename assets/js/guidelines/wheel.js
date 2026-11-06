@@ -77,10 +77,12 @@ function wheelSectorPath(lo, hi) {
   const [ox2, oy2] = wheelPolar(WHEEL_OUTER_R, hi - outerGap);
   const [kx2, ky2] = wheelPolar(WHEEL_POINT_R, hi - pointGap + WHEEL_KINK_DEG);
   const [ix2, iy2] = wheelPolar(WHEEL_INNER_R, hi - innerGap);
-  return `M${ix1},${iy1} L${kx1},${ky1} L${ox1},${oy1} ` +
+  return (
+    `M${ix1},${iy1} L${kx1},${ky1} L${ox1},${oy1} ` +
     `A${WHEEL_OUTER_R},${WHEEL_OUTER_R} 0 0 1 ${ox2},${oy2} ` +
     `L${kx2},${ky2} L${ix2},${iy2} ` +
-    `A${WHEEL_INNER_R},${WHEEL_INNER_R} 0 0 0 ${ix1},${iy1} Z`;
+    `A${WHEEL_INNER_R},${WHEEL_INNER_R} 0 0 0 ${ix1},${iy1} Z`
+  );
 }
 
 // The wedge's label anchor: the centroid of its actual filled shape, not
@@ -102,17 +104,27 @@ function wheelLabelAnchor(lo, hi) {
   const aOuter0 = lo + outerGap;
   const aOuter1 = hi - outerGap;
 
-  const pts = [wheelPolar(WHEEL_INNER_R, aInner0), wheelPolar(WHEEL_POINT_R, lo + pointGap + WHEEL_KINK_DEG), wheelPolar(WHEEL_OUTER_R, aOuter0)];
+  const pts = [
+    wheelPolar(WHEEL_INNER_R, aInner0),
+    wheelPolar(WHEEL_POINT_R, lo + pointGap + WHEEL_KINK_DEG),
+    wheelPolar(WHEEL_OUTER_R, aOuter0),
+  ];
   for (let i = 1; i <= WHEEL_LABEL_ARC_STEPS; i++) {
-    pts.push(wheelPolar(WHEEL_OUTER_R, aOuter0 + (aOuter1 - aOuter0) * (i / WHEEL_LABEL_ARC_STEPS)));
+    pts.push(
+      wheelPolar(WHEEL_OUTER_R, aOuter0 + (aOuter1 - aOuter0) * (i / WHEEL_LABEL_ARC_STEPS)),
+    );
   }
   pts.push(wheelPolar(WHEEL_POINT_R, hi - pointGap + WHEEL_KINK_DEG));
   pts.push(wheelPolar(WHEEL_INNER_R, aInner1));
   for (let i = 1; i <= WHEEL_LABEL_ARC_STEPS; i++) {
-    pts.push(wheelPolar(WHEEL_INNER_R, aInner1 - (aInner1 - aInner0) * (i / WHEEL_LABEL_ARC_STEPS)));
+    pts.push(
+      wheelPolar(WHEEL_INNER_R, aInner1 - (aInner1 - aInner0) * (i / WHEEL_LABEL_ARC_STEPS)),
+    );
   }
 
-  let area = 0, cx = 0, cy = 0;
+  let area = 0,
+    cx = 0,
+    cy = 0;
   for (let i = 0; i < pts.length; i++) {
     const [x0, y0] = pts[i];
     const [x1, y1] = pts[(i + 1) % pts.length];
@@ -156,21 +168,55 @@ function GuidelinesWheel({ activePhase, onSelect }) {
           onClick=${activate(phase)}
           onKeyDown=${activate(phase)}
         />
-        <text x=${lx} y=${ly} text-anchor="middle" dominant-baseline="central" class="guidelines-wedge-label" fill="#FFFFFF" aria-hidden="true">${phase}</text>
+        <text
+          x=${lx}
+          y=${ly}
+          text-anchor="middle"
+          dominant-baseline="central"
+          class="guidelines-wedge-label"
+          fill="#FFFFFF"
+          aria-hidden="true"
+          >${phase}</text
+        >
       </g>
     `;
   });
 
   return html`
-    <svg viewBox=${`0 0 ${WHEEL_SIZE} ${WHEEL_SIZE}`} class="guidelines-wheel" role="group" aria-label="BPM lifecycle phases — select one to see its most relevant guidelines">
+    <svg
+      viewBox=${`0 0 ${WHEEL_SIZE} ${WHEEL_SIZE}`}
+      class="guidelines-wheel"
+      role="group"
+      aria-label="BPM lifecycle phases — select one to see its most relevant guidelines"
+    >
       <defs>
         <filter id="guidelines-wedge-shadow" x="-40%" y="-40%" width="180%" height="180%">
-          <feDropShadow dx="1.5" dy="1.5" stdDeviation="1.2" flood-color="#000" flood-opacity="0.4" />
+          <feDropShadow
+            dx="1.5"
+            dy="1.5"
+            stdDeviation="1.2"
+            flood-color="#000"
+            flood-opacity="0.4"
+          />
         </filter>
       </defs>
       ${wedges}
-      <text x=${WHEEL_CENTER} y=${WHEEL_CENTER - 4} text-anchor="middle" class="guidelines-center-title">Green BPM</text>
-      <text x=${WHEEL_CENTER} y=${WHEEL_CENTER + 16} text-anchor="middle" class="guidelines-center-sub">Guidelines</text>
+      <text
+        x=${WHEEL_CENTER}
+        y=${WHEEL_CENTER - 4}
+        text-anchor="middle"
+        class="guidelines-center-title"
+      >
+        Green BPM
+      </text>
+      <text
+        x=${WHEEL_CENTER}
+        y=${WHEEL_CENTER + 16}
+        text-anchor="middle"
+        class="guidelines-center-sub"
+      >
+        Guidelines
+      </text>
     </svg>
   `;
 }
